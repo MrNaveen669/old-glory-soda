@@ -23,12 +23,12 @@ export function Hero() {
         <div className="fizz-grid absolute inset-0 opacity-40" />
         <motion.div
           className="absolute -top-32 -left-24 h-[26rem] w-[26rem] rounded-full bg-primary/30 blur-[110px]"
-          animate={reduced ? undefined : { x: [0, 60, 0], y: [0, 40, 0], scale: [1, 1.12, 1] }}
+          animate={reduced ? {} : { x: [0, 60, 0], y: [0, 40, 0], scale: [1, 1.12, 1] }}
           transition={{ duration: 16, repeat: Infinity, ease: "easeInOut" }}
         />
         <motion.div
           className="absolute right-[-6rem] bottom-[-8rem] h-[24rem] w-[24rem] rounded-full bg-highlight/20 blur-[120px]"
-          animate={reduced ? undefined : { x: [0, -50, 0], y: [0, -30, 0], scale: [1.1, 1, 1.1] }}
+          animate={reduced ? {} : { x: [0, -50, 0], y: [0, -30, 0], scale: [1.1, 1, 1.1] }}
           transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
         />
         {!reduced &&
