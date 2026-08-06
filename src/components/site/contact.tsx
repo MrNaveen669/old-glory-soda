@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import { useState, type FormEvent } from "react";
+import { useState, type ChangeEvent, type FormEvent } from "react";
 import { toast } from "sonner";
 import { PROFILE } from "./data";
 import { Reveal, Section, SectionHeading } from "./primitives";
@@ -25,7 +25,7 @@ function Field({
     value,
     onFocus: () => setFocused(true),
     onBlur: () => setFocused(false),
-    onChange: (e: { target: { value: string } }) => setValue(e.target.value),
+    onChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setValue(e.target.value),
     className:
       "peer w-full rounded-2xl border border-silver/25 bg-secondary/40 px-4 pt-6 pb-2 text-sm outline-none transition-colors focus:border-primary",
   };
@@ -57,14 +57,17 @@ function Field({
 
 export function Contact() {
   const [sending, setSending] = useState(false);
+  const [resetKey, setResetKey] = useState(0);
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const form = e.currentTarget;
     setSending(true);
     setTimeout(() => {
       setSending(false);
       toast.success("Message sent — I'll reply within a day.");
-      e.currentTarget?.reset?.();
+      form.reset();
+      setResetKey((k) => k + 1);
     }, 900);
   };
 
@@ -112,9 +115,9 @@ export function Contact() {
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           className="glass-panel space-y-4 rounded-3xl p-6 sm:p-8"
         >
-          <Field id="name" label="Your name" />
-          <Field id="email" label="Email address" type="email" />
-          <Field id="message" label="What are you building?" textarea />
+          <Field key={`n${resetKey}`} id="name" label="Your name" />
+          <Field key={`e${resetKey}`} id="email" label="Email address" type="email" />
+          <Field key={`m${resetKey}`} id="message" label="What are you building?" textarea />
           <motion.button
             type="submit"
             disabled={sending}
