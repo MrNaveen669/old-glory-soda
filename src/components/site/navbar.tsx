@@ -1,5 +1,6 @@
 import { AnimatePresence, motion, useScroll, useSpring } from "motion/react";
 import { useEffect, useState } from "react";
+import { CloseCircle, HambergerMenu, Location } from "iconsax-reactjs";
 import { NAV_LINKS } from "./data";
 import { ThemeToggle } from "./theme-toggle";
 import { scrollToSection } from "./use-lenis";
@@ -42,28 +43,28 @@ export function Navbar() {
   return (
     <header className="fixed inset-x-0 top-0 z-50">
       <motion.div
-        className="h-0.5 origin-left bg-primary"
+        className="h-0.5 origin-left bg-destructive"
         style={{ scaleX: progress }}
         aria-hidden
       />
       <div
         className={`transition-all duration-500 ${scrolled ? "glass-panel border-x-0 border-t-0" : "border-transparent bg-transparent"}`}
       >
-        <nav className="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-5 py-3 sm:flex sm:justify-between">
+        <nav className="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-5 py-3 lg:flex lg:justify-between">
           <button
             onClick={() => go("hero")}
             className="flex min-w-0 items-center gap-2 text-left"
             aria-label="Back to top"
           >
-            <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-destructive font-display text-sm font-bold text-destructive-foreground">
-              Y
+            <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-destructive font-brand text-xs text-destructive-foreground">
+              OG
             </span>
-            <span className="truncate font-display text-sm font-semibold tracking-tight">
-              yourname<span className="text-primary">.dev</span>
+            <span className="truncate font-brand text-sm tracking-tight">
+              OLD GLORY<span className="text-primary"> SODA</span>
             </span>
           </button>
 
-          <div className="hidden items-center gap-1 md:flex">
+          <div className="hidden items-center gap-1 lg:flex">
             {NAV_LINKS.map((link) => (
               <button
                 key={link.id}
@@ -87,23 +88,25 @@ export function Navbar() {
           </div>
 
           <div className="flex shrink-0 items-center gap-2">
+            <button
+              onClick={() => go("stores")}
+              className="hidden items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground transition-transform hover:scale-105 sm:inline-flex"
+            >
+              <Location size={16} variant="Linear" />
+              Find a Store
+            </button>
             <ThemeToggle />
             <button
               onClick={() => setOpen((o) => !o)}
               aria-label="Toggle menu"
               aria-expanded={open}
-              className="grid h-9 w-9 place-items-center rounded-full border border-silver/30 md:hidden"
+              className="grid h-9 w-9 place-items-center rounded-full border border-silver/30 lg:hidden"
             >
-              <span className="relative block h-3 w-4">
-                <motion.span
-                  className="absolute inset-x-0 top-0 h-0.5 rounded bg-foreground"
-                  animate={{ rotate: open ? 45 : 0, y: open ? 5 : 0 }}
-                />
-                <motion.span
-                  className="absolute inset-x-0 bottom-0 h-0.5 rounded bg-foreground"
-                  animate={{ rotate: open ? -45 : 0, y: open ? -5 : 0 }}
-                />
-              </span>
+              {open ? (
+                <CloseCircle size={20} variant="Linear" />
+              ) : (
+                <HambergerMenu size={20} variant="Linear" />
+              )}
             </button>
           </div>
         </nav>
@@ -115,7 +118,7 @@ export function Navbar() {
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
               transition={{ duration: 0.32, ease: [0.76, 0, 0.24, 1] }}
-              className="overflow-hidden md:hidden"
+              className="overflow-hidden lg:hidden"
             >
               <div className="flex flex-col gap-1 px-5 pb-4">
                 {NAV_LINKS.map((link, i) => (
@@ -126,9 +129,7 @@ export function Navbar() {
                     transition={{ delay: 0.04 * i }}
                     onClick={() => go(link.id)}
                     className={`rounded-xl px-4 py-3 text-left text-base ${
-                      active === link.id
-                        ? "bg-secondary text-foreground"
-                        : "text-muted-foreground"
+                      active === link.id ? "bg-secondary text-foreground" : "text-muted-foreground"
                     }`}
                   >
                     {link.label}
