@@ -35,8 +35,10 @@
   --color-highlight-foreground: var(--highlight-foreground);
   --color-silver: var(--silver);
   --color-surface: var(--surface);
-  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
-  --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-brand: "Bungee", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Baloo 2", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Outfit", ui-sans-serif, system-ui, sans-serif;
+
 }
 
 :root {
@@ -139,11 +141,20 @@
   color: transparent;
 }
 
+@utility ribbon {
+  position: relative;
+  background: #d62828;
+  color: #f5f1e8;
+  border-radius: 999px;
+  box-shadow: 0 10px 30px -14px #d62828;
+}
+
 @utility glass-panel {
   background: color-mix(in oklab, var(--color-surface) 70%, transparent);
   backdrop-filter: blur(14px);
   border: 1px solid color-mix(in oklab, var(--color-silver) 22%, transparent);
 }
+
 
 @utility glow-primary {
   box-shadow: 0 20px 60px -20px color-mix(in oklab, var(--color-primary) 55%, transparent);

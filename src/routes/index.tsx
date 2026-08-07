@@ -1,21 +1,24 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Toaster } from "@/components/ui/sonner";
-import { About } from "@/components/site/about";
-import { Contact } from "@/components/site/contact";
-import { Experience } from "@/components/site/experience";
+import { Flavors } from "@/components/site/flavors";
 import { Footer } from "@/components/site/footer";
+import { GallerySection } from "@/components/site/gallery";
 import { Hero } from "@/components/site/hero";
 import { Navbar } from "@/components/site/navbar";
+import { Newsletter } from "@/components/site/newsletter";
 import { Preloader } from "@/components/site/preloader";
-import { Projects } from "@/components/site/projects";
-import { Skills } from "@/components/site/skills";
+import { Stores } from "@/components/site/stores";
+import { Story } from "@/components/site/story";
+import { Testimonials } from "@/components/site/testimonials";
 import { ThemeProvider } from "@/components/site/theme-provider";
+import { Why } from "@/components/site/why";
 import { useLenis } from "@/components/site/use-lenis";
-import { PROFILE } from "@/components/site/data";
+import { BRAND, FLAVORS } from "@/components/site/data";
 
-const title = `${PROFILE.name} — ${PROFILE.role} Portfolio`;
+const title = "Old Glory Soda — All Season Drink | Marble Goli Soda";
 const description =
-  "Portfolio of a creative frontend engineer building motion-led, high-performance web interfaces. Selected work, experience, and contact.";
+  "Old Glory Soda bottles the classic marble-neck goli soda in six bold flavours — blueberry, green apple, orange, fruit beer, lemon and jeera. Find a store near you.";
+const url = "https://glory-scroll-studio.lovable.app/";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -26,21 +29,24 @@ export const Route = createFileRoute("/")({
       { property: "og:title", content: title },
       { property: "og:description", content: description },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "/" },
+      { property: "og:url", content: url },
       { name: "twitter:card", content: "summary_large_image" },
     ],
-    links: [{ rel: "canonical", href: "/" }],
+    links: [{ rel: "canonical", href: url }],
     scripts: [
       {
         type: "application/ld+json",
         children: JSON.stringify({
           "@context": "https://schema.org",
-          "@type": "Person",
-          name: PROFILE.name,
-          jobTitle: PROFILE.role,
-          email: `mailto:${PROFILE.email}`,
-          address: PROFILE.location,
-          url: "/",
+          "@type": "Brand",
+          name: BRAND.name,
+          slogan: BRAND.tagline,
+          description,
+          url,
+          makesOffer: FLAVORS.map((f) => ({
+            "@type": "Offer",
+            itemOffered: { "@type": "Product", name: `${BRAND.name} ${f.name}`, description: f.description },
+          })),
         }),
       },
     ],
@@ -56,11 +62,13 @@ function Index() {
       <Navbar />
       <main>
         <Hero />
-        <About />
-        <Skills />
-        <Projects />
-        <Experience />
-        <Contact />
+        <Story />
+        <Flavors />
+        <Why />
+        <GallerySection />
+        <Stores />
+        <Testimonials />
+        <Newsletter />
       </main>
       <Footer />
       <Toaster />
