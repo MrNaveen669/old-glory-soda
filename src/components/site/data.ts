@@ -1,169 +1,201 @@
-export const PROFILE = {
-  name: "Your Name",
-  role: "Creative Frontend Engineer",
-  tagline:
-    "I design and build fizzy, fast interfaces — motion-led products that feel as good as they look.",
-  location: "Bengaluru, India",
-  email: "hello@yourname.dev",
-  socials: [
-    { label: "GitHub", href: "https://github.com" },
-    { label: "LinkedIn", href: "https://linkedin.com" },
-    { label: "Dribbble", href: "https://dribbble.com" },
-    { label: "X", href: "https://x.com" },
-  ],
+export const BRAND = {
+  name: "Old Glory Soda",
+  tagline: "All Season Drink",
+  intro:
+    "The marble-neck goli soda you grew up chasing down summer streets — bottled bolder, fizzier and ready for every season.",
+  email: "hello@oldglorysoda.in",
+  phone: "+91 98400 00000",
+  address: "Old Glory Bottling Works, Chennai, Tamil Nadu",
 };
 
-export const ABOUT = {
-  heading: "Bottled curiosity, poured into pixels.",
+export type Flavor = {
+  id: string;
+  name: string;
+  short: string;
+  color: string;
+  tint: string;
+  note: string;
+  description: string;
+  pairs: string[];
+  sweetness: string;
+  fizz: string;
+};
+
+export const FLAVORS: Flavor[] = [
+  {
+    id: "blueberry-blast",
+    name: "Blueberry Blast",
+    short: "Blueberry",
+    color: "#1FA2E8",
+    tint: "#7FD0FF",
+    note: "Wild berry · deep blue",
+    description:
+      "Our flagship pour. Crushed wild blueberry notes over a sharp mineral fizz — electric blue in the glass, cool and jammy on the tongue.",
+    pairs: ["Beach evenings", "Street chaat", "Ice + mint"],
+    sweetness: "Medium",
+    fizz: "High",
+  },
+  {
+    id: "green-apple",
+    name: "Fizzy Green Apple",
+    short: "Green Apple",
+    color: "#6DC24B",
+    tint: "#B6EF9B",
+    note: "Orchard tart · vivid green",
+    description:
+      "First-bite green apple: tart, snappy and unmistakably crisp. A sour top note that finishes clean with no sugary drag.",
+    pairs: ["Fried snacks", "Hot afternoons", "Chilled neat"],
+    sweetness: "Low",
+    fizz: "Very high",
+  },
+  {
+    id: "citrus-orange",
+    name: "Citrus Orange Pop",
+    short: "Orange",
+    color: "#F97316",
+    tint: "#FFC08A",
+    note: "Sun citrus · bright orange",
+    description:
+      "Hand-pressed orange character with a whisper of peel oil. Sunshine in a codd-neck bottle, from the first goli pop to the last sip.",
+    pairs: ["Breakfast", "Road trips", "Orange wedge"],
+    sweetness: "Medium",
+    fizz: "Medium",
+  },
+  {
+    id: "fruit-beer",
+    name: "Fruit Beer",
+    short: "Fruit Beer",
+    color: "#E4405F",
+    tint: "#FF9AAC",
+    note: "Mixed berry · zero alcohol",
+    description:
+      "The nostalgic non-alcoholic fruit beer, done properly. Layered berry, a malt-like depth and a rounded, grown-up finish.",
+    pairs: ["Celebrations", "Grilled plates", "Tall glass"],
+    sweetness: "Rich",
+    fizz: "Medium",
+  },
+  {
+    id: "lemon-zing",
+    name: "Zesty Lemon Zing",
+    short: "Lemon",
+    color: "#FDE74C",
+    tint: "#FFF6A8",
+    note: "Nimbu soda · bright yellow",
+    description:
+      "The classic nimbu soda reborn. Fresh lemon, a pinch of rock salt and a fizz sharp enough to reset a whole afternoon.",
+    pairs: ["Post-workout", "Spicy biryani", "Salt rim"],
+    sweetness: "Low",
+    fizz: "Very high",
+  },
+  {
+    id: "jeera-soda",
+    name: "Spicy Jeera Soda",
+    short: "Jeera",
+    color: "#B5651D",
+    tint: "#E0A76A",
+    note: "Roasted cumin · heritage amber",
+    description:
+      "Roasted jeera, black salt and a slow warm spice trail. The digestive classic our grandfathers ordered, kept exactly as it should be.",
+    pairs: ["Heavy meals", "Monsoon nights", "Room temp"],
+    sweetness: "Barely",
+    fizz: "High",
+  },
+];
+
+export const STORY = {
+  eyebrow: "Since the marble days",
+  heading: "Pop the goli. Keep the glory.",
   paragraphs: [
-    "I'm a frontend engineer who lives at the seam between design and code. For the last six years I've shipped interfaces for startups and studios — design systems, marketing sites, and dense product dashboards.",
-    "My work leans on motion as meaning: transitions that explain, micro-interactions that reassure, and performance budgets that keep everything at a steady 60fps, even on a mid-range phone.",
+    "It started at a roadside stall with a wooden crate, a block of ice and that unmistakable clink of a glass marble dropping into the neck of a codd bottle. One press of the thumb and the whole street heard it.",
+    "Old Glory Soda bottles that exact moment. Same marble-neck ritual, same thick glass, same hiss — now with cleaner fruit notes, steadier carbonation and six flavours built for every month of the Indian calendar.",
+    "Summer, monsoon or festival night, there is no off-season for a good soda. That is why we call it the All Season Drink.",
   ],
   stats: [
-    { value: "6+", label: "Years shipping" },
-    { value: "40+", label: "Projects launched" },
-    { value: "12", label: "Design systems" },
+    { value: "1962", label: "First crate poured" },
+    { value: "6", label: "Signature flavours" },
+    { value: "100%", label: "Glass bottled" },
   ],
 };
 
-export const SKILLS = [
-  "React",
-  "TypeScript",
-  "Next.js",
-  "Tailwind CSS",
-  "Framer Motion",
-  "GSAP",
-  "Three.js",
-  "Node.js",
-  "PostgreSQL",
-  "Figma",
-  "WebGL",
-  "Vite",
-];
-
-export type Project = {
-  id: string;
-  title: string;
-  category: string;
-  year: string;
-  blurb: string;
-  description: string;
-  tags: string[];
-  link: string;
-  accent: "primary" | "highlight" | "destructive";
-};
-
-export const PROJECTS: Project[] = [
+export const FEATURES = [
   {
-    id: "fizz-commerce",
-    title: "Fizz Commerce",
-    category: "E-commerce platform",
-    year: "2026",
-    blurb: "A headless storefront with a physics-driven cart drawer.",
-    description:
-      "Rebuilt a beverage brand's storefront on a headless stack. Product pages stream in under 400ms, and the cart uses spring physics so adding an item feels tactile. Conversion lifted 23% in the first quarter.",
-    tags: ["Next.js", "Shopify", "Motion"],
-    link: "#",
-    accent: "primary",
+    icon: "leaf",
+    title: "Real Fruit Notes",
+    body: "Flavour built from fruit-forward extracts, never a flat syrup hit.",
   },
   {
-    id: "orbit-analytics",
-    title: "Orbit Analytics",
-    category: "Product dashboard",
-    year: "2025",
-    blurb: "Realtime analytics for teams that hate dashboards.",
-    description:
-      "A dense analytics surface with virtualized tables, streaming charts, and keyboard-first navigation. Built a token-driven design system so five squads could ship consistent UI without a designer in the loop.",
-    tags: ["React", "D3", "WebSockets"],
-    link: "#",
-    accent: "highlight",
+    icon: "bottle",
+    title: "Classic Marble Bottle",
+    body: "The original codd-neck glass and goli seal — the pop is part of the taste.",
   },
   {
-    id: "atlas-ds",
-    title: "Atlas Design System",
-    category: "Design system",
-    year: "2025",
-    blurb: "60 components, one source of truth, zero drift.",
-    description:
-      "Authored a cross-platform design system with documented motion primitives, automated visual regression, and a Figma-to-code token pipeline that removed hand-offs entirely.",
-    tags: ["TypeScript", "Storybook", "Tokens"],
-    link: "#",
-    accent: "destructive",
+    icon: "sun",
+    title: "All Season Refreshment",
+    body: "Six profiles tuned across the year, from peak summer to monsoon evenings.",
   },
   {
-    id: "nocturne",
-    title: "Nocturne",
-    category: "Immersive microsite",
-    year: "2024",
-    blurb: "A WebGL scroll experience for an album launch.",
-    description:
-      "Scroll-linked shader scenes with audio-reactive particles, degraded gracefully to a static poster on low-power devices. Featured on three award galleries in launch week.",
-    tags: ["Three.js", "GLSL", "Lenis"],
-    link: "#",
-    accent: "primary",
-  },
-  {
-    id: "ledgerly",
-    title: "Ledgerly",
-    category: "Fintech app",
-    year: "2024",
-    blurb: "Personal finance that reads like a story, not a spreadsheet.",
-    description:
-      "Designed and built an onboarding flow with animated data storytelling, cutting drop-off by 31%. Handled offline-first sync and accessible chart alternatives.",
-    tags: ["React Native", "Reanimated", "SQLite"],
-    link: "#",
-    accent: "highlight",
-  },
-  {
-    id: "signal-cms",
-    title: "Signal CMS",
-    category: "Internal tooling",
-    year: "2023",
-    blurb: "A content editor writers actually asked to keep.",
-    description:
-      "A block-based editor with drag-to-reorder, collaborative presence, and instant preview. Shipped as a plugin architecture so each publication could extend it independently.",
-    tags: ["Slate", "CRDT", "Node.js"],
-    link: "#",
-    accent: "destructive",
+    icon: "flash",
+    title: "No Compromise Fizz",
+    body: "High-pressure carbonation that stays sharp right down to the final sip.",
   },
 ];
 
-export const EXPERIENCE = [
+export const GALLERY = [
+  { id: "g1", caption: "Crate fresh, ice cold", color: "#1FA2E8", span: "tall" },
+  { id: "g2", caption: "Corner shop classic", color: "#F97316", span: "wide" },
+  { id: "g3", caption: "Marble pop moment", color: "#6DC24B", span: "normal" },
+  { id: "g4", caption: "Festival night pour", color: "#E4405F", span: "normal" },
+  { id: "g5", caption: "Beachside refill", color: "#FDE74C", span: "wide" },
+  { id: "g6", caption: "Jeera after dinner", color: "#B5651D", span: "tall" },
+];
+
+export const STORES = [
+  { city: "Chennai", name: "Marina Provision Stores", detail: "Besant Nagar · 8 stockists nearby" },
+  { city: "Bengaluru", name: "Glory Corner Mart", detail: "Indiranagar · 12 stockists nearby" },
+  { city: "Mumbai", name: "Sea Breeze Soda Co.", detail: "Bandra West · 9 stockists nearby" },
+  { city: "Hyderabad", name: "Charminar Chill Point", detail: "Old City · 6 stockists nearby" },
+];
+
+export const TESTIMONIALS = [
   {
-    period: "2024 — Present",
-    role: "Senior Frontend Engineer",
-    company: "Northlight Studio",
-    detail:
-      "Lead engineer on motion-heavy marketing and product surfaces. Own the performance budget and the shared component library.",
+    quote: "Tastes exactly like the soda cart outside my school. The goli pop still gets a cheer.",
+    name: "Anitha R.",
+    place: "Coimbatore",
   },
   {
-    period: "2022 — 2024",
-    role: "Product Engineer",
-    company: "Orbit Labs",
-    detail:
-      "Built the analytics platform end to end, from data fetching primitives to the charting layer used across four products.",
+    quote: "Jeera soda after a heavy biryani is unbeatable. We keep a crate at the restaurant now.",
+    name: "Imran S.",
+    place: "Hyderabad",
   },
   {
-    period: "2020 — 2022",
-    role: "Frontend Developer",
-    company: "Cobalt & Co.",
-    detail:
-      "Shipped 20+ client sites. Introduced a design-token workflow that cut hand-off time roughly in half.",
+    quote: "The green apple is dangerously good. Tart, loud fizz, gone in a minute.",
+    name: "Meera K.",
+    place: "Kochi",
   },
   {
-    period: "2019 — 2020",
-    role: "Junior Developer",
-    company: "Freelance",
-    detail:
-      "Small business sites, landing pages, and the first taste of building interfaces that people actually use daily.",
+    quote: "Finally a fruit beer that doesn't taste like cough syrup. Party staple.",
+    name: "Dev P.",
+    place: "Mumbai",
   },
+  {
+    quote: "Glass bottles, real fizz, zero fuss. My kids fight over the blueberry one.",
+    name: "Sudha M.",
+    place: "Chennai",
+  },
+];
+
+export const SOCIALS = [
+  { label: "Instagram", href: "https://instagram.com", icon: "instagram" },
+  { label: "Facebook", href: "https://facebook.com", icon: "facebook" },
+  { label: "YouTube", href: "https://youtube.com", icon: "youtube" },
+  { label: "WhatsApp", href: "https://wa.me/919840000000", icon: "whatsapp" },
 ];
 
 export const NAV_LINKS = [
   { id: "hero", label: "Home" },
-  { id: "about", label: "About" },
-  { id: "skills", label: "Skills" },
-  { id: "projects", label: "Work" },
-  { id: "experience", label: "Experience" },
-  { id: "contact", label: "Contact" },
+  { id: "story", label: "Story" },
+  { id: "flavors", label: "Flavours" },
+  { id: "why", label: "Why Us" },
+  { id: "gallery", label: "Gallery" },
+  { id: "stores", label: "Find a Store" },
 ];
