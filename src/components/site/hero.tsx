@@ -55,18 +55,27 @@ export function Hero() {
               {BRAND.name} — {BRAND.tagline}
             </span>
             <span aria-hidden className="block">
-              {Array.from(LOCKUP).map((c, i) => (
-                <motion.span
-                  key={i}
-                  className={`inline-block ${i > 9 ? "text-gradient-soda" : ""}`}
-                  initial={{ y: "110%", opacity: 0, rotate: -6 }}
-                  animate={{ y: "0%", opacity: 1, rotate: 0 }}
-                  transition={{ delay: 1.75 + i * 0.04, duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
-                >
-                  {c === " " ? "\u00A0" : c}
-                </motion.span>
+              {LOCKUP.split(" ").map((word, w) => (
+                <span key={word} className="mr-[0.25em] inline-block whitespace-nowrap">
+                  {Array.from(word).map((c, i) => (
+                    <motion.span
+                      key={i}
+                      className={`inline-block ${w === 2 ? "text-gradient-soda" : ""}`}
+                      initial={{ y: "110%", opacity: 0, rotate: -6 }}
+                      animate={{ y: "0%", opacity: 1, rotate: 0 }}
+                      transition={{
+                        delay: 1.75 + (w * 5 + i) * 0.04,
+                        duration: 0.75,
+                        ease: [0.22, 1, 0.36, 1],
+                      }}
+                    >
+                      {c}
+                    </motion.span>
+                  ))}
+                </span>
               ))}
             </span>
+
           </h1>
 
           <motion.p
