@@ -1,6 +1,6 @@
 import { AnimatePresence, motion, useScroll, useSpring } from "motion/react";
 import { useEffect, useState } from "react";
-import { CloseCircle, HambergerMenu, Location } from "iconsax-reactjs";
+import { CloseCircle, HamburgerMenu, Location } from "iconsax-reactjs";
 import { NAV_LINKS } from "./data";
 import { ThemeToggle } from "./theme-toggle";
 import { scrollToSection } from "./use-lenis";
@@ -105,7 +105,7 @@ export function Navbar() {
               {open ? (
                 <CloseCircle size={20} variant="Linear" />
               ) : (
-                <HambergerMenu size={20} variant="Linear" />
+                <HamburgerMenu size={20} variant="Linear" />
               )}
             </button>
           </div>

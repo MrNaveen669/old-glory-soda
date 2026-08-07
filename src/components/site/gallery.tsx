@@ -23,7 +23,7 @@ function Tile({ item, index }: { item: (typeof GALLERY)[number]; index: number }
       whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 0.7, delay: (index % 3) * 0.07, ease: [0.22, 1, 0.36, 1] }}
-      className={`group relative overflow-hidden rounded-3xl border border-silver/20 ${SPANS[item.span] ?? SPANS.normal}`}
+      className={`group relative overflow-hidden rounded-3xl border border-silver/20 ${SPANS[item.span] ?? SPANS["normal"]}`}
     >
       <motion.div
         style={{

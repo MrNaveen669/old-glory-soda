@@ -138,7 +138,7 @@ export function Bottle({
         stroke="#fff"
         strokeOpacity="0.6"
         strokeWidth="1.5"
-        animate={fizz ? { cy: [56, 50, 56] } : undefined}
+        animate={fizz ? { cy: [56, 50, 56] } : {}}
         transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
       />
       {/* cap */}
