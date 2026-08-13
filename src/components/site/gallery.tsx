@@ -2,7 +2,7 @@ import { motion, useScroll, useTransform } from "motion/react";
 import { useRef } from "react";
 import { Gallery as GalleryIcon } from "iconsax-reactjs";
 import { GALLERY } from "./data";
-import { Bottle } from "./bottle";
+import { FLAVOR_IMAGES, IMAGES } from "./images";
 import { Section, SectionHeading } from "./primitives";
 
 const SPANS: Record<string, string> = {
@@ -11,10 +11,19 @@ const SPANS: Record<string, string> = {
   normal: "h-56",
 };
 
+const TILE_IMAGES = [
+  IMAGES.brandPoster,
+  FLAVOR_IMAGES["citrus-orange"]!,
+  FLAVOR_IMAGES["green-apple"]!,
+  FLAVOR_IMAGES["fruit-beer"]!,
+  FLAVOR_IMAGES["lemon-zing"]!,
+  FLAVOR_IMAGES["jeera-soda"]!,
+];
+
 function Tile({ item, index }: { item: (typeof GALLERY)[number]; index: number }) {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
-  const y = useTransform(scrollYProgress, [0, 1], ["8%", "-8%"]);
+  const y = useTransform(scrollYProgress, [0, 1], ["6%", "-6%"]);
 
   return (
     <motion.div
@@ -25,24 +34,21 @@ function Tile({ item, index }: { item: (typeof GALLERY)[number]; index: number }
       transition={{ duration: 0.7, delay: (index % 3) * 0.07, ease: [0.22, 1, 0.36, 1] }}
       className={`group relative overflow-hidden rounded-3xl border border-silver/20 ${SPANS[item.span] ?? SPANS["normal"]}`}
     >
-      <motion.div
-        style={{
-          y,
-          background: `linear-gradient(150deg, ${item.color}dd, var(--color-background) 78%)`,
-        }}
-        className="absolute inset-[-12%]"
+      <motion.img
+        src={TILE_IMAGES[index % TILE_IMAGES.length]}
+        alt={item.caption}
+        loading="lazy"
+        style={{ y }}
+        className="absolute inset-[-8%] h-[116%] w-[116%] object-cover transition-transform duration-700 group-hover:scale-105"
       />
-      <div className="fizz-grid absolute inset-0 opacity-30" />
-      <div className="absolute right-3 bottom-3 w-12 opacity-70 transition-transform duration-500 group-hover:-translate-y-2 sm:w-16">
-        <Bottle color={item.color} tint="#ffffff" animated={false} label={item.caption} />
-      </div>
-      <div className="absolute inset-x-0 bottom-0 flex items-center gap-2 bg-gradient-to-t from-background/90 to-transparent p-4">
+      <div className="absolute inset-x-0 bottom-0 flex items-center gap-2 bg-gradient-to-t from-background/95 to-transparent p-4">
         <GalleryIcon size={16} variant="Linear" className="shrink-0 text-highlight" />
         <p className="truncate text-sm font-medium">{item.caption}</p>
       </div>
     </motion.div>
   );
 }
+
 
 export function GallerySection() {
   return (
