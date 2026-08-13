@@ -56,7 +56,7 @@ export function GallerySection() {
       <SectionHeading
         eyebrow="In action"
         title="Cold crates, warm streets."
-        intro="Placeholder frames — drop real product photography straight into this grid."
+        intro="Real bottles, real fizz — the Old Glory lineup shot cold and close."
       />
       <div className="mt-12 grid auto-rows-[14rem] gap-4 sm:grid-cols-3">
         {GALLERY.map((g, i) => (
