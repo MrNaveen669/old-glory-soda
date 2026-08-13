@@ -2,9 +2,11 @@ import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState, type MouseEvent } from "react";
 import { CloseCircle, Drop, Location, Star1 } from "iconsax-reactjs";
 import { FLAVORS, type Flavor } from "./data";
-import { Bottle, Bubbles } from "./bottle";
+import { FLAVOR_IMAGES } from "./images";
+import { Bubbles } from "./bottle";
 import { Section, SectionHeading } from "./primitives";
 import { scrollToSection } from "./use-lenis";
+
 
 function FlavorCard({ flavor, index, onOpen }: { flavor: Flavor; index: number; onOpen: () => void }) {
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
