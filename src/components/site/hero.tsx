@@ -2,7 +2,9 @@ import { motion, useReducedMotion, useScroll, useTransform } from "motion/react"
 import { useRef } from "react";
 import { ArrowRight, Location } from "iconsax-reactjs";
 import { BRAND } from "./data";
-import { Bottle, Bubbles } from "./bottle";
+import { Bubbles } from "./bottle";
+import { IMAGES } from "./images";
+
 import { scrollToSection } from "./use-lenis";
 
 const LOCKUP = "OLD GLORY SODA";
@@ -129,16 +131,22 @@ export function Hero() {
           initial={{ opacity: 0, y: 40, rotate: 6 }}
           animate={{ opacity: 1, y: 0, rotate: 0 }}
           transition={{ delay: 1.9, duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
-          className="relative mx-auto w-52 sm:w-64 md:w-full md:max-w-xs"
+          className="relative mx-auto w-64 sm:w-80 md:w-full md:max-w-md"
         >
           <div className="absolute inset-x-6 top-10 bottom-10 rounded-full bg-primary/30 blur-3xl" />
           <motion.div
             animate={reduced ? {} : { y: [0, -14, 0], rotate: [0, 1.5, 0] }}
             transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
           >
-            <Bottle color="#1FA2E8" tint="#7FD0FF" label="Old Glory Blueberry Blast bottle" />
+            <img
+              src={IMAGES.heroBottle}
+              alt="Old Glory Blueberry Blast goli soda bottle surrounded by fresh blueberries"
+              className="relative w-full rounded-3xl border border-silver/20 object-cover shadow-2xl"
+              loading="eager"
+            />
           </motion.div>
         </motion.div>
+
       </motion.div>
 
       <motion.div

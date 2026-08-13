@@ -2,9 +2,11 @@ import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState, type MouseEvent } from "react";
 import { CloseCircle, Drop, Location, Star1 } from "iconsax-reactjs";
 import { FLAVORS, type Flavor } from "./data";
-import { Bottle, Bubbles } from "./bottle";
+import { FLAVOR_IMAGES } from "./images";
+import { Bubbles } from "./bottle";
 import { Section, SectionHeading } from "./primitives";
 import { scrollToSection } from "./use-lenis";
+
 
 function FlavorCard({ flavor, index, onOpen }: { flavor: Flavor; index: number; onOpen: () => void }) {
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
@@ -42,34 +44,33 @@ function FlavorCard({ flavor, index, onOpen }: { flavor: Flavor; index: number; 
         />
         <Bubbles count={8} color={flavor.tint} />
 
-        <div className="relative flex items-start justify-between gap-4">
-          <div className="min-w-0">
-            <span
-              className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-semibold tracking-[0.18em] uppercase"
-              style={{ background: `${flavor.color}26`, color: flavor.color }}
-            >
-              <Drop size={12} variant="Bold" color={flavor.color} />
-              {flavor.short}
-            </span>
-            <h3 className="mt-4 font-brand text-xl leading-tight sm:text-2xl">{flavor.name}</h3>
-            <p className="mt-2 text-sm text-muted-foreground">{flavor.note}</p>
-            <p className="mt-4 line-clamp-3 text-sm text-muted-foreground/90">{flavor.description}</p>
-            <span
-              className="mt-5 inline-block text-xs font-semibold tracking-widest uppercase"
-              style={{ color: flavor.color }}
-            >
-              View flavour →
-            </span>
-          </div>
-          <div className="w-16 shrink-0 transition-transform duration-500 group-hover:-translate-y-2 group-hover:scale-110 sm:w-20">
-            <Bottle
-              color={flavor.color}
-              tint={flavor.tint}
-              label={`${flavor.name} bottle`}
-              animated={false}
+        <div className="relative">
+          <div className="mb-5 overflow-hidden rounded-2xl border border-silver/15">
+            <img
+              src={FLAVOR_IMAGES[flavor.id]}
+              alt={`Old Glory ${flavor.name} goli soda bottle`}
+              loading="lazy"
+              className="h-40 w-full object-cover transition-transform duration-700 group-hover:scale-110 sm:h-48"
             />
           </div>
+          <span
+            className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-semibold tracking-[0.18em] uppercase"
+            style={{ background: `${flavor.color}26`, color: flavor.color }}
+          >
+            <Drop size={12} variant="Bold" color={flavor.color} />
+            {flavor.short}
+          </span>
+          <h3 className="mt-4 font-brand text-xl leading-tight sm:text-2xl">{flavor.name}</h3>
+          <p className="mt-2 text-sm text-muted-foreground">{flavor.note}</p>
+          <p className="mt-4 line-clamp-3 text-sm text-muted-foreground/90">{flavor.description}</p>
+          <span
+            className="mt-5 inline-block text-xs font-semibold tracking-widest uppercase"
+            style={{ color: flavor.color }}
+          >
+            View flavour →
+          </span>
         </div>
+
       </button>
     </motion.div>
   );
@@ -135,10 +136,15 @@ export function Flavors() {
                 <CloseCircle size={26} variant="Linear" />
               </button>
 
-              <div className="relative grid gap-6 sm:grid-cols-[0.4fr_1fr] sm:items-center">
-                <div className="mx-auto w-28 sm:w-full">
-                  <Bottle color={active.color} tint={active.tint} label={`${active.name} bottle`} />
+              <div className="relative grid gap-6 sm:grid-cols-[0.9fr_1fr] sm:items-center">
+                <div className="mx-auto w-full overflow-hidden rounded-2xl border border-silver/20">
+                  <img
+                    src={FLAVOR_IMAGES[active.id]}
+                    alt={`Old Glory ${active.name} goli soda bottle`}
+                    className="h-full w-full object-cover"
+                  />
                 </div>
+
                 <div>
                   <span
                     className="text-xs font-semibold tracking-[0.22em] uppercase"
