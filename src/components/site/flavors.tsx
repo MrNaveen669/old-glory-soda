@@ -136,10 +136,15 @@ export function Flavors() {
                 <CloseCircle size={26} variant="Linear" />
               </button>
 
-              <div className="relative grid gap-6 sm:grid-cols-[0.4fr_1fr] sm:items-center">
-                <div className="mx-auto w-28 sm:w-full">
-                  <Bottle color={active.color} tint={active.tint} label={`${active.name} bottle`} />
+              <div className="relative grid gap-6 sm:grid-cols-[0.9fr_1fr] sm:items-center">
+                <div className="mx-auto w-full overflow-hidden rounded-2xl border border-silver/20">
+                  <img
+                    src={FLAVOR_IMAGES[active.id]}
+                    alt={`Old Glory ${active.name} goli soda bottle`}
+                    className="h-full w-full object-cover"
+                  />
                 </div>
+
                 <div>
                   <span
                     className="text-xs font-semibold tracking-[0.22em] uppercase"
