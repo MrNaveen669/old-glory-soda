@@ -2,7 +2,9 @@ import { motion, useReducedMotion, useScroll, useTransform } from "motion/react"
 import { useRef } from "react";
 import { ArrowRight, Location } from "iconsax-reactjs";
 import { BRAND } from "./data";
-import { Bottle, Bubbles } from "./bottle";
+import { Bubbles } from "./bottle";
+import { IMAGES } from "./images";
+
 import { scrollToSection } from "./use-lenis";
 
 const LOCKUP = "OLD GLORY SODA";

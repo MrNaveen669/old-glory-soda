@@ -33,14 +33,20 @@ export function Story() {
 
         <motion.div
           initial={{ opacity: 0, scale: 0.9, rotate: -8 }}
-          whileInView={{ opacity: 1, scale: 1, rotate: -4 }}
+          whileInView={{ opacity: 1, scale: 1, rotate: -3 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-          className="relative mx-auto w-44 sm:w-56"
+          className="relative mx-auto w-full max-w-sm"
         >
           <div className="absolute inset-x-4 top-12 bottom-12 rounded-full bg-destructive/25 blur-3xl" />
-          <Bottle color="#B5651D" tint="#E0A76A" label="Heritage jeera soda bottle" />
+          <img
+            src={IMAGES.factoryScene}
+            alt="Vintage illustration of the Old Glory Soda factory with delivery truck and crates"
+            className="relative w-full rounded-3xl border border-silver/25 object-cover shadow-2xl"
+            loading="lazy"
+          />
         </motion.div>
+
       </div>
     </Section>
   );
