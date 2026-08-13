@@ -1,7 +1,7 @@
 import { motion } from "motion/react";
 import { STORY } from "./data";
 import { Reveal, Section, SectionHeading } from "./primitives";
-import { Bottle } from "./bottle";
+import { IMAGES } from "./images";
 
 export function Story() {
   return (
