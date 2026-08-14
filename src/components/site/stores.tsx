@@ -77,7 +77,7 @@ export function Stores() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true, margin: "-60px" }}
                 transition={{ duration: 0.6, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
-                whileHover={inStock ? { x: 6 } : undefined}
+                whileHover={{ x: inStock ? 6 : 0 }}
                 className={`glass-panel flex w-full items-center gap-4 rounded-2xl p-4 text-left ${
                   inStock ? "cursor-pointer" : "opacity-70"
                 }`}
