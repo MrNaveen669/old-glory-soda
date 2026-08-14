@@ -11,96 +11,168 @@ export const BRAND = {
 export type Flavor = {
   id: string;
   name: string;
+  flavourType: string;
   short: string;
   color: string;
   tint: string;
   note: string;
   description: string;
+  ingredients: string;
   pairs: string[];
   sweetness: string;
   fizz: string;
+  packaging: "glass" | "pet";
+  lowCalorie?: boolean;
+  comingSoon?: boolean;
+  price?: number;
 };
 
 export const FLAVORS: Flavor[] = [
   {
     id: "blueberry-blast",
-    name: "Blueberry Blast",
+    name: "Blueberry Blast Soda",
+    flavourType: "Blueberry",
     short: "Blueberry",
     color: "#1FA2E8",
     tint: "#7FD0FF",
     note: "Wild berry · deep blue",
     description:
       "Our flagship pour. Crushed wild blueberry notes over a sharp mineral fizz — electric blue in the glass, cool and jammy on the tongue.",
+    ingredients:
+      "Carbonated Water, Sugar, Acidity Regulators (330, 331), Stabilizers (414, 445), Sweetener (960), Preservative (211), Colour (INS 133), Natural & Nature Identical Blueberry flavour",
     pairs: ["Beach evenings", "Street chaat", "Ice + mint"],
     sweetness: "Medium",
     fizz: "High",
+    packaging: "glass",
   },
   {
     id: "green-apple",
-    name: "Fizzy Green Apple",
+    name: "Fizzy Green Apple Soda",
+    flavourType: "Green Apple",
     short: "Green Apple",
     color: "#6DC24B",
     tint: "#B6EF9B",
     note: "Orchard tart · vivid green",
     description:
       "First-bite green apple: tart, snappy and unmistakably crisp. A sour top note that finishes clean with no sugary drag.",
+    ingredients:
+      "Carbonated Water, Sugar, Acidity Regulators (330, 331), Stabilizers (414, 445), Sweetener (960), Preservative (211), Colours (102, 133), Flavours (Natural & Nature Identical - Green Apple)",
     pairs: ["Fried snacks", "Hot afternoons", "Chilled neat"],
     sweetness: "Low",
     fizz: "Very high",
+    packaging: "glass",
   },
   {
     id: "citrus-orange",
-    name: "Citrus Orange Pop",
+    name: "Citrus Orange Pop Soda",
+    flavourType: "Orange",
     short: "Orange",
     color: "#F97316",
     tint: "#FFC08A",
     note: "Sun citrus · bright orange",
     description:
       "Hand-pressed orange character with a whisper of peel oil. Sunshine in a codd-neck bottle, from the first goli pop to the last sip.",
+    ingredients:
+      "Carbonated Water, Sugar, Acidity Regulators (330, 331), Stabilizers (414, 445), Sweetener (960), Preservative (211), Colours (110, 122), Natural & Nature Identical Orange flavour",
     pairs: ["Breakfast", "Road trips", "Orange wedge"],
     sweetness: "Medium",
     fizz: "Medium",
+    packaging: "glass",
   },
   {
     id: "fruit-beer",
     name: "Fruit Beer",
+    flavourType: "Fruit Beer",
     short: "Fruit Beer",
     color: "#E4405F",
     tint: "#FF9AAC",
     note: "Mixed berry · zero alcohol",
     description:
       "The nostalgic non-alcoholic fruit beer, done properly. Layered berry, a malt-like depth and a rounded, grown-up finish.",
+    ingredients:
+      "Carbonated Water, Sugar, Acidity Regulators (330, 331), Sweetener (960), Preservative (211), Colour (150d), Natural & Nature Identical Fruit Beer flavour",
     pairs: ["Celebrations", "Grilled plates", "Tall glass"],
     sweetness: "Rich",
     fizz: "Medium",
+    packaging: "glass",
   },
   {
     id: "lemon-zing",
-    name: "Zesty Lemon Zing",
+    name: "Zesty Lemon Zing Soda",
+    flavourType: "Nimboo Masala",
     short: "Lemon",
     color: "#FDE74C",
     tint: "#FFF6A8",
-    note: "Nimbu soda · bright yellow",
+    note: "Nimboo masala · bright yellow",
     description:
       "The classic nimbu soda reborn. Fresh lemon, a pinch of rock salt and a fizz sharp enough to reset a whole afternoon.",
+    ingredients:
+      "Carbonated Water, Sugar, Salt, Acidity Regulators, Stabilizers, Sweetener, Preservative, Natural & Nature Identical Nimboo Masala flavour",
     pairs: ["Post-workout", "Spicy biryani", "Salt rim"],
     sweetness: "Low",
     fizz: "Very high",
+    packaging: "glass",
   },
   {
-    id: "jeera-soda",
-    name: "Spicy Jeera Soda",
-    short: "Jeera",
+    id: "zeera-soda",
+    name: "Spicy Spark Zeera Soda",
+    flavourType: "Zeera Masala",
+    short: "Zeera",
     color: "#B5651D",
     tint: "#E0A76A",
-    note: "Roasted cumin · heritage amber",
+    note: "Roasted zeera · heritage amber",
     description:
-      "Roasted jeera, black salt and a slow warm spice trail. The digestive classic our grandfathers ordered, kept exactly as it should be.",
+      "Roasted zeera, black salt and a slow warm spice trail. The digestive classic our grandfathers ordered, kept exactly as it should be.",
+    ingredients:
+      "Carbonated Water, Sugar, Acidity Regulators (330, 331), Stabilizers (414, 445), Sweetener (960), Preservative (211), Colour (150d), Natural & Nature Identical Zeera Masala flavour",
     pairs: ["Heavy meals", "Monsoon nights", "Room temp"],
     sweetness: "Barely",
     fizz: "High",
+    packaging: "glass",
   },
 ];
+
+/** ₹10 / ₹20 PET (plastic) range — clear bottle, blue screw cap, low calorie claim. */
+export const PET_TIERS = [10, 20] as const;
+export type PetTier = (typeof PET_TIERS)[number];
+
+const petFrom = (id: string, price: PetTier): Flavor => {
+  const base = FLAVORS.find((f) => f.id === id)!;
+  return {
+    ...base,
+    id: `${id}-pet-${price}`,
+    packaging: "pet",
+    lowCalorie: true,
+    price,
+    note: `PET bottle · ₹${price}`,
+  };
+};
+
+export const PET_RANGE: Record<PetTier, Flavor[]> = {
+  10: [
+    petFrom("zeera-soda", 10),
+    petFrom("citrus-orange", 10),
+    {
+      id: "shikanji-pet-10",
+      name: "Shikanji",
+      flavourType: "Shikanji",
+      short: "Shikanji",
+      color: "#C4CBD4",
+      tint: "#E4E9EE",
+      note: "PET bottle · ₹10",
+      description: "A new addition to the ₹10 PET range. Details coming soon.",
+      ingredients: "",
+      pairs: [],
+      sweetness: "—",
+      fizz: "—",
+      packaging: "pet",
+      lowCalorie: true,
+      comingSoon: true,
+      price: 10,
+    },
+  ],
+  20: [petFrom("zeera-soda", 20), petFrom("citrus-orange", 20)],
+};
 
 export const STORY = {
   eyebrow: "Since the marble days",
@@ -113,7 +185,7 @@ export const STORY = {
   stats: [
     { value: "1962", label: "First crate poured" },
     { value: "6", label: "Signature flavours" },
-    { value: "100%", label: "Glass bottled" },
+    { value: "100% Glass", label: "Flagship heritage range" },
   ],
 };
 
@@ -126,7 +198,7 @@ export const FEATURES = [
   {
     icon: "bottle",
     title: "Classic Marble Bottle",
-    body: "The original codd-neck glass and goli seal — the pop is part of the taste.",
+    body: "The flagship range keeps the original codd-neck glass and goli seal — the pop is part of the taste.",
   },
   {
     icon: "sun",
@@ -146,14 +218,33 @@ export const GALLERY = [
   { id: "g3", caption: "Marble pop moment", color: "#6DC24B", span: "normal" },
   { id: "g4", caption: "Festival night pour", color: "#E4405F", span: "normal" },
   { id: "g5", caption: "Beachside refill", color: "#FDE74C", span: "wide" },
-  { id: "g6", caption: "Jeera after dinner", color: "#B5651D", span: "tall" },
+  { id: "g6", caption: "Zeera after dinner", color: "#B5651D", span: "tall" },
 ];
 
-export const STORES = [
-  { city: "Chennai", name: "Marina Provision Stores", detail: "Besant Nagar · 8 stockists nearby" },
-  { city: "Bengaluru", name: "Glory Corner Mart", detail: "Indiranagar · 12 stockists nearby" },
-  { city: "Mumbai", name: "Sea Breeze Soda Co.", detail: "Bandra West · 9 stockists nearby" },
-  { city: "Hyderabad", name: "Charminar Chill Point", detail: "Old City · 6 stockists nearby" },
+export type StoreLocation = {
+  city: string;
+  status: "in-stock" | "coming-soon";
+  distributor?: {
+    name: string;
+    description: string;
+    location: string;
+    phone: string;
+  };
+};
+
+export const STORE_LOCATIONS: StoreLocation[] = [
+  {
+    city: "Raipur",
+    status: "in-stock",
+    distributor: {
+      name: "Details to be confirmed",
+      description: "Details to be confirmed",
+      location: "Details to be confirmed",
+      phone: "Details to be confirmed",
+    },
+  },
+  { city: "Balod", status: "coming-soon" },
+  { city: "Dalli", status: "coming-soon" },
 ];
 
 export const TESTIMONIALS = [
@@ -163,7 +254,7 @@ export const TESTIMONIALS = [
     place: "Coimbatore",
   },
   {
-    quote: "Jeera soda after a heavy biryani is unbeatable. We keep a crate at the restaurant now.",
+    quote: "Zeera soda after a heavy biryani is unbeatable. We keep a crate at the restaurant now.",
     name: "Imran S.",
     place: "Hyderabad",
   },
@@ -195,6 +286,7 @@ export const NAV_LINKS = [
   { id: "hero", label: "Home" },
   { id: "story", label: "Story" },
   { id: "flavors", label: "Flavours" },
+  { id: "pricing", label: "Pick Your Price" },
   { id: "why", label: "Why Us" },
   { id: "gallery", label: "Gallery" },
   { id: "stores", label: "Find a Store" },
