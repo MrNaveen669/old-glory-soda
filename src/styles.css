@@ -63,7 +63,7 @@
   --destructive-foreground: #fffcf5;
   --highlight: #e8b93e;
   --highlight-foreground: #20242e;
-  --silver: #9c9versionless;
+  --silver: #9a8f74;
   --border: #d9cba8;
   --input: #d9cba8;
   --ring: #1b7fc4;
@@ -144,10 +144,10 @@
 
 @utility ribbon {
   position: relative;
-  background: #d62828;
-  color: #f5f1e8;
+  background: #b3302a;
+  color: #fffcf5;
   border-radius: 999px;
-  box-shadow: 0 10px 30px -14px #d62828;
+  box-shadow: 0 10px 30px -14px #b3302a;
 }
 
 @utility glass-panel {
