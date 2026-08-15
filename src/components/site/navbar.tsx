@@ -2,6 +2,7 @@ import { AnimatePresence, motion, useScroll, useSpring } from "motion/react";
 import { useEffect, useState } from "react";
 import { CloseCircle, HamburgerMenu, Location } from "iconsax-reactjs";
 import { NAV_LINKS } from "./data";
+import { OldGloryLogo } from "./logo";
 import { ThemeToggle } from "./theme-toggle";
 import { scrollToSection } from "./use-lenis";
 
@@ -53,15 +54,10 @@ export function Navbar() {
         <nav className="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-5 py-3 lg:flex lg:justify-between">
           <button
             onClick={() => go("hero")}
-            className="flex min-w-0 items-center gap-2 text-left"
-            aria-label="Back to top"
+            className="flex min-w-0 items-center text-left"
+            aria-label="Old Glory Soda — back to top"
           >
-            <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-destructive font-brand text-xs text-destructive-foreground">
-              OG
-            </span>
-            <span className="truncate font-brand text-sm tracking-tight">
-              OLD GLORY<span className="text-primary"> SODA</span>
-            </span>
+            <OldGloryLogo className="h-9 w-auto text-foreground sm:h-10" />
           </button>
 
           <div className="hidden items-center gap-1 lg:flex">
