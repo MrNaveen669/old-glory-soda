@@ -2,6 +2,7 @@ import { AnimatePresence, motion, useScroll, useSpring } from "motion/react";
 import { useEffect, useState } from "react";
 import { CloseCircle, HamburgerMenu, Location } from "iconsax-reactjs";
 import { NAV_LINKS } from "./data";
+import { OldGloryLogo } from "./logo";
 import { ThemeToggle } from "./theme-toggle";
 import { scrollToSection } from "./use-lenis";
 
