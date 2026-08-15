@@ -3,6 +3,7 @@ import { Facebook, Instagram, Whatsapp, Youtube } from "iconsax-reactjs";
 import type { Icon } from "iconsax-reactjs";
 import { BRAND, FLAVORS, NAV_LINKS, SOCIALS } from "./data";
 import { scrollToSection } from "./use-lenis";
+import { OldGloryLogo } from "./logo";
 
 const SOCIAL_ICONS: Record<string, Icon> = {
   instagram: Instagram,
