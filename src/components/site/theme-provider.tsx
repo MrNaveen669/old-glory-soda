@@ -8,10 +8,10 @@ const ThemeContext = createContext<{ theme: Theme; toggle: () => void }>({
 });
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setTheme] = useState<Theme>("dark");
+  const [theme, setTheme] = useState<Theme>("light");
 
   useEffect(() => {
-    const stored = window.localStorage.getItem("portfolio-theme") as Theme | null;
+    const stored = window.localStorage.getItem("ogs-theme") as Theme | null;
     if (stored) setTheme(stored);
   }, []);
 
@@ -19,7 +19,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     const root = document.documentElement;
     root.classList.toggle("dark", theme === "dark");
     root.style.colorScheme = theme;
-    window.localStorage.setItem("portfolio-theme", theme);
+    window.localStorage.setItem("ogs-theme", theme);
   }, [theme]);
 
   const toggle = useCallback(() => setTheme((t) => (t === "dark" ? "light" : "dark")), []);

@@ -17,7 +17,7 @@ const TILE_IMAGES = [
   FLAVOR_IMAGES["green-apple"]!,
   FLAVOR_IMAGES["fruit-beer"]!,
   FLAVOR_IMAGES["lemon-zing"]!,
-  FLAVOR_IMAGES["jeera-soda"]!,
+  FLAVOR_IMAGES["zeera-soda"]!,
 ];
 
 function Tile({ item, index }: { item: (typeof GALLERY)[number]; index: number }) {

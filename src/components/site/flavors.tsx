@@ -1,11 +1,12 @@
-import { AnimatePresence, motion } from "motion/react";
-import { useEffect, useState, type MouseEvent } from "react";
-import { CloseCircle, Drop, Location, Star1 } from "iconsax-reactjs";
+import { motion } from "motion/react";
+import { useState, type MouseEvent } from "react";
+import { Drop } from "iconsax-reactjs";
 import { FLAVORS, type Flavor } from "./data";
 import { FLAVOR_IMAGES } from "./images";
 import { Bubbles } from "./bottle";
+import { FlavorModal } from "./flavor-modal";
 import { Section, SectionHeading } from "./primitives";
-import { scrollToSection } from "./use-lenis";
+
 
 
 function FlavorCard({ flavor, index, onOpen }: { flavor: Flavor; index: number; onOpen: () => void }) {
@@ -80,12 +81,6 @@ export function Flavors() {
   const [openId, setOpenId] = useState<string | null>(null);
   const active = FLAVORS.find((f) => f.id === openId) ?? null;
 
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpenId(null);
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, []);
-
   return (
     <Section id="flavors" className="overflow-hidden">
       <SectionHeading
@@ -99,105 +94,7 @@ export function Flavors() {
           <FlavorCard key={f.id} flavor={f} index={i} onOpen={() => setOpenId(f.id)} />
         ))}
       </div>
-
-      <AnimatePresence>
-        {active && (
-          <motion.div
-            className="fixed inset-0 z-[80] grid place-items-center bg-background/80 p-4 backdrop-blur-md"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setOpenId(null)}
-            role="dialog"
-            aria-modal="true"
-            aria-label={`${active.name} details`}
-          >
-            <motion.div
-              onClick={(e) => e.stopPropagation()}
-              initial={{ opacity: 0, y: 40, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 20, scale: 0.97 }}
-              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-              className="relative max-h-[88svh] w-full max-w-3xl overflow-y-auto rounded-3xl border border-silver/25 bg-card p-6 sm:p-8"
-              style={{ boxShadow: `0 40px 90px -40px ${active.color}` }}
-            >
-              <span
-                aria-hidden
-                className="absolute inset-0 opacity-25"
-                style={{
-                  background: `radial-gradient(90% 60% at 90% 0%, ${active.color}, transparent 60%)`,
-                }}
-              />
-              <button
-                onClick={() => setOpenId(null)}
-                aria-label="Close"
-                className="absolute top-4 right-4 z-10 rounded-full p-1 text-muted-foreground transition-colors hover:text-foreground"
-              >
-                <CloseCircle size={26} variant="Linear" />
-              </button>
-
-              <div className="relative grid gap-6 sm:grid-cols-[0.9fr_1fr] sm:items-center">
-                <div className="mx-auto w-full overflow-hidden rounded-2xl border border-silver/20">
-                  <img
-                    src={FLAVOR_IMAGES[active.id]}
-                    alt={`Old Glory ${active.name} goli soda bottle`}
-                    className="h-full w-full object-cover"
-                  />
-                </div>
-
-                <div>
-                  <span
-                    className="text-xs font-semibold tracking-[0.22em] uppercase"
-                    style={{ color: active.color }}
-                  >
-                    {active.note}
-                  </span>
-                  <h3 className="mt-2 font-brand text-2xl sm:text-3xl">{active.name}</h3>
-                  <p className="mt-4 text-sm text-muted-foreground sm:text-base">
-                    {active.description}
-                  </p>
-
-                  <div className="mt-5 grid grid-cols-2 gap-3 text-sm">
-                    <div className="rounded-2xl border border-silver/20 p-3">
-                      <p className="text-xs text-muted-foreground">Sweetness</p>
-                      <p className="mt-1 font-semibold">{active.sweetness}</p>
-                    </div>
-                    <div className="rounded-2xl border border-silver/20 p-3">
-                      <p className="text-xs text-muted-foreground">Fizz level</p>
-                      <p className="mt-1 font-semibold">{active.fizz}</p>
-                    </div>
-                  </div>
-
-                  <div className="mt-5 flex flex-wrap gap-2">
-                    {active.pairs.map((p) => (
-                      <span
-                        key={p}
-                        className="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs"
-                        style={{ borderColor: `${active.color}66`, color: active.color }}
-                      >
-                        <Star1 size={12} variant="Bold" color={active.color} />
-                        {p}
-                      </span>
-                    ))}
-                  </div>
-
-                  <button
-                    onClick={() => {
-                      setOpenId(null);
-                      scrollToSection("stores");
-                    }}
-                    className="mt-6 inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold text-primary-foreground"
-                    style={{ background: active.color }}
-                  >
-                    <Location size={18} variant="Linear" />
-                    Find this near me
-                  </button>
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <FlavorModal flavor={active} onClose={() => setOpenId(null)} />
     </Section>
   );
 }
