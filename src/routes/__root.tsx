@@ -84,7 +84,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "Old Glory Soda — the classic marble-neck goli soda, bottled in six bold flavours. All Season Drink.",
       },
       { name: "author", content: "Old Glory Soda" },
-      { name: "theme-color", content: "#0A1628" },
+      { name: "theme-color", content: "#F6EFDD" },
       { property: "og:site_name", content: "Old Glory Soda" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -112,7 +112,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en">
       <head>
         <HeadContent />
       </head>
