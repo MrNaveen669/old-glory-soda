@@ -22,9 +22,7 @@ export function Footer() {
     >
       <div className="mx-auto grid max-w-6xl gap-10 sm:grid-cols-[1.2fr_1fr_1fr]">
         <div>
-          <span className="ribbon inline-flex px-4 py-1.5 font-brand text-sm tracking-wide">
-            OLD GLORY SODA
-          </span>
+          <OldGloryLogo className="h-14 w-auto text-foreground" />
           <p className="mt-4 max-w-xs text-sm text-muted-foreground">
             {BRAND.tagline}. Marble-neck glass bottles, bottled in India since 1962.
           </p>
