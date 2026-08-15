@@ -1,11 +1,12 @@
-import { AnimatePresence, motion } from "motion/react";
-import { useEffect, useState, type MouseEvent } from "react";
-import { CloseCircle, Drop, Location, Star1 } from "iconsax-reactjs";
+import { motion } from "motion/react";
+import { useState, type MouseEvent } from "react";
+import { Drop } from "iconsax-reactjs";
 import { FLAVORS, type Flavor } from "./data";
 import { FLAVOR_IMAGES } from "./images";
 import { Bubbles } from "./bottle";
+import { FlavorModal } from "./flavor-modal";
 import { Section, SectionHeading } from "./primitives";
-import { scrollToSection } from "./use-lenis";
+
 
 
 function FlavorCard({ flavor, index, onOpen }: { flavor: Flavor; index: number; onOpen: () => void }) {
