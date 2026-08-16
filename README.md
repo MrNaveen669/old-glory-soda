@@ -94,3 +94,15 @@ cd <repository-name>
 npm i
 npm run dev
 ```
+
+## Render Deployment
+
+To deploy this project on Render:
+
+1. Create a new **Web Service** on Render and connect your repository.
+2. Configure the settings:
+   - **Environment**: Node
+   - **Build Command**: `npm install && npm run build`
+   - **Start Command**: `npm start` (or `node .output/server/index.mjs`)
+3. Render automatically binds to `0.0.0.0` and assigns the `PORT` environment variable.
+

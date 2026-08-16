@@ -20,6 +20,8 @@ const title = "Old Glory Soda — All Season Drink | Marble Goli Soda";
 const description =
   "Old Glory Soda bottles the classic marble-neck goli soda in six flavours — Blueberry Blast, Fizzy Green Apple, Citrus Orange Pop, Fruit Beer, Zesty Lemon Zing and Spicy Spark Zeera Soda. Find a store near you.";
 const ogImage = "https://oldglorysoda.lovable.app/logo-mark.png";
+const url = "https://oldglorysoda.lovable.app";
+
 
 export const Route = createFileRoute("/")({
   component: Index,
