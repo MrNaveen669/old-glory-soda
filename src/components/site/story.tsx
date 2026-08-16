@@ -68,7 +68,7 @@ export function Story() {
               transition={{ duration: 0.6, delay: i * 0.12 }}
             >
               <Link
-                to={`/story/${beat.slug}`}
+                to={`/story/${beat.slug}` as any}
                 className="group relative flex flex-col justify-between h-full overflow-hidden rounded-2xl border border-[#D8C8A6] bg-[#F6EFDD] p-6 shadow-md transition-all hover:-translate-y-1.5 hover:shadow-xl hover:border-[#7A1F1F]/60"
               >
                 <div>

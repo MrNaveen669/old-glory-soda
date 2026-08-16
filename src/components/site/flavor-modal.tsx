@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { useEffect } from "react";
 import { CloseCircle, Location, Star1 } from "iconsax-reactjs";
 import type { Flavor } from "./data";
-import { flavorImage } from "./images";
+import { flavorImage, flavorFullImage } from "./images";
 import { scrollToSection } from "./use-lenis";
 
 function parseIngredients(raw: string): { name: string; code: string }[] {

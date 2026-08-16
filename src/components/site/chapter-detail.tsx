@@ -6,7 +6,7 @@ import { Navbar } from "./navbar";
 import { Footer } from "./footer";
 
 export function ChapterDetail({ chapterId }: { chapterId: string }) {
-  const chapter: StoryChapter = STORY_CHAPTERS[chapterId] ?? STORY_CHAPTERS["roadside-roots"];
+  const chapter: StoryChapter = (STORY_CHAPTERS[chapterId] ?? STORY_CHAPTERS["roadside-roots"])!;
 
   return (
     <div className="min-h-screen bg-[#F6EFDD] text-[#1A1A1A] flex flex-col font-sans">
@@ -120,7 +120,7 @@ export function ChapterDetail({ chapterId }: { chapterId: string }) {
             {/* Bottom Sequential Chapter Navigation */}
             <div className="mt-16 flex flex-col sm:flex-row items-center justify-between gap-4 border-t-2 border-[#D8C8A6] pt-8">
               <Link
-                to={`/story/${chapter.prevChapter.id}`}
+                to={`/story/${chapter.prevChapter.id}` as any}
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full border-2 border-[#7A1F1F] bg-[#F6EFDD] px-6 py-3.5 text-xs font-bold tracking-wider text-[#7A1F1F] uppercase shadow-md transition-all hover:bg-[#7A1F1F] hover:text-[#F6EFDD] min-h-[44px]"
               >
                 <ArrowLeft size={16} variant="Linear" />
@@ -136,7 +136,7 @@ export function ChapterDetail({ chapterId }: { chapterId: string }) {
               </Link>
 
               <Link
-                to={`/story/${chapter.nextChapter.id}`}
+                to={`/story/${chapter.nextChapter.id}` as any}
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full bg-[#7A1F1F] px-6 py-3.5 text-xs font-bold tracking-wider text-[#F6EFDD] uppercase shadow-md transition-all hover:bg-[#5E1717] hover:scale-105 min-h-[44px]"
               >
                 Next: {chapter.nextChapter.title}
