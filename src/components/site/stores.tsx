@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
-import { CloseCircle, Location, Map1, Profile2User, Shop, Sms, Truck } from "iconsax-reactjs";
+import { Call, CloseCircle, Location, Map1, Profile2User, Shop, Sms, Truck } from "iconsax-reactjs";
 import { BRAND, STORE_LOCATIONS, type StoreLocation } from "./data";
 import { Reveal, Section, SectionHeading } from "./primitives";
 import { Bubbles } from "./bottle";
