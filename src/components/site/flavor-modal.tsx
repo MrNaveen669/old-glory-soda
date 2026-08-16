@@ -84,18 +84,36 @@ export function FlavorModal({ flavor, onClose }: { flavor: Flavor | null; onClos
                 <h3 className="mt-2 font-brand text-2xl sm:text-3xl">{flavor.name}</h3>
                 <p className="mt-4 text-sm text-muted-foreground sm:text-base">
                   {flavor.description}
-                  {flavor.ingredients && (
-                    <>
-                      {" "}
-                      <span className="mt-3 block text-xs leading-relaxed text-muted-foreground/90 sm:text-sm">
-                        <span className="font-semibold text-foreground">
-                          Ingredients ({flavor.flavourType}):
-                        </span>{" "}
-                        {flavor.ingredients}
-                      </span>
-                    </>
-                  )}
                 </p>
+
+                {flavor.ingredients && (
+                  <div className="mt-4">
+                    <p className="text-xs font-semibold tracking-[0.16em] text-foreground uppercase">
+                      Ingredients ({flavor.flavourType})
+                    </p>
+                    <div className="mt-2 overflow-hidden rounded-2xl border border-silver/30 bg-background/60 transition-transform duration-300 ease-out hover:scale-[1.03]">
+                      <table className="w-full border-collapse text-left text-xs sm:text-sm">
+                        <thead>
+                          <tr className="bg-secondary/60 text-foreground">
+                            <th className="px-3 py-2 font-semibold">Ingredient</th>
+                            <th className="w-28 px-3 py-2 font-semibold">Code/Type</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {parseIngredients(flavor.ingredients).map((row) => (
+                            <tr
+                              key={row.name}
+                              className="border-t border-silver/25 transition-transform duration-200 ease-out hover:scale-[1.02] hover:bg-secondary/40"
+                            >
+                              <td className="px-3 py-2 text-foreground/90">{row.name}</td>
+                              <td className="px-3 py-2 text-muted-foreground">{row.code}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                )}
 
                 {!flavor.comingSoon && (
                   <div className="mt-5 grid grid-cols-2 gap-3 text-sm">
