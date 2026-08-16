@@ -117,13 +117,12 @@ export function PickYourPrice() {
                       Coming soon
                     </div>
                   ) : (
-                    <div className="relative grid grid-cols-[auto_1fr] items-center gap-4">
-                      <PetBottle flavor={f} />
+                    <div className="overflow-hidden rounded-2xl border border-silver/15">
                       <img
                         src={flavorImage(f.id)}
-                        alt={`Old Glory ${f.name} PET bottle range`}
+                        alt={`Old Glory ${f.name} PET bottle`}
                         loading="lazy"
-                        className="h-36 w-full rounded-2xl border border-silver/15 object-cover opacity-80 transition-transform duration-700 group-hover:scale-105"
+                        className="h-44 w-full object-cover transition-transform duration-700 group-hover:scale-105"
                       />
                     </div>
                   )}
