@@ -5,6 +5,23 @@ import type { Flavor } from "./data";
 import { flavorImage } from "./images";
 import { scrollToSection } from "./use-lenis";
 
+function parseIngredients(raw: string): { name: string; code: string }[] {
+  return raw
+    .split(/,(?![^(]*\))/g)
+    .map((part) => part.trim())
+    .filter(Boolean)
+    .map((part) => {
+      const match = part.match(/^(.*?)\s*\(([^)]*)\)\s*$/);
+      if (match) {
+        const inner = match[2].trim();
+        if (/\d/.test(inner) && /^(INS\s*)?[\w\d]+([,\s]+[\w\d]+)*$/.test(inner)) {
+          return { name: match[1].trim(), code: inner };
+        }
+      }
+      return { name: part, code: "—" };
+    });
+}
+
 export function FlavorModal({ flavor, onClose }: { flavor: Flavor | null; onClose: () => void }) {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
