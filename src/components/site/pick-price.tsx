@@ -1,38 +1,10 @@
 import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
 import { Drop } from "iconsax-reactjs";
-import { PET_RANGE, PET_TIERS, type Flavor, type PetTier } from "./data";
+import { PET_RANGE, PET_TIERS, type PetTier } from "./data";
 import { flavorImage } from "./images";
 import { FlavorModal } from "./flavor-modal";
 import { Section, SectionHeading } from "./primitives";
-
-function PetBottle({ flavor }: { flavor: Flavor }) {
-  return (
-    <div
-      className="relative mx-auto flex h-44 w-20 flex-col items-center"
-      aria-hidden
-      style={{ filter: "drop-shadow(0 14px 22px rgba(0,0,0,0.25))" }}
-    >
-      {/* blue screw cap */}
-      <span className="h-4 w-8 rounded-t-md bg-[#1FA2E8]" />
-      <span className="h-1.5 w-8 bg-[#177FBB]" />
-      {/* neck */}
-      <span className="h-4 w-5 bg-white/25" />
-      {/* clear PET body */}
-      <span
-        className="relative w-16 flex-1 overflow-hidden rounded-t-xl rounded-b-2xl border border-white/50 bg-white/20"
-        style={{ backdropFilter: "blur(2px)" }}
-      >
-        <span
-          className="absolute inset-x-0 bottom-0 h-[78%]"
-          style={{ background: `linear-gradient(180deg, ${flavor.tint}, ${flavor.color})`, opacity: 0.85 }}
-        />
-        <span className="absolute inset-y-6 left-1.5 w-1.5 rounded-full bg-white/60" />
-        <span className="absolute inset-x-0 top-1/3 h-6 border-y border-white/50 bg-white/25" />
-      </span>
-    </div>
-  );
-}
 
 export function PickYourPrice() {
   const [tier, setTier] = useState<PetTier>(10);
@@ -117,13 +89,12 @@ export function PickYourPrice() {
                       Coming soon
                     </div>
                   ) : (
-                    <div className="relative grid grid-cols-[auto_1fr] items-center gap-4">
-                      <PetBottle flavor={f} />
+                    <div className="overflow-hidden rounded-2xl border border-silver/15">
                       <img
                         src={flavorImage(f.id)}
-                        alt={`Old Glory ${f.name} PET bottle range`}
+                        alt={`Old Glory ${f.name} PET bottle`}
                         loading="lazy"
-                        className="h-36 w-full rounded-2xl border border-silver/15 object-cover opacity-80 transition-transform duration-700 group-hover:scale-105"
+                        className="h-44 w-full object-cover transition-transform duration-700 group-hover:scale-105"
                       />
                     </div>
                   )}
