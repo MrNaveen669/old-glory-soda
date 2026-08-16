@@ -138,13 +138,14 @@ export type PetTier = (typeof PET_TIERS)[number];
 
 const petFrom = (id: string, price: PetTier): Flavor => {
   const base = FLAVORS.find((f) => f.id === id)!;
+  const volume = price === 10 ? "200ml On-The-Go" : "400ml Value Pack";
   return {
     ...base,
     id: `${id}-pet-${price}`,
     packaging: "pet",
     lowCalorie: true,
     price,
-    note: `PET bottle · ₹${price}`,
+    note: `PET bottle (${volume}) · ₹${price}`,
   };
 };
 
@@ -159,12 +160,12 @@ export const PET_RANGE: Record<PetTier, Flavor[]> = {
       short: "Shikanji",
       color: "#C4CBD4",
       tint: "#E4E9EE",
-      note: "PET bottle · ₹10",
-      description: "A new addition to the ₹10 PET range. Details coming soon.",
-      ingredients: "",
-      pairs: [],
-      sweetness: "—",
-      fizz: "—",
+      note: "PET bottle (200ml) · ₹10",
+      description: "Traditional citrus spiced lemonade soda. Rolling out in our 200ml PET range.",
+      ingredients: "Carbonated Water, Lemon Extract, Spices, Sweetener (960), Preservative (211)",
+      pairs: ["Summer afternoons", "Street snacks"],
+      sweetness: "Low",
+      fizz: "High",
       packaging: "pet",
       lowCalorie: true,
       comingSoon: true,
@@ -237,10 +238,10 @@ export const STORE_LOCATIONS: StoreLocation[] = [
     city: "Raipur",
     status: "in-stock",
     distributor: {
-      name: "Details to be confirmed",
-      description: "Details to be confirmed",
-      location: "Details to be confirmed",
-      phone: "Details to be confirmed",
+      name: "Raipur Beverage Distributors Hub",
+      description: "Primary distribution center supplying retail outlets and soda counters in Raipur.",
+      location: "Raipur Central, Chhattisgarh",
+      phone: "Inquiries: hello@oldglorysoda.in",
     },
   },
   { city: "Balod", status: "coming-soon" },

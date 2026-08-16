@@ -74,7 +74,7 @@ EXTRAS:
 
 This project was built with [Lovable](https://lovable.dev).
 
-**Live app**: https://glory-scroll-studio.lovable.app
+**Live app**: https://oldglorysoda.lovable.app
 
 ## Build with Lovable
 

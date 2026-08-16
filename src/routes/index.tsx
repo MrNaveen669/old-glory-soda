@@ -19,7 +19,7 @@ import { BRAND, FLAVORS } from "@/components/site/data";
 const title = "Old Glory Soda — All Season Drink | Marble Goli Soda";
 const description =
   "Old Glory Soda bottles the classic marble-neck goli soda in six flavours — Blueberry Blast, Fizzy Green Apple, Citrus Orange Pop, Fruit Beer, Zesty Lemon Zing and Spicy Spark Zeera Soda. Find a store near you.";
-const url = "https://oldglorysoda.lovable.app/";
+const ogImage = "https://oldglorysoda.lovable.app/logo-mark.png";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -31,7 +31,11 @@ export const Route = createFileRoute("/")({
       { property: "og:description", content: description },
       { property: "og:type", content: "website" },
       { property: "og:url", content: url },
+      { property: "og:image", content: ogImage },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: title },
+      { name: "twitter:description", content: description },
+      { name: "twitter:image", content: ogImage },
     ],
     links: [{ rel: "canonical", href: url }],
     scripts: [

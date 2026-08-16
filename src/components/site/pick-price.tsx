@@ -25,7 +25,7 @@ export function PickYourPrice() {
           <button
             key={t}
             onClick={() => setTier(t)}
-            className={`relative rounded-full px-6 py-2 text-sm font-semibold transition-colors ${
+            className={`relative rounded-full px-5 py-2 text-sm font-semibold transition-colors ${
               tier === t ? "text-primary-foreground" : "text-muted-foreground hover:text-foreground"
             }`}
             aria-pressed={tier === t}
@@ -37,7 +37,9 @@ export function PickYourPrice() {
                 transition={{ type: "spring", stiffness: 400, damping: 32 }}
               />
             )}
-            <span className="relative">₹{t} Bottles</span>
+            <span className="relative">
+              ₹{t} Tier <span className="text-xs opacity-80">({t === 10 ? "200ml Pocket" : "400ml Family Pack"})</span>
+            </span>
           </button>
         ))}
       </div>

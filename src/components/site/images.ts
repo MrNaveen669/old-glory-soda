@@ -1,29 +1,35 @@
-import heroBottle from "@/assets/hero-bottle.jpeg.asset.json";
-import blueberry from "@/assets/flavor-blueberry.jpeg.asset.json";
-import greenApple from "@/assets/flavor-green-apple.jpeg.asset.json";
-import orange from "@/assets/flavor-orange.jpeg.asset.json";
-import fruitBeer from "@/assets/flavor-fruit-beer.jpeg.asset.json";
-import lemon from "@/assets/flavor-lemon.jpeg.asset.json";
-import zeera from "@/assets/flavor-jeera.jpeg.asset.json";
-import brandPoster from "@/assets/brand-poster.png.asset.json";
-import factoryScene from "@/assets/factory-scene.png.asset.json";
-
 export const IMAGES = {
-  heroBottle: heroBottle.url,
-  brandPoster: brandPoster.url,
-  factoryScene: factoryScene.url,
+  heroBottle: "/Codd-neck_bottle_with_blue_soda_202608131812.jpeg",
+  brandPoster: "/Story merge.png",
+  factoryScene: "/Factory.png",
 };
 
 export const FLAVOR_IMAGES: Record<string, string> = {
-  "blueberry-blast": blueberry.url,
-  "green-apple": greenApple.url,
-  "citrus-orange": orange.url,
-  "fruit-beer": fruitBeer.url,
-  "lemon-zing": lemon.url,
-  "zeera-soda": zeera.url,
+  "blueberry-blast": "/Blueberry_bottle.jpeg",
+  "green-apple": "/apple_bottle.jpeg",
+  "citrus-orange": "/Orange soda.jpeg",
+  "fruit-beer": "/Fruit_Beer_bottle.jpeg",
+  "lemon-zing": "/Lemon_soda_bottl3.jpeg",
+  "zeera-soda": "/Spicy_Jeera_bottle.jpeg",
 };
 
-/** PET range ids reuse the base flavour photography. */
+export const PET_IMAGES: Record<string, string> = {
+  "zeera-soda-pet-10": "/Rs.10-Jeera.png",
+  "zeera-soda-pet-20": "/Rs.10-Jeera.png",
+  "citrus-orange-pet-10": "/Rs.10-Orange.png",
+  "citrus-orange-pet-20": "/Rs.10-Orange.png",
+  "shikanji-pet-10": "/Rs.10-Sikanji.png",
+};
+
+export const VINTAGE_ILLUSTRATIONS = {
+  tree: "/Tree.png",
+  factory: "/Factory.png",
+  truck: "/Truck.png",
+  crates: "/Bottle Cate.png",
+  storyMerge: "/Story merge.png",
+};
+
+/** PET range ids reuse specific PET bottle photography if available. */
 export function flavorImage(id: string): string | undefined {
-  return FLAVOR_IMAGES[id] ?? FLAVOR_IMAGES[id.replace(/-pet-\d+$/, "")];
+  return PET_IMAGES[id] ?? FLAVOR_IMAGES[id] ?? FLAVOR_IMAGES[id.replace(/-pet-\d+$/, "")];
 }

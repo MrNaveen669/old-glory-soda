@@ -87,7 +87,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "theme-color", content: "#F6EFDD" },
       { property: "og:site_name", content: "Old Glory Soda" },
       { property: "og:type", content: "website" },
+      { property: "og:image", content: "https://oldglorysoda.lovable.app/logo-mark.png" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:image", content: "https://oldglorysoda.lovable.app/logo-mark.png" },
     ],
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
