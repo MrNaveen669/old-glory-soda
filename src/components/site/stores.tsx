@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
-import { Call, CloseCircle, Location, Map1, Profile2User, Shop, Truck } from "iconsax-reactjs";
+import { Call, CloseCircle, Location, Map1, Profile2User, Shop, Sms, Truck } from "iconsax-reactjs";
 import { BRAND, STORE_LOCATIONS, type StoreLocation } from "./data";
 import { Reveal, Section, SectionHeading } from "./primitives";
 import { Bubbles } from "./bottle";
@@ -27,11 +27,11 @@ export function Stores() {
                 Order Online
               </button>
               <a
-                href={`tel:${BRAND.phone.replace(/\s/g, "")}`}
+                href={`mailto:${BRAND.email}`}
                 className="inline-flex items-center gap-2 rounded-full border border-silver/40 px-6 py-3 text-sm font-semibold transition-colors hover:border-highlight hover:text-highlight"
               >
-                <Call size={18} variant="Linear" />
-                Talk to distribution
+                <Sms size={18} variant="Linear" />
+                Email distribution
               </a>
             </div>
           </Reveal>
@@ -58,7 +58,7 @@ export function Stores() {
                 ))}
                 <div className="absolute bottom-3 left-3 inline-flex items-center gap-2 rounded-full bg-background/80 px-3 py-1.5 text-xs">
                   <Map1 size={14} variant="Linear" />
-                  Interactive map placeholder
+                  Store network
                 </div>
               </div>
             </div>
