@@ -249,28 +249,28 @@ export const STORE_LOCATIONS: StoreLocation[] = [
 
 export const TESTIMONIALS = [
   {
-    quote: "Tastes exactly like the soda cart outside my school. The goli pop still gets a cheer.",
-    name: "Anitha R.",
+    quote: "Honestly? The blueberry one tastes like the soda cart outside my school. That goli pop sound still gets a cheer from everyone.",
+    name: "Anitha",
     place: "Coimbatore",
   },
   {
-    quote: "Zeera soda after a heavy biryani is unbeatable. We keep a crate at the restaurant now.",
-    name: "Imran S.",
+    quote: "Zeera soda after a heavy biryani is unbeatable. We keep a crate at the restaurant now — customers ask for it by name.",
+    name: "Imran Sheikh",
     place: "Hyderabad",
   },
   {
-    quote: "The green apple is dangerously good. Tart, loud fizz, gone in a minute.",
-    name: "Meera K.",
+    quote: "Dangerously good. Tart, loud fizz, gone in a minute.",
+    name: "Meera",
     place: "Kochi",
   },
   {
-    quote: "Finally a fruit beer that doesn't taste like cough syrup. Party staple.",
-    name: "Dev P.",
+    quote: "Finally a fruit beer that doesn't taste like cough syrup. Price is fair, availability is still patchy in my area, but when I find it I buy six.",
+    name: "Dev",
     place: "Mumbai",
   },
   {
-    quote: "Glass bottles, real fizz, zero fuss. My kids fight over the blueberry one.",
-    name: "Sudha M.",
+    quote: "Glass bottles, real fizz, zero fuss. My kids fight over the blueberry and I secretly grab the lemon zing for myself.",
+    name: "Sudha Mani",
     place: "Chennai",
   },
 ];
@@ -279,7 +279,6 @@ export const SOCIALS = [
   { label: "Instagram", href: "https://instagram.com", icon: "instagram" },
   { label: "Facebook", href: "https://facebook.com", icon: "facebook" },
   { label: "YouTube", href: "https://youtube.com", icon: "youtube" },
-  { label: "WhatsApp", href: "https://wa.me/919840000000", icon: "whatsapp" },
 ];
 
 export const NAV_LINKS = [
