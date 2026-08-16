@@ -29,13 +29,14 @@ export function FlavorModal({ flavor, onClose }: { flavor: Flavor | null; onClos
     return () => window.removeEventListener("keydown", onKey);
   }, [onClose]);
 
-  const image = flavor ? flavorImage(flavor.id) : undefined;
+  const cutout = flavor ? flavorImage(flavor.id) : undefined;
+  const fullScene = flavor ? flavorFullImage(flavor.id) : undefined;
 
   return (
     <AnimatePresence>
       {flavor && (
         <motion.div
-          className="fixed inset-0 z-[80] grid place-items-center bg-background/80 p-4 backdrop-blur-md"
+          className="fixed inset-0 z-[80] grid place-items-center bg-[#1A1A1A]/75 p-4 backdrop-blur-md"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -50,30 +51,46 @@ export function FlavorModal({ flavor, onClose }: { flavor: Flavor | null; onClos
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.97 }}
             transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-            className="relative max-h-[88svh] w-full max-w-3xl overflow-y-auto rounded-3xl border border-silver/25 bg-card p-6 sm:p-8"
-            style={{ boxShadow: `0 40px 90px -40px ${flavor.color}` }}
+            className="relative max-h-[90svh] w-full max-w-3xl overflow-y-auto rounded-3xl border-2 border-[#D8C8A6] bg-[#F6EFDD] p-6 sm:p-8 text-[#1A1A1A]"
+            style={{ boxShadow: `0 30px 80px -20px ${flavor.color}60` }}
           >
             <span
               aria-hidden
-              className="absolute inset-0 opacity-25"
-              style={{ background: `radial-gradient(90% 60% at 90% 0%, ${flavor.color}, transparent 60%)` }}
+              className="absolute inset-0 opacity-15 pointer-events-none"
+              style={{ background: `radial-gradient(80% 50% at 80% 0%, ${flavor.color}, transparent 70%)` }}
             />
             <button
               onClick={onClose}
               aria-label="Close"
-              className="absolute top-4 right-4 z-10 rounded-full p-1 text-muted-foreground transition-colors hover:text-foreground"
+              className="absolute top-4 right-4 z-10 rounded-full bg-[#EAE0C8] p-1.5 text-[#5C4A38] transition-colors hover:bg-[#7A1F1F] hover:text-[#F6EFDD]"
             >
-              <CloseCircle size={26} variant="Linear" />
+              <CloseCircle size={24} variant="Linear" />
             </button>
 
-            <div className="relative grid gap-6 sm:grid-cols-[0.9fr_1fr] sm:items-center">
-              <div className="mx-auto w-full overflow-hidden rounded-2xl border border-silver/20">
-                {image && !flavor.comingSoon ? (
-                  <img
-                    src={image}
-                    alt={`Old Glory ${flavor.name}`}
-                    className={`h-full w-full object-cover ${flavor.packaging === "pet" ? "brightness-105 saturate-[0.92]" : ""}`}
-                  />
+            <div className="relative grid gap-6 sm:grid-cols-[0.95fr_1.05fr] sm:items-center">
+              {/* Image Container displaying Full Scene artwork */}
+              <div className="relative mx-auto w-full overflow-hidden rounded-2xl border border-[#D8C8A6] bg-[#F9F3E5] p-2 shadow-inner">
+                {fullScene && !flavor.comingSoon ? (
+                  <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl bg-[#EAE0C8]/50">
+                    <img
+                      src={fullScene}
+                      alt={`Old Glory ${flavor.name} full scene artwork`}
+                      className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
+                    />
+                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#1A1A1A]/80 to-transparent p-3 text-center">
+                      <span className="text-[10px] font-bold tracking-widest text-[#F6EFDD] uppercase">
+                        Full Scene View · Signature Reserve
+                      </span>
+                    </div>
+                  </div>
+                ) : cutout ? (
+                  <div className="flex h-64 w-full items-center justify-center p-4">
+                    <img
+                      src={cutout}
+                      alt={`Old Glory ${flavor.name}`}
+                      className="h-full object-contain filter drop-shadow-lg"
+                    />
+                  </div>
                 ) : (
                   <div
                     className="grid h-56 w-full place-items-center text-xs tracking-[0.2em] uppercase"

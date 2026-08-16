@@ -98,7 +98,7 @@ export function Hero() {
           </motion.div>
         </div>
 
-        {/* Right Column: Illustrated Scene with Bottle & Banyan Tree Background */}
+        {/* Right Column: Hand-Drawn Sepia Scene with Illustrated Bottle */}
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -106,44 +106,50 @@ export function Hero() {
           className="relative mx-auto w-full max-w-lg lg:max-w-none"
         >
           <div className="relative overflow-hidden rounded-3xl border-2 border-[#D8C8A6] bg-[#F9F3E5] p-5 shadow-2xl">
-            {/* Background Banyan Tree Stall Illustration */}
-            <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-[#EAE0C8]/60">
+            {/* Background Banyan Tree Stall Vintage Illustration */}
+            <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-[#EAE0C8]/60 border border-[#D8C8A6]/40">
               <img
                 src={VINTAGE_ILLUSTRATIONS.tree}
-                alt="Vintage roadside stall under a banyan tree with bicycle illustration"
-                className="h-full w-full object-cover opacity-80 mix-blend-multiply filter sepia-[0.4] contrast-[1.1]"
+                alt="Vintage roadside stall under a banyan tree with wooden crate illustration"
+                className="h-full w-full object-cover opacity-85 mix-blend-multiply filter sepia-[0.45] contrast-[1.15]"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#F9F3E5] via-transparent to-transparent opacity-80" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#F9F3E5] via-transparent to-transparent opacity-70" />
             </div>
 
-            {/* Foreground Soda Bottle */}
+            {/* Foreground Hand-Drawn Illustrated Bottle */}
             <motion.div
-              animate={reduced ? {} : { y: [0, -10, 0] }}
+              animate={reduced ? {} : { y: [0, -8, 0] }}
               transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute inset-x-8 bottom-6 top-8 flex items-center justify-center"
+              className="absolute inset-x-8 bottom-6 top-8 flex items-center justify-center pointer-events-none"
             >
               <img
                 src={IMAGES.heroBottle}
-                alt="Old Glory marble neck goli soda bottle foreground"
-                className="max-h-full max-w-[240px] drop-shadow-[0_20px_35px_rgba(46,37,28,0.35)] sm:max-w-[280px]"
+                alt="Old Glory marble neck goli soda illustrated bottle"
+                className="max-h-full max-w-[200px] sm:max-w-[240px] filter drop-shadow-[0_15px_25px_rgba(74,53,37,0.3)] contrast-[1.05]"
               />
             </motion.div>
 
-            {/* Bottom-right Circular Stamp Badge */}
+            {/* Bottom-right Circular Stamp Badge with Fixed Curved Text */}
             <motion.div
               animate={reduced ? {} : { rotate: 360 }}
-              transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-              className="absolute -bottom-4 -right-4 h-28 w-28 rounded-full border-2 border-dashed border-[#7A1F1F] bg-[#F6EFDD] p-2 shadow-xl grid place-items-center text-center text-[#7A1F1F]"
+              transition={{ duration: 28, repeat: Infinity, ease: "linear" }}
+              className="absolute -bottom-4 -right-4 h-28 w-28 rounded-full border-2 border-dashed border-[#7A1F1F] bg-[#F6EFDD] p-1.5 shadow-xl grid place-items-center text-center text-[#7A1F1F]"
             >
-              <svg viewBox="0 0 100 100" className="h-full w-full">
-                <path
-                  id="circlePath"
-                  d="M 50, 50 m -37, 0 a 37,37 0 1,1 74,0 a 37,37 0 1,1 -74,0"
-                  fill="none"
-                />
-                <text className="text-[10.5px] font-bold tracking-widest uppercase fill-[#7A1F1F]">
-                  <textPath href="#circlePath" startOffset="0%">
-                    • MADE IN INDIA • SINCE 1962 •
+              <svg viewBox="0 0 100 100" className="h-full w-full pointer-events-none">
+                <defs>
+                  {/* Top arc path: left (9 o'clock) to right (3 o'clock) along top curve */}
+                  <path id="badgeTopArc" d="M 14 50 A 36 36 0 0 1 86 50" fill="none" />
+                  {/* Bottom arc path: right (3 o'clock) to left (9 o'clock) along bottom curve so text reads right-side-up */}
+                  <path id="badgeBottomArc" d="M 86 50 A 36 36 0 0 1 14 50" fill="none" />
+                </defs>
+                <text className="text-[9.5px] font-extrabold tracking-widest uppercase fill-[#7A1F1F]">
+                  <textPath href="#badgeTopArc" startOffset="50%" textAnchor="middle">
+                    MADE IN INDIA
+                  </textPath>
+                </text>
+                <text className="text-[9.5px] font-extrabold tracking-widest uppercase fill-[#7A1F1F]">
+                  <textPath href="#badgeBottomArc" startOffset="50%" textAnchor="middle">
+                    SINCE 1962
                   </textPath>
                 </text>
               </svg>
@@ -158,3 +164,4 @@ export function Hero() {
     </section>
   );
 }
+

@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { CloseCircle, HamburgerMenu, Location } from "iconsax-reactjs";
 import { NAV_LINKS } from "./data";
 import { OldGloryLogo } from "./logo";
-import { ThemeToggle } from "./theme-toggle";
 import { scrollToSection } from "./use-lenis";
 
 export function Navbar() {
@@ -91,12 +90,11 @@ export function Navbar() {
               <Location size={16} variant="Linear" />
               Find Old Glory
             </button>
-            <ThemeToggle />
             <button
               onClick={() => setOpen((o) => !o)}
               aria-label="Toggle menu"
               aria-expanded={open}
-              className="grid h-9 w-9 place-items-center rounded-full border border-silver/30 lg:hidden"
+              className="grid h-9 w-9 place-items-center rounded-full border border-[#D8C8A6] bg-[#F6EFDD] text-[#7A1F1F] lg:hidden"
             >
               {open ? (
                 <CloseCircle size={20} variant="Linear" />

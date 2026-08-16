@@ -38,44 +38,72 @@ export function PickYourPrice() {
               High fizz pocket-sized PET bottles designed for daily street crispness. Portable, recyclable, zero compromise.
             </p>
 
-            {/* Bottle Image + Flavour List */}
-            <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 items-center gap-6 rounded-2xl border border-[#F6EFDD]/20 bg-[#5E1717]/60 p-5">
-              <div className="flex h-44 items-center justify-center overflow-hidden rounded-xl bg-[#7A1F1F]/40 p-2">
-                <img
-                  src={PET_IMAGES["zeera-soda-pet-10"]}
-                  alt="₹10 PET bottle of Old Glory soda"
-                  className="h-full object-contain filter drop-shadow-xl"
-                />
-              </div>
-
-              <div>
-                <p className="text-xs font-bold tracking-widest text-[#F6EFDD]/80 uppercase">
-                  Available Flavours:
-                </p>
-                <ul className="mt-3 space-y-2 text-sm font-semibold">
-                  <li className="flex items-center gap-2">
-                    <span className="h-2 w-2 rounded-full bg-[#E0A76A]" />
+            {/* Visual Flavour Cards Grid for ₹10 Range */}
+            <div className="mt-8">
+              <p className="text-xs font-bold tracking-widest text-[#F6EFDD]/90 uppercase mb-3">
+                Available Flavours in ₹10 Tier:
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                {/* Tile 1: Spicy Spark Zeera */}
+                <div className="flex flex-col items-center rounded-xl border border-[#F6EFDD]/25 bg-[#F6EFDD] p-3 text-center text-[#1A1A1A] shadow-md transition-transform hover:scale-105">
+                  <div className="flex h-20 w-full items-center justify-center rounded-lg bg-[#EAE0C8]/50 p-1">
+                    <img
+                      src={PET_IMAGES["zeera-soda-pet-10"]}
+                      alt="Spicy Spark Zeera ₹10 PET bottle"
+                      className="h-full object-contain filter drop-shadow-md"
+                    />
+                  </div>
+                  <h4 className="mt-2 font-display text-xs font-bold uppercase text-[#7A1F1F]">
                     Spicy Spark Zeera
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <span className="h-2 w-2 rounded-full bg-[#FFC08A]" />
-                    Citrus Orange Pop
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <span className="h-2 w-2 rounded-full bg-[#FFF6A8]" />
-                    Shikanji (Lemon Spice)
-                  </li>
-                </ul>
-                <div className="mt-4 inline-block rounded-full bg-[#F6EFDD] px-3 py-1 text-[10px] font-bold text-[#7A1F1F] uppercase tracking-wider">
-                  Low Calorie · Stevia Sweetened
+                  </h4>
+                  <span className="mt-0.5 text-[10px] font-semibold text-[#5C4A38]">
+                    Roasted Zeera
+                  </span>
                 </div>
+
+                {/* Tile 2: Citrus Orange Pop */}
+                <div className="flex flex-col items-center rounded-xl border border-[#F6EFDD]/25 bg-[#F6EFDD] p-3 text-center text-[#1A1A1A] shadow-md transition-transform hover:scale-105">
+                  <div className="flex h-20 w-full items-center justify-center rounded-lg bg-[#EAE0C8]/50 p-1">
+                    <img
+                      src={PET_IMAGES["citrus-orange-pet-10"]}
+                      alt="Citrus Orange Pop ₹10 PET bottle"
+                      className="h-full object-contain filter drop-shadow-md"
+                    />
+                  </div>
+                  <h4 className="mt-2 font-display text-xs font-bold uppercase text-[#7A1F1F]">
+                    Citrus Orange Pop
+                  </h4>
+                  <span className="mt-0.5 text-[10px] font-semibold text-[#5C4A38]">
+                    Sun Citrus
+                  </span>
+                </div>
+
+                {/* Tile 3: Shikanji */}
+                <div className="flex flex-col items-center rounded-xl border border-[#F6EFDD]/25 bg-[#F6EFDD] p-3 text-center text-[#1A1A1A] shadow-md transition-transform hover:scale-105">
+                  <div className="flex h-20 w-full items-center justify-center rounded-lg bg-[#EAE0C8]/50 p-1">
+                    <img
+                      src={PET_IMAGES["shikanji-pet-10"]}
+                      alt="Shikanji ₹10 PET bottle"
+                      className="h-full object-contain filter drop-shadow-md"
+                    />
+                  </div>
+                  <h4 className="mt-2 font-display text-xs font-bold uppercase text-[#7A1F1F]">
+                    Shikanji
+                  </h4>
+                  <span className="mt-0.5 text-[10px] font-semibold text-[#5C4A38]">
+                    Lemon Spice
+                  </span>
+                </div>
+              </div>
+              <div className="mt-4 inline-block rounded-full bg-[#F6EFDD] px-3.5 py-1 text-[10px] font-bold text-[#7A1F1F] uppercase tracking-wider">
+                Low Calorie · Stevia Sweetened · 200ml
               </div>
             </div>
           </div>
 
           <div className="mt-10 flex items-center justify-between border-t border-[#F6EFDD]/20 pt-4 text-xs font-bold text-[#F6EFDD]/80 uppercase tracking-widest">
             <span>Everyday Street Price</span>
-            <span>200ml Clear PET Bottle</span>
+            <span>200ml Clear PET Range</span>
           </div>
         </motion.div>
 
@@ -110,44 +138,72 @@ export function PickYourPrice() {
               Double the volume for full afternoon sharing. Crafted for family meals, roadside dhabas and festival gatherings.
             </p>
 
-            {/* Bottle Image + Flavour List */}
-            <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 items-center gap-6 rounded-2xl border border-[#F6EFDD]/20 bg-[#212B20]/60 p-5">
-              <div className="flex h-44 items-center justify-center overflow-hidden rounded-xl bg-[#2E3B2C]/40 p-2">
-                <img
-                  src={PET_IMAGES["citrus-orange-pet-20"]}
-                  alt="₹20 PET bottle of Old Glory soda"
-                  className="h-full object-contain filter drop-shadow-xl"
-                />
-              </div>
-
-              <div>
-                <p className="text-xs font-bold tracking-widest text-[#F6EFDD]/80 uppercase">
-                  Available Flavours:
-                </p>
-                <ul className="mt-3 space-y-2 text-sm font-semibold">
-                  <li className="flex items-center gap-2">
-                    <span className="h-2 w-2 rounded-full bg-[#FFC08A]" />
+            {/* Visual Flavour Cards Grid for ₹20 Range */}
+            <div className="mt-8">
+              <p className="text-xs font-bold tracking-widest text-[#F6EFDD]/90 uppercase mb-3">
+                Available Flavours in ₹20 Tier:
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                {/* Tile 1: Citrus Orange Pop */}
+                <div className="flex flex-col items-center rounded-xl border border-[#F6EFDD]/25 bg-[#F6EFDD] p-3 text-center text-[#1A1A1A] shadow-md transition-transform hover:scale-105">
+                  <div className="flex h-20 w-full items-center justify-center rounded-lg bg-[#EAE0C8]/50 p-1">
+                    <img
+                      src={PET_IMAGES["citrus-orange-pet-20"]}
+                      alt="Citrus Orange Pop ₹20 PET bottle"
+                      className="h-full object-contain filter drop-shadow-md"
+                    />
+                  </div>
+                  <h4 className="mt-2 font-display text-xs font-bold uppercase text-[#2E3B2C]">
                     Citrus Orange Pop
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <span className="h-2 w-2 rounded-full bg-[#E0A76A]" />
-                    Spicy Spark Zeera
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <span className="h-2 w-2 rounded-full bg-[#B6EF9B]" />
-                    Fizzy Green Apple
-                  </li>
-                </ul>
-                <div className="mt-4 inline-block rounded-full bg-[#F6EFDD] px-3 py-1 text-[10px] font-bold text-[#2E3B2C] uppercase tracking-wider">
-                  Double Volume · Max Carbonation
+                  </h4>
+                  <span className="mt-0.5 text-[10px] font-semibold text-[#5C4A38]">
+                    Sun Citrus
+                  </span>
                 </div>
+
+                {/* Tile 2: Spicy Spark Zeera */}
+                <div className="flex flex-col items-center rounded-xl border border-[#F6EFDD]/25 bg-[#F6EFDD] p-3 text-center text-[#1A1A1A] shadow-md transition-transform hover:scale-105">
+                  <div className="flex h-20 w-full items-center justify-center rounded-lg bg-[#EAE0C8]/50 p-1">
+                    <img
+                      src={PET_IMAGES["zeera-soda-pet-20"]}
+                      alt="Spicy Spark Zeera ₹20 PET bottle"
+                      className="h-full object-contain filter drop-shadow-md"
+                    />
+                  </div>
+                  <h4 className="mt-2 font-display text-xs font-bold uppercase text-[#2E3B2C]">
+                    Spicy Spark Zeera
+                  </h4>
+                  <span className="mt-0.5 text-[10px] font-semibold text-[#5C4A38]">
+                    Roasted Zeera
+                  </span>
+                </div>
+
+                {/* Tile 3: Fizzy Green Apple */}
+                <div className="flex flex-col items-center rounded-xl border border-[#F6EFDD]/25 bg-[#F6EFDD] p-3 text-center text-[#1A1A1A] shadow-md transition-transform hover:scale-105">
+                  <div className="flex h-20 w-full items-center justify-center rounded-lg bg-[#EAE0C8]/50 p-1">
+                    <img
+                      src={PET_IMAGES["green-apple-pet-20"]}
+                      alt="Fizzy Green Apple ₹20 PET bottle"
+                      className="h-full object-contain filter drop-shadow-md"
+                    />
+                  </div>
+                  <h4 className="mt-2 font-display text-xs font-bold uppercase text-[#2E3B2C]">
+                    Fizzy Green Apple
+                  </h4>
+                  <span className="mt-0.5 text-[10px] font-semibold text-[#5C4A38]">
+                    Orchard Tart
+                  </span>
+                </div>
+              </div>
+              <div className="mt-4 inline-block rounded-full bg-[#F6EFDD] px-3.5 py-1 text-[10px] font-bold text-[#2E3B2C] uppercase tracking-wider">
+                Double Volume · Max Carbonation · 400ml
               </div>
             </div>
           </div>
 
           <div className="mt-10 flex items-center justify-between border-t border-[#F6EFDD]/20 pt-4 text-xs font-bold text-[#F6EFDD]/80 uppercase tracking-widest">
             <span>Family Value Pack</span>
-            <span>400ml Clear PET Bottle</span>
+            <span>400ml Clear PET Range</span>
           </div>
         </motion.div>
       </div>

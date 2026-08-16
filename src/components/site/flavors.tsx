@@ -5,13 +5,13 @@ import { FLAVOR_IMAGES } from "./images";
 import { FlavorModal } from "./flavor-modal";
 import { Section } from "./primitives";
 
-const FRUIT_IMAGERY: Record<string, { fruitImg: string; tagline: string }> = {
-  "blueberry-blast": { fruitImg: "/Blueberry.png", tagline: "Wild Berry" },
-  "green-apple": { fruitImg: "/Apple.png", tagline: "Orchard Tart" },
-  "citrus-orange": { fruitImg: "/orange.png", tagline: "Sun Citrus" },
-  "fruit-beer": { fruitImg: "/Fruite Beer.png", tagline: "Mixed Berry" },
-  "lemon-zing": { fruitImg: "/Lemon.png", tagline: "Nimboo Masala" },
-  "zeera-soda": { fruitImg: "/Jeera.png", tagline: "Roasted Zeera" },
+const FLAVOR_TAGLINES: Record<string, string> = {
+  "blueberry-blast": "Wild Berry",
+  "green-apple": "Orchard Tart",
+  "citrus-orange": "Sun Citrus",
+  "fruit-beer": "Mixed Berry",
+  "lemon-zing": "Nimboo Masala",
+  "zeera-soda": "Roasted Zeera",
 };
 
 export function Flavors() {
@@ -31,7 +31,7 @@ export function Flavors() {
               SIX FLAVOURS. EVERY SEASON.
             </h2>
             <p className="mt-3 max-w-xl text-base text-[#5C4A38]">
-              Bottled in authentic codd-neck glass with the original goli pop ritual — crafted for every palate across the year.
+              Bottled in authentic codd-neck glass with the original goli pop ritual — hand-drawn heritage art, crafted for every palate.
             </p>
           </div>
 
@@ -52,9 +52,9 @@ export function Flavors() {
         </div>
 
         {/* 6-Column Flavours Grid */}
-        <div className="mt-14 grid gap-5 grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
+        <div className="mt-14 grid gap-6 grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
           {FLAVORS.map((f, i) => {
-            const meta = FRUIT_IMAGERY[f.id] ?? { fruitImg: "/Blueberry.png", tagline: "Heritage Fizz" };
+            const tagline = FLAVOR_TAGLINES[f.id] ?? "Heritage Fizz";
             return (
               <motion.button
                 key={f.id}
@@ -63,7 +63,7 @@ export function Flavors() {
                 viewport={{ once: true, margin: "-40px" }}
                 transition={{ duration: 0.5, delay: i * 0.08 }}
                 onClick={() => setOpenId(f.id)}
-                className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-[#D8C8A6] bg-[#F9F3E5] p-4 text-center shadow-md transition-all hover:-translate-y-2 hover:shadow-2xl"
+                className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-[#D8C8A6] bg-[#F9F3E5] p-4 text-center shadow-md transition-all hover:-translate-y-2 hover:shadow-2xl focus-visible:outline-2 focus-visible:outline-[#7A1F1F]"
                 style={{ borderColor: `${f.color}50` }}
               >
                 {/* Color Top Border Accent */}
@@ -72,41 +72,37 @@ export function Flavors() {
                   style={{ backgroundColor: f.color }}
                 />
 
-                {/* Illustrated Bottle Image */}
-                <div className="relative mt-2 flex h-48 w-full items-center justify-center overflow-hidden rounded-xl bg-[#EAE0C8]/30 p-2">
+                {/* Clean Background-Removed Cutout Illustrated Bottle */}
+                <div className="relative mt-2 flex h-52 w-full items-center justify-center overflow-hidden rounded-xl bg-[#EAE0C8]/40 p-3 border border-[#D8C8A6]/30">
                   <img
                     src={FLAVOR_IMAGES[f.id]}
-                    alt={`Old Glory ${f.name} illustrated bottle`}
-                    className="h-full object-contain drop-shadow-md transition-transform duration-500 group-hover:scale-110"
+                    alt={`Old Glory ${f.name} illustrated bottle cutout`}
+                    className="h-full object-contain filter drop-shadow-md transition-transform duration-500 group-hover:scale-110"
                   />
+                  {/* Subtle "Tap to View" overlay badge on cutout image */}
+                  <div className="absolute inset-x-2 bottom-2 rounded-lg bg-[#7A1F1F]/90 py-1 text-[9px] font-extrabold uppercase tracking-widest text-[#F6EFDD] opacity-0 transition-opacity duration-300 group-hover:opacity-100 shadow-md">
+                    Tap to view full scene
+                  </div>
                 </div>
 
-                {/* Fruit / Spice Imagery Below */}
-                <div className="my-3 flex h-16 w-full items-center justify-center overflow-hidden rounded-lg bg-[#F6EFDD]/80 p-1 border border-[#D8C8A6]/40">
-                  <img
-                    src={meta.fruitImg}
-                    alt={`${f.name} fruit notes`}
-                    className="h-full object-contain filter drop-shadow-sm transition-transform group-hover:scale-105"
-                  />
-                </div>
-
-                {/* Flavour Name + 2-Word Tagline */}
-                <div>
+                {/* Flavour Name + Tagline */}
+                <div className="mt-4">
                   <h3 className="font-display text-sm font-bold uppercase tracking-tight text-[#1A1A1A] group-hover:text-[#7A1F1F]">
                     {f.name}
                   </h3>
                   <span
-                    className="mt-1 inline-block text-[11px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full"
+                    className="mt-1.5 inline-block text-[10px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full"
                     style={{ backgroundColor: `${f.color}20`, color: f.color }}
                   >
-                    {meta.tagline}
+                    {tagline}
                   </span>
                 </div>
 
-                {/* Bottom CTA Link */}
-                <span className="mt-3 block text-[10px] font-bold tracking-widest text-[#7A1F1F] uppercase group-hover:underline">
-                  Pop Details →
-                </span>
+                {/* Bottom Interactive Callout */}
+                <div className="mt-4 flex items-center justify-center gap-1 border-t border-[#D8C8A6]/40 pt-2.5 text-[10px] font-bold tracking-wider text-[#7A1F1F] uppercase group-hover:underline">
+                  <span>Pop Full View</span>
+                  <span>→</span>
+                </div>
               </motion.button>
             );
           })}
@@ -117,3 +113,4 @@ export function Flavors() {
     </Section>
   );
 }
+

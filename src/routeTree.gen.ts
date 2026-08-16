@@ -10,33 +10,89 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as StoryBottlingWorksRouteImport } from './routes/story/bottling-works'
+import { Route as StoryCornerShopCratesRouteImport } from './routes/story/corner-shop-crates'
+import { Route as StoryRoadsideRootsRouteImport } from './routes/story/roadside-roots'
+import { Route as StoryTownRolloutRouteImport } from './routes/story/town-rollout'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const StoryBottlingWorksRoute = StoryBottlingWorksRouteImport.update({
+  id: '/story/bottling-works',
+  path: '/story/bottling-works',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StoryCornerShopCratesRoute = StoryCornerShopCratesRouteImport.update({
+  id: '/story/corner-shop-crates',
+  path: '/story/corner-shop-crates',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StoryRoadsideRootsRoute = StoryRoadsideRootsRouteImport.update({
+  id: '/story/roadside-roots',
+  path: '/story/roadside-roots',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StoryTownRolloutRoute = StoryTownRolloutRouteImport.update({
+  id: '/story/town-rollout',
+  path: '/story/town-rollout',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/story/bottling-works': typeof StoryBottlingWorksRoute
+  '/story/corner-shop-crates': typeof StoryCornerShopCratesRoute
+  '/story/roadside-roots': typeof StoryRoadsideRootsRoute
+  '/story/town-rollout': typeof StoryTownRolloutRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/story/bottling-works': typeof StoryBottlingWorksRoute
+  '/story/corner-shop-crates': typeof StoryCornerShopCratesRoute
+  '/story/roadside-roots': typeof StoryRoadsideRootsRoute
+  '/story/town-rollout': typeof StoryTownRolloutRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/story/bottling-works': typeof StoryBottlingWorksRoute
+  '/story/corner-shop-crates': typeof StoryCornerShopCratesRoute
+  '/story/roadside-roots': typeof StoryRoadsideRootsRoute
+  '/story/town-rollout': typeof StoryTownRolloutRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/story/bottling-works'
+    | '/story/corner-shop-crates'
+    | '/story/roadside-roots'
+    | '/story/town-rollout'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/story/bottling-works'
+    | '/story/corner-shop-crates'
+    | '/story/roadside-roots'
+    | '/story/town-rollout'
+  id:
+    | '__root__'
+    | '/'
+    | '/story/bottling-works'
+    | '/story/corner-shop-crates'
+    | '/story/roadside-roots'
+    | '/story/town-rollout'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  StoryBottlingWorksRoute: typeof StoryBottlingWorksRoute
+  StoryCornerShopCratesRoute: typeof StoryCornerShopCratesRoute
+  StoryRoadsideRootsRoute: typeof StoryRoadsideRootsRoute
+  StoryTownRolloutRoute: typeof StoryTownRolloutRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +104,43 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/story/bottling-works': {
+      id: '/story/bottling-works'
+      path: '/story/bottling-works'
+      fullPath: '/story/bottling-works'
+      preLoaderRoute: typeof StoryBottlingWorksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/story/corner-shop-crates': {
+      id: '/story/corner-shop-crates'
+      path: '/story/corner-shop-crates'
+      fullPath: '/story/corner-shop-crates'
+      preLoaderRoute: typeof StoryCornerShopCratesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/story/roadside-roots': {
+      id: '/story/roadside-roots'
+      path: '/story/roadside-roots'
+      fullPath: '/story/roadside-roots'
+      preLoaderRoute: typeof StoryRoadsideRootsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/story/town-rollout': {
+      id: '/story/town-rollout'
+      path: '/story/town-rollout'
+      fullPath: '/story/town-rollout'
+      preLoaderRoute: typeof StoryTownRolloutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  StoryBottlingWorksRoute: StoryBottlingWorksRoute,
+  StoryCornerShopCratesRoute: StoryCornerShopCratesRoute,
+  StoryRoadsideRootsRoute: StoryRoadsideRootsRoute,
+  StoryTownRolloutRoute: StoryTownRolloutRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
