@@ -12,7 +12,7 @@ function parseIngredients(raw: string): { name: string; code: string }[] {
     .filter(Boolean)
     .map((part) => {
       const match = part.match(/^(.*?)\s*\(([^)]*)\)\s*$/);
-      if (match) {
+      if (match?.[1] && match[2]) {
         const inner = match[2].trim();
         if (/\d/.test(inner) && /^(INS\s*)?[\w\d]+([,\s]+[\w\d]+)*$/.test(inner)) {
           return { name: match[1].trim(), code: inner };
