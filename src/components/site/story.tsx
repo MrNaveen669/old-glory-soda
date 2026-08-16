@@ -1,113 +1,106 @@
 import { motion } from "motion/react";
-import { useState } from "react";
-import { STORY } from "./data";
-import { Reveal, Section, SectionHeading } from "./primitives";
 import { VINTAGE_ILLUSTRATIONS } from "./images";
+import { Reveal, Section } from "./primitives";
 
 const STORY_BEATS = [
   {
-    id: "origin",
-    year: "1962",
+    num: "01",
     title: "Roadside Roots",
-    caption: "Started under the banyan tree with a wooden crate and fresh block ice.",
+    description: "Started under a sprawling banyan tree with a handcrafted wooden crate, blocks of river ice, and codd-neck glass bottles.",
     image: VINTAGE_ILLUSTRATIONS.tree,
   },
   {
-    id: "factory",
-    year: "1970s",
+    num: "02",
     title: "Bottling Works",
-    caption: "Codd-neck precision glass filling with marble pressure sealing.",
+    description: "Built our first mechanical bottling factory with vintage pressure pipes and marble sealing precision for maximum fizz.",
     image: VINTAGE_ILLUSTRATIONS.factory,
   },
   {
-    id: "truck",
-    year: "1980s",
+    num: "03",
     title: "Town Rollout",
-    caption: "Vintage fleet delivering fresh wooden crates across Chhattisgarh.",
+    description: "Loaded onto vintage delivery trucks, spreading the iconic marble pop sound to every town and village across the state.",
     image: VINTAGE_ILLUSTRATIONS.truck,
   },
   {
-    id: "crates",
-    year: "Today",
+    num: "04",
     title: "Corner Shop Crates",
-    caption: "Classic marble-neck crates ready for every season.",
+    description: "Stacking high at local corner stores and kirana counters, serving six signature flavours to generations of soda lovers.",
     image: VINTAGE_ILLUSTRATIONS.crates,
   },
 ];
 
 export function Story() {
-  const [activeBeat, setActiveBeat] = useState(0);
-
   return (
-    <Section id="story">
-      <div className="grid items-start gap-12 lg:grid-cols-[1fr_1fr]">
-        <div>
-          <SectionHeading eyebrow={STORY.eyebrow} title={STORY.heading} />
-          <div className="mt-6 space-y-4">
-            {STORY.paragraphs.map((p, i) => (
-              <Reveal key={i} delay={i + 1}>
-                <p className="max-w-xl text-base text-pretty text-muted-foreground sm:text-lg">
-                  {p}
-                </p>
-              </Reveal>
-            ))}
-          </div>
-
-          <div className="mt-10 grid grid-cols-3 gap-3 sm:gap-5">
-            {STORY.stats.map((s, i) => (
-              <Reveal key={s.label} delay={i + 4}>
-                <div className="glass-panel rounded-2xl p-4 text-center sm:p-5">
-                  <p className="font-brand text-2xl text-highlight sm:text-3xl">{s.value}</p>
-                  <p className="mt-1 text-xs text-muted-foreground sm:text-sm">{s.label}</p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
+    <Section id="story" className="bg-[#F9F3E5] py-20 border-y border-[#D8C8A6]/60">
+      <div className="mx-auto max-w-6xl">
+        {/* Section Heading */}
+        <div className="text-center">
+          <Reveal>
+            <span className="inline-block text-xs font-bold tracking-widest text-[#7A1F1F] uppercase">
+              EST. 1962 · HERITAGE CHRONICLES
+            </span>
+          </Reveal>
+          <Reveal delay={1}>
+            <h2 className="mt-3 font-display text-4xl font-extrabold uppercase tracking-tight sm:text-5xl text-[#1A1A1A]">
+              OUR STORY SINCE 1962
+            </h2>
+          </Reveal>
+          <Reveal delay={2}>
+            <p className="mx-auto mt-4 max-w-2xl text-base text-[#5C4A38] sm:text-lg">
+              From a single roadside stall under a banyan tree to an iconic Indian soda brand. Here is how the marble kept rolling.
+            </p>
+          </Reveal>
         </div>
 
-        <div className="space-y-6">
-          <div className="relative overflow-hidden rounded-3xl border border-silver/25 bg-card p-4 shadow-xl">
-            <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-muted/40">
-              <motion.img
-                key={STORY_BEATS[activeBeat].id}
-                src={STORY_BEATS[activeBeat].image}
-                alt={STORY_BEATS[activeBeat].title}
-                initial={{ opacity: 0, scale: 0.96 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                className="h-full w-full object-contain p-2"
-              />
-              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-background/90 via-background/40 to-transparent p-4">
-                <span className="inline-block rounded-full bg-primary/20 px-2.5 py-0.5 text-xs font-semibold text-primary">
-                  {STORY_BEATS[activeBeat].year}
-                </span>
-                <p className="mt-1 font-brand text-lg">{STORY_BEATS[activeBeat].title}</p>
-                <p className="text-xs text-muted-foreground">{STORY_BEATS[activeBeat].caption}</p>
-              </div>
-            </div>
-          </div>
+        {/* 4-Column Grid */}
+        <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {STORY_BEATS.map((beat, i) => (
+            <motion.div
+              key={beat.num}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.6, delay: i * 0.12 }}
+              className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-[#D8C8A6] bg-[#F6EFDD] p-6 shadow-md transition-all hover:-translate-y-1.5 hover:shadow-xl hover:border-[#7A1F1F]/50"
+            >
+              <div>
+                {/* Number Badge */}
+                <div className="flex items-center justify-between border-b border-[#D8C8A6]/60 pb-3">
+                  <span className="font-display text-2xl font-black text-[#7A1F1F]">
+                    {beat.num}
+                  </span>
+                  <span className="text-[10px] font-bold tracking-widest text-[#5C4A38] uppercase">
+                    CHRONICLE
+                  </span>
+                </div>
 
-          <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4">
-            {STORY_BEATS.map((beat, idx) => (
-              <button
-                key={beat.id}
-                onClick={() => setActiveBeat(idx)}
-                className={`flex flex-col items-center rounded-2xl border p-2.5 text-center transition-all ${
-                  activeBeat === idx
-                    ? "border-primary bg-primary/10 shadow-sm"
-                    : "border-silver/20 bg-card/60 hover:border-silver/40"
-                }`}
-              >
-                <img
-                  src={beat.image}
-                  alt={beat.title}
-                  className="h-12 w-12 object-contain opacity-80"
-                />
-                <span className="mt-1.5 text-[11px] font-semibold">{beat.title}</span>
-                <span className="text-[9px] text-muted-foreground">{beat.year}</span>
-              </button>
-            ))}
-          </div>
+                {/* Sepia Illustration */}
+                <div className="my-5 overflow-hidden rounded-xl border border-[#D8C8A6]/40 bg-[#EAE0C8]/40 p-2">
+                  <img
+                    src={beat.image}
+                    alt={beat.title}
+                    className="h-36 w-full object-contain filter sepia-[0.55] contrast-[1.1] transition-transform duration-500 group-hover:scale-105"
+                  />
+                </div>
+
+                {/* Title */}
+                <h3 className="font-display text-xl font-bold uppercase tracking-wide text-[#1A1A1A]">
+                  {beat.title}
+                </h3>
+
+                {/* Description */}
+                <p className="mt-2 text-xs leading-relaxed text-[#5C4A38]">
+                  {beat.description}
+                </p>
+              </div>
+
+              {/* Bottom Decorative Stamp Dot */}
+              <div className="mt-5 flex items-center gap-1.5 pt-3 border-t border-[#D8C8A6]/40 text-[10px] font-bold text-[#7A1F1F] uppercase tracking-wider">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#7A1F1F]" />
+                Old Glory Bottling Co.
+              </div>
+            </motion.div>
+          ))}
         </div>
       </div>
     </Section>

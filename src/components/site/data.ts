@@ -284,10 +284,9 @@ export const SOCIALS = [
 
 export const NAV_LINKS = [
   { id: "hero", label: "Home" },
-  { id: "story", label: "Story" },
+  { id: "story", label: "Our Story" },
   { id: "flavors", label: "Flavours" },
-  { id: "pricing", label: "Pick Your Price" },
-  { id: "why", label: "Why Us" },
+  { id: "pricing", label: "Pricing" },
+  { id: "stores", label: "Where to Buy" },
   { id: "gallery", label: "Gallery" },
-  { id: "stores", label: "Find a Store" },
 ];

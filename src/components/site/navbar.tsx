@@ -86,10 +86,10 @@ export function Navbar() {
           <div className="flex shrink-0 items-center gap-2">
             <button
               onClick={() => go("stores")}
-              className="hidden items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground transition-transform hover:scale-105 sm:inline-flex"
+              className="hidden items-center gap-1.5 rounded-full bg-[#7A1F1F] px-5 py-2.5 text-xs font-bold tracking-wider text-[#F6EFDD] uppercase shadow-md transition-all hover:bg-[#5E1717] hover:scale-105 active:scale-95 sm:inline-flex"
             >
               <Location size={16} variant="Linear" />
-              Find a Store
+              Find Old Glory
             </button>
             <ThemeToggle />
             <button

@@ -1,99 +1,118 @@
 import { motion } from "motion/react";
-import { useState, type MouseEvent } from "react";
-import { Drop } from "iconsax-reactjs";
+import { useState } from "react";
 import { FLAVORS, type Flavor } from "./data";
 import { FLAVOR_IMAGES } from "./images";
-import { Bubbles } from "./bottle";
 import { FlavorModal } from "./flavor-modal";
-import { Section, SectionHeading } from "./primitives";
+import { Section } from "./primitives";
 
-
-
-function FlavorCard({ flavor, index, onOpen }: { flavor: Flavor; index: number; onOpen: () => void }) {
-  const [tilt, setTilt] = useState({ x: 0, y: 0 });
-
-  const onMove = (e: MouseEvent<HTMLButtonElement>) => {
-    const r = e.currentTarget.getBoundingClientRect();
-    const px = (e.clientX - r.left) / r.width - 0.5;
-    const py = (e.clientY - r.top) / r.height - 0.5;
-    setTilt({ x: -py * 10, y: px * 12 });
-  };
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-70px" }}
-      transition={{ duration: 0.7, delay: (index % 3) * 0.08, ease: [0.22, 1, 0.36, 1] }}
-    >
-      <button
-        onMouseMove={onMove}
-        onMouseLeave={() => setTilt({ x: 0, y: 0 })}
-        onClick={onOpen}
-        className="group relative block w-full overflow-hidden rounded-3xl border border-silver/20 bg-card p-6 text-left transition-shadow duration-300 hover:shadow-2xl"
-        style={{
-          transform: `perspective(900px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
-          transition: "transform 220ms ease-out",
-          boxShadow: `0 24px 60px -34px ${flavor.color}`,
-        }}
-        aria-label={`View ${flavor.name} details`}
-      >
-        <span
-          aria-hidden
-          className="absolute inset-0 opacity-25 transition-opacity duration-500 group-hover:opacity-45"
-          style={{ background: `radial-gradient(120% 80% at 80% 0%, ${flavor.color}, transparent 65%)` }}
-        />
-        <Bubbles count={8} color={flavor.tint} />
-
-        <div className="relative">
-          <div className="mb-5 overflow-hidden rounded-2xl border border-silver/15">
-            <img
-              src={FLAVOR_IMAGES[flavor.id]}
-              alt={`Old Glory ${flavor.name} goli soda bottle`}
-              loading="lazy"
-              className="h-40 w-full object-cover transition-transform duration-700 group-hover:scale-110 sm:h-48"
-            />
-          </div>
-          <span
-            className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-semibold tracking-[0.18em] uppercase"
-            style={{ background: `${flavor.color}26`, color: flavor.color }}
-          >
-            <Drop size={12} variant="Bold" color={flavor.color} />
-            {flavor.short}
-          </span>
-          <h3 className="mt-4 font-brand text-xl leading-tight sm:text-2xl">{flavor.name}</h3>
-          <p className="mt-2 text-sm text-muted-foreground">{flavor.note}</p>
-          <p className="mt-4 line-clamp-3 text-sm text-muted-foreground/90">{flavor.description}</p>
-          <span
-            className="mt-5 inline-block text-xs font-semibold tracking-widest uppercase"
-            style={{ color: flavor.color }}
-          >
-            View flavour →
-          </span>
-        </div>
-
-      </button>
-    </motion.div>
-  );
-}
+const FRUIT_IMAGERY: Record<string, { fruitImg: string; tagline: string }> = {
+  "blueberry-blast": { fruitImg: "/Blueberry.png", tagline: "Wild Berry" },
+  "green-apple": { fruitImg: "/Apple.png", tagline: "Orchard Tart" },
+  "citrus-orange": { fruitImg: "/orange.png", tagline: "Sun Citrus" },
+  "fruit-beer": { fruitImg: "/Fruite Beer.png", tagline: "Mixed Berry" },
+  "lemon-zing": { fruitImg: "/Lemon.png", tagline: "Nimboo Masala" },
+  "zeera-soda": { fruitImg: "/Jeera.png", tagline: "Roasted Zeera" },
+};
 
 export function Flavors() {
   const [openId, setOpenId] = useState<string | null>(null);
   const active = FLAVORS.find((f) => f.id === openId) ?? null;
 
   return (
-    <Section id="flavors" className="overflow-hidden">
-      <SectionHeading
-        eyebrow="The lineup"
-        title="Six flavours, one marble ritual."
-        intro="Every bottle carries the same goli pop and the same thick glass — the only thing that changes is what's inside."
-      />
+    <Section id="flavors" className="bg-[#F6EFDD] py-20">
+      <div className="mx-auto max-w-7xl">
+        {/* Header Row with Stevia Badge */}
+        <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+          <div>
+            <span className="text-xs font-bold tracking-widest text-[#7A1F1F] uppercase">
+              MARBLE NECK SIGNATURE COLLECTION
+            </span>
+            <h2 className="mt-2 font-display text-4xl font-extrabold uppercase tracking-tight sm:text-5xl text-[#1A1A1A]">
+              SIX FLAVOURS. EVERY SEASON.
+            </h2>
+            <p className="mt-3 max-w-xl text-base text-[#5C4A38]">
+              Bottled in authentic codd-neck glass with the original goli pop ritual — crafted for every palate across the year.
+            </p>
+          </div>
 
-      <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {FLAVORS.map((f, i) => (
-          <FlavorCard key={f.id} flavor={f} index={i} onOpen={() => setOpenId(f.id)} />
-        ))}
+          {/* Stevia Natural Sweetener Circular Badge */}
+          <div className="flex shrink-0 items-center gap-3 rounded-full border-2 border-dashed border-[#2E3B2C] bg-[#2E3B2C]/10 px-4 py-2.5 shadow-sm">
+            <span className="grid h-10 w-10 place-items-center rounded-full bg-[#2E3B2C] text-[#F6EFDD] font-bold text-xs">
+              🍃
+            </span>
+            <div>
+              <p className="font-display text-xs font-bold uppercase tracking-wider text-[#2E3B2C]">
+                Made with Stevia
+              </p>
+              <p className="text-[10px] text-[#5C4A38] uppercase tracking-wide">
+                Natural Sweetener · Low Calorie
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* 6-Column Flavours Grid */}
+        <div className="mt-14 grid gap-5 grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
+          {FLAVORS.map((f, i) => {
+            const meta = FRUIT_IMAGERY[f.id] ?? { fruitImg: "/Blueberry.png", tagline: "Heritage Fizz" };
+            return (
+              <motion.button
+                key={f.id}
+                initial={{ opacity: 0, y: 35 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-40px" }}
+                transition={{ duration: 0.5, delay: i * 0.08 }}
+                onClick={() => setOpenId(f.id)}
+                className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-[#D8C8A6] bg-[#F9F3E5] p-4 text-center shadow-md transition-all hover:-translate-y-2 hover:shadow-2xl"
+                style={{ borderColor: `${f.color}50` }}
+              >
+                {/* Color Top Border Accent */}
+                <div
+                  className="absolute inset-x-0 top-0 h-1.5"
+                  style={{ backgroundColor: f.color }}
+                />
+
+                {/* Illustrated Bottle Image */}
+                <div className="relative mt-2 flex h-48 w-full items-center justify-center overflow-hidden rounded-xl bg-[#EAE0C8]/30 p-2">
+                  <img
+                    src={FLAVOR_IMAGES[f.id]}
+                    alt={`Old Glory ${f.name} illustrated bottle`}
+                    className="h-full object-contain drop-shadow-md transition-transform duration-500 group-hover:scale-110"
+                  />
+                </div>
+
+                {/* Fruit / Spice Imagery Below */}
+                <div className="my-3 flex h-16 w-full items-center justify-center overflow-hidden rounded-lg bg-[#F6EFDD]/80 p-1 border border-[#D8C8A6]/40">
+                  <img
+                    src={meta.fruitImg}
+                    alt={`${f.name} fruit notes`}
+                    className="h-full object-contain filter drop-shadow-sm transition-transform group-hover:scale-105"
+                  />
+                </div>
+
+                {/* Flavour Name + 2-Word Tagline */}
+                <div>
+                  <h3 className="font-display text-sm font-bold uppercase tracking-tight text-[#1A1A1A] group-hover:text-[#7A1F1F]">
+                    {f.name}
+                  </h3>
+                  <span
+                    className="mt-1 inline-block text-[11px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full"
+                    style={{ backgroundColor: `${f.color}20`, color: f.color }}
+                  >
+                    {meta.tagline}
+                  </span>
+                </div>
+
+                {/* Bottom CTA Link */}
+                <span className="mt-3 block text-[10px] font-bold tracking-widest text-[#7A1F1F] uppercase group-hover:underline">
+                  Pop Details →
+                </span>
+              </motion.button>
+            );
+          })}
+        </div>
       </div>
+
       <FlavorModal flavor={active} onClose={() => setOpenId(null)} />
     </Section>
   );

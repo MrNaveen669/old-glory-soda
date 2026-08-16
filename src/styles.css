@@ -35,67 +35,68 @@
   --color-highlight-foreground: var(--highlight-foreground);
   --color-silver: var(--silver);
   --color-surface: var(--surface);
-  --font-brand: "Bungee", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Baloo 2", ui-sans-serif, system-ui, sans-serif;
+  --color-maroon: #7A1F1F;
+  --color-olive: #2E3B2C;
+  --color-sepia: #4A3525;
+  --font-brand: "Yellowtail", cursive;
+  --font-display: "Alfa Slab One", "Playfair Display", serif;
+  --font-serif: "Playfair Display", serif;
   --font-sans: "Outfit", ui-sans-serif, system-ui, sans-serif;
-
 }
 
 :root {
   --radius: 0.875rem;
-  /* Vintage Soda Parchment */
-  --background: #f6efdd;
-  --foreground: #20242e;
-  --surface: #fffcf5;
-  --card: #fffcf5;
-  --card-foreground: #20242e;
-  --popover: #fffcf5;
-  --popover-foreground: #20242e;
-  --primary: #1b7fc4;
-  --primary-foreground: #fffcf5;
-  --secondary: #efe4c9;
-  --secondary-foreground: #20242e;
-  --muted: #ece0c4;
-  --muted-foreground: #5c5748;
-  --accent: #1b7fc4;
-  --accent-foreground: #fffcf5;
-  --destructive: #b3302a;
-  --destructive-foreground: #fffcf5;
-  --highlight: #e8b93e;
-  --highlight-foreground: #20242e;
-  --silver: #9a8f74;
-  --border: #d9cba8;
-  --input: #d9cba8;
-  --ring: #1b7fc4;
+  /* Vintage Soda Aged Parchment & Sepia Palette */
+  --background: #F6EFDD;
+  --foreground: #1A1A1A;
+  --surface: #FDF9F0;
+  --card: #F9F3E5;
+  --card-foreground: #1A1A1A;
+  --popover: #F9F3E5;
+  --popover-foreground: #1A1A1A;
+  --primary: #7A1F1F; /* Deep maroon / brick red */
+  --primary-foreground: #F6EFDD;
+  --secondary: #2E3B2C; /* Dark olive green */
+  --secondary-foreground: #F6EFDD;
+  --muted: #EAE0C8;
+  --muted-foreground: #5C4A38;
+  --accent: #7A1F1F;
+  --accent-foreground: #F6EFDD;
+  --destructive: #7A1F1F;
+  --destructive-foreground: #F6EFDD;
+  --highlight: #C85A17;
+  --highlight-foreground: #F6EFDD;
+  --silver: #A6957B;
+  --border: #D8C8A6;
+  --input: #D8C8A6;
+  --ring: #7A1F1F;
 }
 
 .dark {
-  /* deep ink navy, warm accents */
-  --background: #20242e;
-  --foreground: #f6efdd;
-  --surface: #2a2f3c;
-  --card: #2a2f3c;
-  --card-foreground: #f6efdd;
-  --popover: #2a2f3c;
-  --popover-foreground: #f6efdd;
-  --primary: #3f9edd;
-  --primary-foreground: #20242e;
-  --secondary: #333a49;
-  --secondary-foreground: #f6efdd;
-  --muted: #333a49;
-  --muted-foreground: #c3bba6;
-  --accent: #3f9edd;
-  --accent-foreground: #20242e;
-  --destructive: #c9453e;
-  --destructive-foreground: #fffcf5;
-  --highlight: #e8b93e;
-  --highlight-foreground: #20242e;
-  --silver: #c4cbd4;
+  --background: #1C241B;
+  --foreground: #F6EFDD;
+  --surface: #242E23;
+  --card: #242E23;
+  --card-foreground: #F6EFDD;
+  --popover: #242E23;
+  --popover-foreground: #F6EFDD;
+  --primary: #8C2323;
+  --primary-foreground: #F6EFDD;
+  --secondary: #3B4B39;
+  --secondary-foreground: #F6EFDD;
+  --muted: #2A3629;
+  --muted-foreground: #C8BFA9;
+  --accent: #8C2323;
+  --accent-foreground: #F6EFDD;
+  --destructive: #8C2323;
+  --destructive-foreground: #F6EFDD;
+  --highlight: #D96A27;
+  --highlight-foreground: #F6EFDD;
+  --silver: #A6957B;
   --border: oklch(1 0 0 / 14%);
   --input: oklch(1 0 0 / 18%);
-  --ring: #3f9edd;
+  --ring: #8C2323;
 }
-
 
 @layer base {
   * {
@@ -121,12 +122,12 @@
   h3,
   h4 {
     font-family: var(--font-display);
-    letter-spacing: -0.02em;
+    letter-spacing: 0.02em;
   }
 
   ::selection {
-    background: var(--color-highlight);
-    color: var(--color-highlight-foreground);
+    background: var(--color-primary);
+    color: var(--color-primary-foreground);
   }
 }
 
@@ -144,29 +145,56 @@
 
 @utility ribbon {
   position: relative;
-  background: #b3302a;
-  color: #fffcf5;
+  background: var(--color-primary);
+  color: var(--color-primary-foreground);
   border-radius: 999px;
-  box-shadow: 0 10px 30px -14px #b3302a;
+  box-shadow: 0 10px 30px -14px var(--color-primary);
 }
 
 @utility glass-panel {
-  background: color-mix(in oklab, var(--color-surface) 70%, transparent);
+  background: color-mix(in oklab, var(--color-surface) 85%, transparent);
   backdrop-filter: blur(14px);
-  border: 1px solid color-mix(in oklab, var(--color-silver) 22%, transparent);
+  border: 1px solid color-mix(in oklab, var(--color-silver) 35%, transparent);
 }
 
-
 @utility glow-primary {
-  box-shadow: 0 20px 60px -20px color-mix(in oklab, var(--color-primary) 55%, transparent);
+  box-shadow: 0 16px 40px -15px color-mix(in oklab, var(--color-primary) 45%, transparent);
 }
 
 @utility fizz-grid {
   background-image: radial-gradient(
-    color-mix(in oklab, var(--color-silver) 20%, transparent) 1px,
-    transparent 1px
+    color-mix(in oklab, var(--color-silver) 25%, transparent) 1.2px,
+    transparent 1.2px
   );
-  background-size: 26px 26px;
+  background-size: 24px 24px;
+}
+
+@utility sepia-sketch {
+  filter: sepia(0.65) contrast(1.15) brightness(0.92) hue-rotate(-15deg);
+  mix-blend-multiply: multiply;
+}
+
+@utility paper-card {
+  background-color: var(--color-card);
+  border: 1px solid color-mix(in oklab, var(--color-border) 80%, transparent);
+  box-shadow: 0 4px 20px -4px rgba(74, 53, 37, 0.08);
+}
+
+@utility stamp-border {
+  border: 2px dashed color-mix(in oklab, var(--color-primary) 60%, transparent);
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@utility animate-spin-slow {
+  animation: spin-slow 20s linear infinite;
 }
 
 @keyframes marquee-x {

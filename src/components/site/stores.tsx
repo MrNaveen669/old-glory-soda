@@ -1,169 +1,243 @@
-import { AnimatePresence, motion } from "motion/react";
+import { motion } from "motion/react";
 import { useState } from "react";
-import { Call, CloseCircle, Location, Map1, Profile2User, Shop, Sms, Truck } from "iconsax-reactjs";
-import { BRAND, STORE_LOCATIONS, type StoreLocation } from "./data";
-import { Reveal, Section, SectionHeading } from "./primitives";
-import { Bubbles } from "./bottle";
+import { Location } from "iconsax-reactjs";
+import { STORE_LOCATIONS } from "./data";
+import { VINTAGE_ILLUSTRATIONS } from "./images";
+import { Section } from "./primitives";
 
 export function Stores() {
-  const [openCity, setOpenCity] = useState<string | null>(null);
-  const active: StoreLocation | null =
-    STORE_LOCATIONS.find((s) => s.city === openCity && s.distributor) ?? null;
+  const [submitted, setSubmitted] = useState(false);
+  const [townName, setTownName] = useState("");
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (townName.trim()) {
+      setSubmitted(true);
+      setTownName("");
+    }
+  };
 
   return (
-    <Section id="stores" className="overflow-hidden">
-      <Bubbles count={10} color="var(--color-highlight)" />
-      <div className="relative grid gap-10 md:grid-cols-[1fr_1fr] md:items-start">
-        <div>
-          <SectionHeading
-            eyebrow="Where to buy"
-            title="A crate is closer than you think."
-            intro="Old Glory is rolling out across Chhattisgarh, one town at a time. Here is where we are right now."
-          />
-          <Reveal delay={3}>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <button className="glow-primary inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-transform hover:scale-[1.03] active:scale-95">
-                <Truck size={18} variant="Linear" />
-                Order Online
-              </button>
-              <a
-                href={`mailto:${BRAND.email}`}
-                className="inline-flex items-center gap-2 rounded-full border border-silver/40 px-6 py-3 text-sm font-semibold transition-colors hover:border-highlight hover:text-highlight"
-              >
-                <Sms size={18} variant="Linear" />
-                Email distribution
-              </a>
-            </div>
-          </Reveal>
-
-          <Reveal delay={4}>
-            <div className="mt-8 rounded-3xl border border-silver/20 bg-card p-4">
-              <div className="relative h-48 overflow-hidden rounded-2xl bg-secondary sm:h-56">
-                <div className="fizz-grid absolute inset-0 opacity-60" />
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/25 to-transparent" />
-                {[
-                  { top: "30%", left: "34%" },
-                  { top: "58%", left: "60%" },
-                  { top: "68%", left: "26%" },
-                ].map((pos, i) => (
-                  <motion.span
-                    key={i}
-                    className="absolute text-destructive"
-                    style={pos}
-                    animate={{ y: [0, -7, 0] }}
-                    transition={{ duration: 2.4, repeat: Infinity, delay: i * 0.3 }}
-                  >
-                    <Location size={26} variant="Bold" color="currentColor" />
-                  </motion.span>
-                ))}
-                <div className="absolute bottom-3 left-3 inline-flex items-center gap-2 rounded-full bg-background/80 px-3 py-1.5 text-xs">
-                  <Map1 size={14} variant="Linear" />
-                  Store network
-                </div>
-              </div>
-            </div>
-          </Reveal>
-        </div>
-
-        <div className="space-y-3 md:mt-4">
-          {STORE_LOCATIONS.map((s, i) => {
-            const inStock = s.status === "in-stock";
-            const Wrapper = inStock ? motion.button : motion.div;
-            return (
-              <Wrapper
-                key={s.city}
-                {...(inStock ? { onClick: () => setOpenCity(s.city), type: "button" as const } : {})}
-                initial={{ opacity: 0, x: 30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, margin: "-60px" }}
-                transition={{ duration: 0.6, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
-                whileHover={{ x: inStock ? 6 : 0 }}
-                className={`glass-panel flex w-full items-center gap-4 rounded-2xl p-4 text-left ${
-                  inStock ? "cursor-pointer" : "opacity-70"
-                }`}
-              >
-                <span
-                  className={`grid h-11 w-11 shrink-0 place-items-center rounded-xl ${
-                    inStock ? "bg-destructive/15 text-destructive" : "bg-muted text-muted-foreground"
-                  }`}
-                >
-                  <Shop size={22} variant="Linear" color="currentColor" />
-                </span>
-                <div className="min-w-0">
-                  <p className="truncate font-display text-sm font-semibold">{s.city}</p>
-                  <p className="truncate text-xs text-muted-foreground">
-                    {inStock ? "Tap for distributor details" : "Rolling out shortly"}
-                  </p>
-                </div>
-                <span
-                  className={`ml-auto shrink-0 rounded-full px-3 py-1 text-[10px] font-semibold tracking-[0.16em] uppercase ${
-                    inStock
-                      ? "bg-[#6DC24B]/20 text-[#4f9c33]"
-                      : "bg-muted text-muted-foreground"
-                  }`}
-                >
-                  {inStock ? "In Stock" : "Coming Soon"}
-                </span>
-              </Wrapper>
-            );
-          })}
-          <p className="pt-2 text-xs text-muted-foreground">
-            Distributor enquiries welcome — more towns being added each month.
+    <Section id="stores" className="bg-[#F9F3E5] py-20 border-y border-[#D8C8A6]/60">
+      <div className="mx-auto max-w-7xl">
+        {/* Section Heading */}
+        <div className="text-center">
+          <span className="text-xs font-bold tracking-widest text-[#7A1F1F] uppercase">
+            DISTRIBUTION NETWORK · EST. 1962
+          </span>
+          <h2 className="mt-2 font-display text-4xl font-extrabold uppercase tracking-tight sm:text-5xl text-[#1A1A1A]">
+            FROM OUR TOWN TO YOURS
+          </h2>
+          <p className="mx-auto mt-3 max-w-2xl text-base text-[#5C4A38]">
+            Old Glory Soda is rolling out across Chhattisgarh and beyond. Check current availability or invite us to your town.
           </p>
         </div>
-      </div>
 
-      <AnimatePresence>
-        {active && active.distributor && (
+        {/* Grid Layout: Delivery Truck | Town List | Line-Art Map | Dark CTA Card */}
+        <div className="mt-14 grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-4 items-stretch">
+          {/* 1. Illustrated Delivery Truck (Left) */}
           <motion.div
-            className="fixed inset-0 z-[80] grid place-items-center bg-background/80 p-4 backdrop-blur-md"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setOpenCity(null)}
-            role="dialog"
-            aria-modal="true"
-            aria-label={`${active.city} distributor details`}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="flex flex-col justify-between overflow-hidden rounded-2xl border border-[#D8C8A6] bg-[#F6EFDD] p-6 shadow-md"
           >
-            <motion.div
-              onClick={(e) => e.stopPropagation()}
-              initial={{ opacity: 0, y: 30, scale: 0.96 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 16, scale: 0.97 }}
-              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-              className="relative w-full max-w-md rounded-3xl border border-silver/25 bg-card p-6 sm:p-8"
-            >
-              <button
-                onClick={() => setOpenCity(null)}
-                aria-label="Close"
-                className="absolute top-4 right-4 text-muted-foreground transition-colors hover:text-foreground"
-              >
-                <CloseCircle size={24} variant="Linear" />
-              </button>
-              <span className="inline-flex rounded-full bg-[#6DC24B]/20 px-3 py-1 text-[10px] font-semibold tracking-[0.16em] text-[#4f9c33] uppercase">
-                In Stock
+            <div>
+              <span className="text-[10px] font-bold tracking-widest text-[#7A1F1F] uppercase">
+                FLEET 1962
               </span>
-              <h3 className="mt-3 font-brand text-2xl">{active.city}</h3>
-              <dl className="mt-5 space-y-3 text-sm">
-                {[
-                  { icon: Profile2User, label: "Distributor", value: active.distributor.name },
-                  { icon: Shop, label: "About", value: active.distributor.description },
-                  { icon: Location, label: "Location", value: active.distributor.location },
-                  { icon: Call, label: "Phone", value: active.distributor.phone },
-                ].map(({ icon: Icon, label, value }) => (
-                  <div key={label} className="flex items-start gap-3 rounded-2xl border border-silver/20 p-3">
-                    <Icon size={18} variant="Linear" className="mt-0.5 shrink-0 text-muted-foreground" />
-                    <div>
-                      <dt className="text-xs text-muted-foreground">{label}</dt>
-                      <dd className="font-medium">{value}</dd>
-                    </div>
-                  </div>
-                ))}
-              </dl>
-            </motion.div>
+              <h3 className="mt-1 font-display text-xl font-bold uppercase text-[#1A1A1A]">
+                FRESH DELIVERY
+              </h3>
+              <p className="mt-2 text-xs text-[#5C4A38] leading-relaxed">
+                Our vintage distribution trucks transport wooden crates directly from bottling works to neighborhood kirana stores.
+              </p>
+            </div>
+            
+            <div className="my-4 overflow-hidden rounded-xl border border-[#D8C8A6]/50 bg-[#EAE0C8]/40 p-2">
+              <img
+                src={VINTAGE_ILLUSTRATIONS.truck}
+                alt="Old Glory Soda vintage delivery truck illustration"
+                className="h-44 w-full object-contain filter sepia-[0.6] contrast-[1.1]"
+              />
+            </div>
+
+            <div className="text-[10px] font-bold tracking-wider text-[#5C4A38] uppercase border-t border-[#D8C8A6]/50 pt-3">
+              🚚 Daily Bottling Logistics
+            </div>
           </motion.div>
-        )}
-      </AnimatePresence>
+
+          {/* 2. Town List with Status Pills (Center) */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="flex flex-col justify-between rounded-2xl border border-[#D8C8A6] bg-[#F6EFDD] p-6 shadow-md"
+          >
+            <div>
+              <span className="text-[10px] font-bold tracking-widest text-[#7A1F1F] uppercase">
+                COVERAGE STATUS
+              </span>
+              <h3 className="mt-1 font-display text-xl font-bold uppercase text-[#1A1A1A]">
+                TOWN LIST
+              </h3>
+              <p className="mt-2 text-xs text-[#5C4A38]">
+                Active distribution centers & upcoming rollouts:
+              </p>
+            </div>
+
+            <div className="my-5 space-y-3">
+              {STORE_LOCATIONS.map((loc) => {
+                const isInStock = loc.status === "in-stock";
+                return (
+                  <div
+                    key={loc.city}
+                    className="flex items-center justify-between rounded-xl border border-[#D8C8A6]/60 bg-[#F9F3E5] px-4 py-3 shadow-sm"
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <span className="grid h-8 w-8 place-items-center rounded-full bg-[#7A1F1F]/10 text-[#7A1F1F]">
+                        <Location size={18} variant="Bold" />
+                      </span>
+                      <div>
+                        <p className="font-display text-sm font-bold text-[#1A1A1A]">
+                          {loc.city}
+                        </p>
+                        <p className="text-[10px] text-[#5C4A38]">
+                          {isInStock ? "Distributors Active" : "Scheduled Next"}
+                        </p>
+                      </div>
+                    </div>
+
+                    <span
+                      className={`rounded-full px-3 py-1 text-[10px] font-bold tracking-wider uppercase ${
+                        isInStock
+                          ? "bg-[#2E3B2C] text-[#F6EFDD]"
+                          : "bg-[#EAE0C8] text-[#5C4A38]"
+                      }`}
+                    >
+                      {isInStock ? "In Stock" : "Coming Soon"}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="text-[10px] font-bold tracking-wider text-[#5C4A38] uppercase border-t border-[#D8C8A6]/50 pt-3">
+              📍 More Towns Added Monthly
+            </div>
+          </motion.div>
+
+          {/* 3. Simple Line-Art Map with Location Pins (Right) */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="flex flex-col justify-between rounded-2xl border border-[#D8C8A6] bg-[#F6EFDD] p-6 shadow-md"
+          >
+            <div>
+              <span className="text-[10px] font-bold tracking-widest text-[#7A1F1F] uppercase">
+                TERRITORY MAP
+              </span>
+              <h3 className="mt-1 font-display text-xl font-bold uppercase text-[#1A1A1A]">
+                LINE-ART MAP
+              </h3>
+              <p className="mt-2 text-xs text-[#5C4A38]">
+                Regional hub coordinates & retail pins:
+              </p>
+            </div>
+
+            <div className="relative my-4 flex h-48 w-full items-center justify-center overflow-hidden rounded-xl border border-[#D8C8A6] bg-[#EAE0C8]/40 p-4">
+              {/* Line-art map background drawing */}
+              <svg viewBox="0 0 200 160" className="h-full w-full opacity-60 text-[#4A3525]">
+                <path
+                  d="M 20,40 Q 60,20 100,50 T 180,40 T 170,120 T 90,140 T 30,110 Z"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeDasharray="4 3"
+                />
+                <path
+                  d="M 40,80 Q 90,90 140,70"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1"
+                />
+                <circle cx="95" cy="65" r="4" fill="#7A1F1F" />
+                <circle cx="65" cy="100" r="3" fill="#2E3B2C" />
+                <circle cx="130" cy="90" r="3" fill="#2E3B2C" />
+              </svg>
+
+              {/* Pin Callout Labels */}
+              <div className="absolute top-10 left-12 rounded-full bg-[#7A1F1F] px-2 py-0.5 text-[9px] font-bold text-[#F6EFDD] shadow">
+                Raipur Hub
+              </div>
+              <div className="absolute bottom-8 left-8 rounded-full bg-[#2E3B2C] px-2 py-0.5 text-[9px] font-bold text-[#F6EFDD] shadow">
+                Balod
+              </div>
+              <div className="absolute bottom-12 right-10 rounded-full bg-[#2E3B2C] px-2 py-0.5 text-[9px] font-bold text-[#F6EFDD] shadow">
+                Dalli
+              </div>
+            </div>
+
+            <div className="text-[10px] font-bold tracking-wider text-[#5C4A38] uppercase border-t border-[#D8C8A6]/50 pt-3">
+              🗺️ Chhattisgarh Supply Zone
+            </div>
+          </motion.div>
+
+          {/* 4. Dark CTA Card (Far Right) */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="flex flex-col justify-between rounded-2xl bg-[#7A1F1F] p-6 text-[#F6EFDD] shadow-xl"
+          >
+            <div>
+              <span className="inline-block rounded-full bg-[#F6EFDD]/15 px-3 py-1 text-[10px] font-bold tracking-widest text-[#F6EFDD] uppercase border border-[#F6EFDD]/30">
+                INVITE US
+              </span>
+              <h3 className="mt-4 font-display text-2xl font-black uppercase leading-tight text-[#F6EFDD]">
+                LOVE OLD GLORY?
+              </h3>
+              <p className="mt-2 text-xs text-[#F6EFDD]/90 leading-relaxed">
+                Help it reach your town! Tell us where you want Old Glory Soda stocked next.
+              </p>
+            </div>
+
+            <form onSubmit={handleSubmit} className="my-4 space-y-3">
+              {submitted ? (
+                <div className="rounded-xl border border-[#F6EFDD]/40 bg-[#F6EFDD]/20 p-4 text-center text-xs font-bold text-[#F6EFDD]">
+                  ✓ Thank you! We have added your town to our rollout map.
+                </div>
+              ) : (
+                <>
+                  <input
+                    type="text"
+                    required
+                    placeholder="Enter your town or city name..."
+                    value={townName}
+                    onChange={(e) => setTownName(e.target.value)}
+                    className="w-full rounded-full border border-[#F6EFDD]/30 bg-[#F6EFDD]/10 px-4 py-2.5 text-xs text-[#F6EFDD] placeholder-[#F6EFDD]/60 focus:outline-none focus:ring-2 focus:ring-[#F6EFDD]"
+                  />
+                  <button
+                    type="submit"
+                    className="w-full rounded-full bg-[#F6EFDD] px-4 py-3 text-xs font-bold tracking-wider text-[#7A1F1F] uppercase shadow transition-all hover:bg-white hover:scale-105 active:scale-95"
+                  >
+                    Let Us Know →
+                  </button>
+                </>
+              )}
+            </form>
+
+            <div className="text-[10px] font-bold tracking-wider text-[#F6EFDD]/80 uppercase border-t border-[#F6EFDD]/20 pt-3">
+              ✉️ Direct Retailer & Customer Request
+            </div>
+          </motion.div>
+        </div>
+      </div>
     </Section>
   );
 }
