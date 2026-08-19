@@ -11,6 +11,7 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { ThemeProvider } from "../components/site/theme-provider";
 
 function NotFoundComponent() {
   return (
@@ -84,7 +85,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "Old Glory Soda — the classic marble-neck goli soda, bottled in six bold flavours. All Season Drink.",
       },
       { name: "author", content: "Old Glory Soda" },
-      { name: "theme-color", content: "#F6EFDD" },
+      { name: "theme-color", content: "#0D1B2E" },
       { property: "og:site_name", content: "Old Glory Soda" },
       { property: "og:type", content: "website" },
       { property: "og:image", content: "https://oldglorysoda.lovable.app/logo-mark.png" },
@@ -114,7 +115,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" data-theme="dark">
       <head>
         <HeadContent />
       </head>
@@ -131,8 +132,10 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <ThemeProvider>
+        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+        <Outlet />
+      </ThemeProvider>
     </QueryClientProvider>
   );
 }

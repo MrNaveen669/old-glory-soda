@@ -37,7 +37,13 @@ export function Testimonials() {
         title="What the crate crowd says."
       />
 
-      <div className="relative mt-12 [mask-image:linear-gradient(90deg,transparent,#000_8%,#000_92%,transparent)]">
+      <div
+        className="relative mt-12"
+        style={{
+          maskImage:
+            "linear-gradient(90deg, transparent, var(--mask-opaque) 8%, var(--mask-opaque) 92%, transparent)",
+        }}
+      >
         <div className="animate-marquee flex w-max gap-4 hover:[animation-play-state:paused]">
           {TESTIMONIALS.map((t, i) => (
             <TestimonialCard key={`a-${i}`} t={t} i={i} />

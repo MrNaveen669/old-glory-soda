@@ -2,7 +2,7 @@
 @source "../src";
 @import "tw-animate-css";
 
-@custom-variant dark (&:is(.dark *));
+@custom-variant dark (&:is([data-theme="dark"] *));
 
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
@@ -35,67 +35,139 @@
   --color-highlight-foreground: var(--highlight-foreground);
   --color-silver: var(--silver);
   --color-surface: var(--surface);
-  --color-maroon: #7A1F1F;
-  --color-olive: #2E3B2C;
-  --color-sepia: #4A3525;
+  --color-bg-base: var(--bg-base);
+  --color-bg-surface: var(--bg-surface);
+  --color-bg-muted: var(--bg-muted);
+  --color-text-primary: var(--text-primary);
+  --color-text-muted: var(--text-muted);
+  --color-text-muted-strong: var(--text-muted-strong);
+  --color-accent-primary: var(--accent-primary);
+  --color-accent-secondary: var(--accent-secondary);
+  --color-accent-support: var(--accent-support);
+  --color-accent-cta: var(--accent-cta);
+  --color-accent-gold: var(--accent-gold);
+  --color-accent-hover: var(--accent-hover);
+  --color-on-accent: var(--on-accent);
+  --color-footer-bg: var(--footer-bg);
+  --color-footer-surface: var(--footer-surface);
+  --color-overlay: var(--overlay);
+  --color-price-secondary: var(--price-secondary);
+  --color-price-badge-secondary: var(--price-badge-secondary);
+  --color-maroon: var(--accent-primary);
+  --color-olive: var(--accent-support);
+  --color-sepia: var(--text-muted-strong);
   --font-brand: "Yellowtail", cursive;
   --font-display: "Alfa Slab One", "Playfair Display", serif;
   --font-serif: "Playfair Display", serif;
   --font-sans: "Outfit", ui-sans-serif, system-ui, sans-serif;
 }
 
-:root {
+:root,
+[data-theme="light"] {
   --radius: 0.875rem;
   /* Vintage Soda Aged Parchment & Sepia Palette */
-  --background: #F6EFDD;
-  --foreground: #1A1A1A;
+  --bg-base: #F6EFDD;
+  --bg-surface: #F9F3E5;
+  --bg-muted: #EAE0C8;
+  --text-primary: #1A1A1A;
+  --text-muted: #5C4A38;
+  --text-muted-strong: #4A3525;
+  --accent-primary: #7A1F1F;
+  --accent-secondary: #C85A17;
+  --accent-support: #2E3B2C;
+  --accent-cta: #7A1F1F;
+  --accent-gold: #E0A76A;
+  --accent-hover: #5E1717;
+  --on-accent: #F6EFDD;
+  --footer-bg: #182017;
+  --footer-surface: #242E23;
+  --overlay: #1A1A1A;
+  --price-secondary: #2E3B2C;
+  --price-badge-secondary: #2E3B2C;
+  --flavor-blueberry-blast: #1FA2E8;
+  --flavor-green-apple: #6DC24B;
+  --flavor-citrus-orange: #F97316;
+  --flavor-fruit-beer: #E4405F;
+  --flavor-lemon-zing: #FDE74C;
+  --flavor-zeera-soda: #B5651D;
+  --shadow-color: rgba(74, 53, 37, 0.08);
+  --mask-opaque: #000;
+  --background: var(--bg-base);
+  --foreground: var(--text-primary);
   --surface: #FDF9F0;
-  --card: #F9F3E5;
-  --card-foreground: #1A1A1A;
-  --popover: #F9F3E5;
-  --popover-foreground: #1A1A1A;
-  --primary: #7A1F1F; /* Deep maroon / brick red */
-  --primary-foreground: #F6EFDD;
-  --secondary: #2E3B2C; /* Dark olive green */
-  --secondary-foreground: #F6EFDD;
-  --muted: #EAE0C8;
-  --muted-foreground: #5C4A38;
-  --accent: #7A1F1F;
-  --accent-foreground: #F6EFDD;
-  --destructive: #7A1F1F;
-  --destructive-foreground: #F6EFDD;
-  --highlight: #C85A17;
-  --highlight-foreground: #F6EFDD;
+  --card: var(--bg-surface);
+  --card-foreground: var(--text-primary);
+  --popover: var(--bg-surface);
+  --popover-foreground: var(--text-primary);
+  --primary: var(--accent-primary);
+  --primary-foreground: var(--on-accent);
+  --secondary: var(--accent-support);
+  --secondary-foreground: var(--on-accent);
+  --muted: var(--bg-muted);
+  --muted-foreground: var(--text-muted);
+  --accent: var(--accent-primary);
+  --accent-foreground: var(--on-accent);
+  --destructive: var(--accent-primary);
+  --destructive-foreground: var(--on-accent);
+  --highlight: var(--accent-secondary);
+  --highlight-foreground: var(--on-accent);
   --silver: #A6957B;
   --border: #D8C8A6;
   --input: #D8C8A6;
-  --ring: #7A1F1F;
+  --ring: var(--accent-primary);
 }
 
-.dark {
-  --background: #1C241B;
-  --foreground: #F6EFDD;
-  --surface: #242E23;
-  --card: #242E23;
-  --card-foreground: #F6EFDD;
-  --popover: #242E23;
-  --popover-foreground: #F6EFDD;
-  --primary: #8C2323;
-  --primary-foreground: #F6EFDD;
-  --secondary: #3B4B39;
-  --secondary-foreground: #F6EFDD;
-  --muted: #2A3629;
-  --muted-foreground: #C8BFA9;
-  --accent: #8C2323;
-  --accent-foreground: #F6EFDD;
-  --destructive: #8C2323;
-  --destructive-foreground: #F6EFDD;
-  --highlight: #D96A27;
-  --highlight-foreground: #F6EFDD;
-  --silver: #A6957B;
-  --border: oklch(1 0 0 / 14%);
-  --input: oklch(1 0 0 / 18%);
-  --ring: #8C2323;
+[data-theme="dark"] {
+  /* Midnight Blueberry */
+  --bg-base: #0D1B2E;
+  --bg-surface: #16283F;
+  --bg-muted: #1B3049;
+  --text-primary: #EAF2FA;
+  --text-muted: #8FA8C4;
+  --text-muted-strong: #8FA8C4;
+  --accent-primary: #3DB8FF;
+  --accent-secondary: #E8544A;
+  --accent-support: #3DB8FF;
+  --accent-cta: #F2C94C;
+  --accent-gold: #F2C94C;
+  --accent-hover: #70CAFF;
+  --on-accent: #EAF2FA;
+  --footer-bg: #0D1B2E;
+  --footer-surface: #16283F;
+  --overlay: #050B13;
+  --price-secondary: #16283F;
+  --price-badge-secondary: #F2C94C;
+  --flavor-blueberry-blast: var(--accent-primary);
+  --flavor-green-apple: var(--accent-primary);
+  --flavor-citrus-orange: var(--accent-primary);
+  --flavor-fruit-beer: var(--accent-primary);
+  --flavor-lemon-zing: var(--accent-primary);
+  --flavor-zeera-soda: var(--accent-primary);
+  --shadow-color: rgba(61, 184, 255, 0.12);
+  --mask-opaque: #000;
+  --background: var(--bg-base);
+  --foreground: var(--text-primary);
+  --surface: var(--bg-surface);
+  --card: var(--bg-surface);
+  --card-foreground: var(--text-primary);
+  --popover: var(--bg-surface);
+  --popover-foreground: var(--text-primary);
+  --primary: var(--accent-primary);
+  --primary-foreground: var(--bg-base);
+  --secondary: var(--bg-surface);
+  --secondary-foreground: var(--text-primary);
+  --muted: var(--bg-muted);
+  --muted-foreground: var(--text-muted);
+  --accent: var(--accent-primary);
+  --accent-foreground: var(--bg-base);
+  --destructive: var(--accent-secondary);
+  --destructive-foreground: var(--text-primary);
+  --highlight: var(--accent-cta);
+  --highlight-foreground: var(--bg-base);
+  --silver: #8FA8C4;
+  --border: #22364F;
+  --input: #22364F;
+  --ring: var(--accent-primary);
 }
 
 @layer base {
@@ -105,6 +177,12 @@
 
   html {
     -webkit-tap-highlight-color: transparent;
+    background-color: var(--bg-base);
+    color-scheme: light;
+  }
+
+  html[data-theme="dark"] {
+    color-scheme: dark;
   }
 
   body {
@@ -112,8 +190,8 @@
     color: var(--color-foreground);
     font-family: var(--font-sans);
     transition:
-      background-color 0.6s ease,
-      color 0.6s ease;
+      background-color 250ms ease,
+      color 250ms ease;
     overflow-x: hidden;
   }
 
@@ -128,6 +206,14 @@
   ::selection {
     background: var(--color-primary);
     color: var(--color-primary-foreground);
+  }
+
+  *:not(img):not(picture):not(video):not(svg),
+  *:not(img):not(picture):not(video):not(svg)::before,
+  *:not(img):not(picture):not(video):not(svg)::after {
+    transition-property: background-color, color, border-color, box-shadow;
+    transition-duration: 250ms;
+    transition-timing-function: ease;
   }
 }
 
@@ -177,7 +263,7 @@
 @utility paper-card {
   background-color: var(--color-card);
   border: 1px solid color-mix(in oklab, var(--color-border) 80%, transparent);
-  box-shadow: 0 4px 20px -4px rgba(74, 53, 37, 0.08);
+  box-shadow: 0 4px 20px -4px var(--shadow-color);
 }
 
 @utility stamp-border {

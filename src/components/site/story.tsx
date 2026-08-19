@@ -36,22 +36,22 @@ const STORY_BEATS = [
 
 export function Story() {
   return (
-    <Section id="story" className="bg-[#F9F3E5] py-20 border-y border-[#D8C8A6]/60">
+    <Section id="story" className="bg-bg-surface py-20 border-y border-border-theme/60">
       <div className="mx-auto max-w-6xl">
         {/* Section Heading */}
         <div className="text-center">
           <Reveal>
-            <span className="inline-block text-xs font-bold tracking-widest text-[#7A1F1F] uppercase">
+            <span className="inline-block text-xs font-bold tracking-widest text-accent-primary uppercase">
               EST. 1962 · HERITAGE CHRONICLES
             </span>
           </Reveal>
           <Reveal delay={1}>
-            <h2 className="mt-3 font-display text-4xl font-extrabold uppercase tracking-tight sm:text-5xl text-[#1A1A1A]">
+            <h2 className="mt-3 font-display text-4xl font-extrabold uppercase tracking-tight sm:text-5xl text-text-primary">
               OUR STORY SINCE 1962
             </h2>
           </Reveal>
           <Reveal delay={2}>
-            <p className="mx-auto mt-4 max-w-2xl text-base text-[#5C4A38] sm:text-lg">
+            <p className="mx-auto mt-4 max-w-2xl text-base text-text-muted sm:text-lg">
               From a single roadside stall under a banyan tree to an iconic Indian soda brand. Tap any chapter below to explore the full chronicle.
             </p>
           </Reveal>
@@ -69,21 +69,21 @@ export function Story() {
             >
               <Link
                 to={`/story/${beat.slug}` as any}
-                className="group relative flex flex-col justify-between h-full overflow-hidden rounded-2xl border border-[#D8C8A6] bg-[#F6EFDD] p-6 shadow-md transition-all hover:-translate-y-1.5 hover:shadow-xl hover:border-[#7A1F1F]/60"
+                className="group relative flex flex-col justify-between h-full overflow-hidden rounded-2xl border border-border-theme bg-bg-base p-6 shadow-md transition-all hover:-translate-y-1.5 hover:shadow-xl hover:border-accent-primary/60"
               >
                 <div>
                   {/* Number Badge */}
-                  <div className="flex items-center justify-between border-b border-[#D8C8A6]/60 pb-3">
-                    <span className="font-display text-2xl font-black text-[#7A1F1F]">
+                  <div className="flex items-center justify-between border-b border-border-theme/60 pb-3">
+                    <span className="font-display text-2xl font-black text-accent-primary">
                       {beat.num}
                     </span>
-                    <span className="text-[10px] font-bold tracking-widest text-[#5C4A38] uppercase">
+                    <span className="text-[10px] font-bold tracking-widest text-text-muted uppercase">
                       CHRONICLE
                     </span>
                   </div>
 
                   {/* Sepia Illustration */}
-                  <div className="my-5 overflow-hidden rounded-xl border border-[#D8C8A6]/40 bg-[#EAE0C8]/40 p-2">
+                  <div className="my-5 overflow-hidden rounded-xl border border-border-theme/40 bg-bg-muted/40 p-2">
                     <img
                       src={beat.image}
                       alt={beat.title}
@@ -92,18 +92,18 @@ export function Story() {
                   </div>
 
                   {/* Title */}
-                  <h3 className="font-display text-xl font-bold uppercase tracking-wide text-[#1A1A1A] group-hover:text-[#7A1F1F]">
+                  <h3 className="font-display text-xl font-bold uppercase tracking-wide text-text-primary group-hover:text-accent-primary">
                     {beat.title}
                   </h3>
 
                   {/* Description */}
-                  <p className="mt-2 text-xs leading-relaxed text-[#5C4A38]">
+                  <p className="mt-2 text-xs leading-relaxed text-text-muted">
                     {beat.description}
                   </p>
                 </div>
 
                 {/* Bottom CTA Link / Button */}
-                <div className="mt-6 flex items-center justify-between border-t border-[#D8C8A6]/40 pt-3 text-[11px] font-bold text-[#7A1F1F] uppercase tracking-wider group-hover:underline">
+                <div className="mt-6 flex items-center justify-between border-t border-border-theme/40 pt-3 text-[11px] font-bold text-accent-primary uppercase tracking-wider group-hover:underline">
                   <span>Read full chapter</span>
                   <span className="transition-transform group-hover:translate-x-1">→</span>
                 </div>
@@ -115,4 +115,3 @@ export function Story() {
     </Section>
   );
 }
-

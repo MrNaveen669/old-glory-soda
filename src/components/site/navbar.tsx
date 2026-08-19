@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { CloseCircle, HamburgerMenu, Location } from "iconsax-reactjs";
 import { NAV_LINKS } from "./data";
 import { OldGloryLogo } from "./logo";
+import { ThemeToggle } from "./theme-toggle";
 import { scrollToSection } from "./use-lenis";
 
 export function Navbar() {
@@ -83,9 +84,10 @@ export function Navbar() {
           </div>
 
           <div className="flex shrink-0 items-center gap-2">
+            <ThemeToggle />
             <button
               onClick={() => go("stores")}
-              className="hidden items-center gap-1.5 rounded-full bg-[#7A1F1F] px-5 py-2.5 text-xs font-bold tracking-wider text-[#F6EFDD] uppercase shadow-md transition-all hover:bg-[#5E1717] hover:scale-105 active:scale-95 sm:inline-flex"
+              className="hidden items-center gap-1.5 rounded-full bg-accent-cta px-5 py-2.5 text-xs font-bold tracking-wider text-on-accent uppercase shadow-md transition-all hover:bg-accent-hover hover:scale-105 active:scale-95 dark:text-bg-base sm:inline-flex"
             >
               <Location size={16} variant="Linear" />
               Find Old Glory
@@ -94,7 +96,7 @@ export function Navbar() {
               onClick={() => setOpen((o) => !o)}
               aria-label="Toggle menu"
               aria-expanded={open}
-              className="grid h-9 w-9 place-items-center rounded-full border border-[#D8C8A6] bg-[#F6EFDD] text-[#7A1F1F] lg:hidden"
+              className="grid h-9 w-9 place-items-center rounded-full border border-border-theme bg-bg-base text-accent-primary lg:hidden"
             >
               {open ? (
                 <CloseCircle size={20} variant="Linear" />

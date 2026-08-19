@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as HealthRouteImport } from './routes/health'
 import { Route as StoryBottlingWorksRouteImport } from './routes/story/bottling-works'
 import { Route as StoryCornerShopCratesRouteImport } from './routes/story/corner-shop-crates'
 import { Route as StoryRoadsideRootsRouteImport } from './routes/story/roadside-roots'
@@ -18,6 +19,11 @@ import { Route as StoryTownRolloutRouteImport } from './routes/story/town-rollou
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HealthRoute = HealthRouteImport.update({
+  id: '/health',
+  path: '/health',
   getParentRoute: () => rootRouteImport,
 } as any)
 const StoryBottlingWorksRoute = StoryBottlingWorksRouteImport.update({
@@ -43,6 +49,7 @@ const StoryTownRolloutRoute = StoryTownRolloutRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/health': typeof HealthRoute
   '/story/bottling-works': typeof StoryBottlingWorksRoute
   '/story/corner-shop-crates': typeof StoryCornerShopCratesRoute
   '/story/roadside-roots': typeof StoryRoadsideRootsRoute
@@ -50,6 +57,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/health': typeof HealthRoute
   '/story/bottling-works': typeof StoryBottlingWorksRoute
   '/story/corner-shop-crates': typeof StoryCornerShopCratesRoute
   '/story/roadside-roots': typeof StoryRoadsideRootsRoute
@@ -58,6 +66,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/health': typeof HealthRoute
   '/story/bottling-works': typeof StoryBottlingWorksRoute
   '/story/corner-shop-crates': typeof StoryCornerShopCratesRoute
   '/story/roadside-roots': typeof StoryRoadsideRootsRoute
@@ -67,6 +76,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/health'
     | '/story/bottling-works'
     | '/story/corner-shop-crates'
     | '/story/roadside-roots'
@@ -74,6 +84,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/health'
     | '/story/bottling-works'
     | '/story/corner-shop-crates'
     | '/story/roadside-roots'
@@ -81,6 +92,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/health'
     | '/story/bottling-works'
     | '/story/corner-shop-crates'
     | '/story/roadside-roots'
@@ -89,6 +101,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  HealthRoute: typeof HealthRoute
   StoryBottlingWorksRoute: typeof StoryBottlingWorksRoute
   StoryCornerShopCratesRoute: typeof StoryCornerShopCratesRoute
   StoryRoadsideRootsRoute: typeof StoryRoadsideRootsRoute
@@ -102,6 +115,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/health': {
+      id: '/health'
+      path: '/health'
+      fullPath: '/health'
+      preLoaderRoute: typeof HealthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/story/bottling-works': {
@@ -137,6 +157,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  HealthRoute: HealthRoute,
   StoryBottlingWorksRoute: StoryBottlingWorksRoute,
   StoryCornerShopCratesRoute: StoryCornerShopCratesRoute,
   StoryRoadsideRootsRoute: StoryRoadsideRootsRoute,

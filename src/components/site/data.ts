@@ -213,13 +213,28 @@ export const FEATURES = [
   },
 ];
 
-export const GALLERY = [
-  { id: "g1", caption: "Crate fresh, ice cold", color: "#1FA2E8", span: "tall" },
-  { id: "g2", caption: "Corner shop classic", color: "#F97316", span: "wide" },
-  { id: "g3", caption: "Marble pop moment", color: "#6DC24B", span: "normal" },
-  { id: "g4", caption: "Festival night pour", color: "#E4405F", span: "normal" },
-  { id: "g5", caption: "Beachside refill", color: "#FDE74C", span: "wide" },
-  { id: "g6", caption: "Zeera after dinner", color: "#B5651D", span: "tall" },
+export type GalleryItem = {
+  id: string;
+  type: "image" | "video";
+  src: string;
+  caption: string;
+  poster?: string;
+};
+
+export const GALLERY: GalleryItem[] = [
+  { id: "g1", type: "image", src: "/Story merge.png", caption: "Crate fresh, ice cold" },
+  { id: "g2", type: "image", src: "/orange-removebg.png", caption: "Corner shop classic" },
+  { id: "g3", type: "image", src: "/Green-apple-removebg.png", caption: "Marble pop moment" },
+  { id: "g4", type: "image", src: "/Fruit-beer-removebg.png", caption: "Festival night pour" },
+  { id: "g5", type: "image", src: "/Lemon-soda-removebg.png", caption: "Beachside refill" },
+  { id: "g6", type: "image", src: "/Jeera-removebg.png", caption: "Zeera after dinner" },
+  {
+    id: "g7",
+    type: "video",
+    src: "/gallery-video-1.mp4",
+    poster: "/Factory.png",
+    caption: "Bottling in motion",
+  },
 ];
 
 export type StoreLocation = {

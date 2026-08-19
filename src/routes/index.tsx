@@ -11,7 +11,6 @@ import { Preloader } from "@/components/site/preloader";
 import { Stores } from "@/components/site/stores";
 import { Story } from "@/components/site/story";
 import { Testimonials } from "@/components/site/testimonials";
-import { ThemeProvider } from "@/components/site/theme-provider";
 import { Why } from "@/components/site/why";
 import { useLenis } from "@/components/site/use-lenis";
 import { BRAND, FLAVORS } from "@/components/site/data";
@@ -64,7 +63,7 @@ function Index() {
   useLenis();
 
   return (
-    <ThemeProvider>
+    <>
       <Preloader />
       <Navbar />
       <main>
@@ -80,6 +79,6 @@ function Index() {
       </main>
       <Footer />
       <Toaster />
-    </ThemeProvider>
+    </>
   );
 }
