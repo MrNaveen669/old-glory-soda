@@ -190,6 +190,7 @@
     -webkit-tap-highlight-color: transparent;
     background-color: var(--bg-base);
     color-scheme: light;
+    scroll-behavior: smooth;
   }
 
   html[data-theme="dark"] {
@@ -204,6 +205,12 @@
       background-color 250ms ease,
       color 250ms ease;
     overflow-x: hidden;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
   }
 
   h1,
