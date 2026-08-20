@@ -5,7 +5,7 @@ export const BRAND = {
     "The marble-neck goli soda you grew up chasing down summer streets — bottled bolder, fizzier and ready for every season.",
   email: "hello@oldglorysoda.in",
   phone: "+91 98400 00000",
-  address: "Old Glory Bottling Works, Chennai, Tamil Nadu",
+  address: "Old Glory Bottling Works, Mana, Chhattisgarh",
 };
 
 export type Flavor = {
@@ -223,17 +223,16 @@ export type GalleryItem = {
 
 export const GALLERY: GalleryItem[] = [
   { id: "g1", type: "image", src: "/Story merge.png", caption: "Crate fresh, ice cold" },
-  { id: "g2", type: "image", src: "/orange-removebg.png", caption: "Corner shop classic" },
-  { id: "g3", type: "image", src: "/Green-apple-removebg.png", caption: "Marble pop moment" },
-  { id: "g4", type: "image", src: "/Fruit-beer-removebg.png", caption: "Festival night pour" },
-  { id: "g5", type: "image", src: "/Lemon-soda-removebg.png", caption: "Beachside refill" },
-  { id: "g6", type: "image", src: "/Jeera-removebg.png", caption: "Zeera after dinner" },
+  { id: "g2", type: "image", src: "/Orange soda.jpeg", caption: "Corner shop classic" },
+  { id: "g3", type: "image", src: "/apple_bottle.jpeg", caption: "Marble pop moment" },
+  { id: "g4", type: "image", src: "/Fruit_Beer_bottle.jpeg", caption: "Festival night pour" },
+  { id: "g5", type: "image", src: "/Lemon_soda_bottl3.jpeg", caption: "Beachside refill" },
+  { id: "g6", type: "video", src: "/video-5.mp4", caption: "" },
   {
     id: "g7",
     type: "video",
-    src: "/gallery-video-1.mp4",
-    poster: "/Factory.png",
-    caption: "Bottling in motion",
+    src: "/video-4.mp4",
+    caption: "",
   },
 ];
 

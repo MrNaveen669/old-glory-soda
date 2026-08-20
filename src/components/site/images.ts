@@ -7,11 +7,11 @@ export const IMAGES = {
 /** Clean background-removed illustrated cutout bottles for default card views */
 export const FLAVOR_IMAGES: Record<string, string> = {
   "blueberry-blast": "/Blueberry-removebg.png",
-  "green-apple": "/Green-apple-removebg.png",
-  "citrus-orange": "/orange-removebg.png",
-  "fruit-beer": "/Fruit-beer-removebg.png",
-  "lemon-zing": "/Lemon-soda-removebg.png",
-  "zeera-soda": "/Jeera-removebg.png",
+  "green-apple": "/Greenapple-removebg2-removebg-preview.png",
+  "citrus-orange": "/orange-removebg-removebg-preview.png",
+  "fruit-beer": "/FruiteBeer-removebg-preview.png",
+  "lemon-zing": "/lemon-removebg2-removebg-preview.png",
+  "zeera-soda": "/Jeera-removebg2-removebg-preview.png",
 };
 
 /** Full original scene images (with background/fruit/splash) revealed in modals */
@@ -30,7 +30,7 @@ export const PET_IMAGES: Record<string, string> = {
   "citrus-orange-pet-10": "/Rs.10-Orange.png",
   "citrus-orange-pet-20": "/Rs.10-Orange.png",
   "shikanji-pet-10": "/Rs.10-Sikanji.png",
-  "green-apple-pet-20": "/Green-apple-removebg.png",
+  "green-apple-pet-20": "/Greenapple-removebg2-removebg-preview.png",
 };
 
 export const VINTAGE_ILLUSTRATIONS = {

@@ -53,6 +53,9 @@
   --color-overlay: var(--overlay);
   --color-price-secondary: var(--price-secondary);
   --color-price-badge-secondary: var(--price-badge-secondary);
+  --color-hero-text: var(--hero-text);
+  --color-hero-muted: var(--hero-muted);
+  --color-hero-accent: var(--hero-accent);
   --color-maroon: var(--accent-primary);
   --color-olive: var(--accent-support);
   --color-sepia: var(--text-muted-strong);
@@ -92,6 +95,10 @@
   --flavor-zeera-soda: #B5651D;
   --shadow-color: rgba(74, 53, 37, 0.08);
   --mask-opaque: #000;
+  --hero-overlay-base: #0D1B2E;
+  --hero-text: #EAF2FA;
+  --hero-muted: #C3D3E5;
+  --hero-accent: #3DB8FF;
   --background: var(--bg-base);
   --foreground: var(--text-primary);
   --surface: #FDF9F0;
@@ -145,6 +152,10 @@
   --flavor-zeera-soda: var(--accent-primary);
   --shadow-color: rgba(61, 184, 255, 0.12);
   --mask-opaque: #000;
+  --hero-overlay-base: #0D1B2E;
+  --hero-text: #EAF2FA;
+  --hero-muted: #C3D3E5;
+  --hero-accent: #3DB8FF;
   --background: var(--bg-base);
   --foreground: var(--text-primary);
   --surface: var(--bg-surface);
