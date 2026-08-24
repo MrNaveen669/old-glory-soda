@@ -56,7 +56,7 @@ export function Hero() {
             className="inline-flex items-center gap-2 rounded-full border border-hero-accent/45 bg-[color-mix(in_srgb,var(--hero-overlay-base)_55%,transparent)] px-4 py-1.5 text-xs font-semibold tracking-widest text-hero-accent uppercase backdrop-blur-sm"
           >
             <span className="h-2 w-2 rounded-full bg-hero-accent animate-pulse" />
-            EST. 1962 · MARBLE NECK ORIGINAL
+            · MARBLE NECK ORIGINAL
           </motion.div>
 
           {/* Headline: ALL SEASON DRINK */}
@@ -112,7 +112,7 @@ export function Hero() {
               onClick={() => scrollToSection("story")}
               className="inline-flex items-center gap-2 rounded-full border border-hero-text/45 bg-[color-mix(in_srgb,var(--hero-overlay-base)_30%,transparent)] px-7 py-3.5 text-sm font-bold tracking-wider text-hero-text uppercase backdrop-blur-sm transition-all hover:border-hero-accent hover:text-hero-accent active:scale-95"
             >
-              Our Story 1962
+              Our Story
             </button>
           </motion.div>
         </div>

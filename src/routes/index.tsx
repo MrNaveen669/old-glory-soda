@@ -11,6 +11,7 @@ import { Preloader } from "@/components/site/preloader";
 import { Stores } from "@/components/site/stores";
 import { Story } from "@/components/site/story";
 import { Testimonials } from "@/components/site/testimonials";
+import { ThenNow } from "@/components/site/then-now";
 import { Why } from "@/components/site/why";
 import { useLenis } from "@/components/site/use-lenis";
 import { BRAND, FLAVORS } from "@/components/site/data";
@@ -19,8 +20,7 @@ const title = "Old Glory Soda — All Season Drink | Marble Goli Soda";
 const description =
   "Old Glory Soda bottles the classic marble-neck goli soda in six flavours — Blueberry Blast, Fizzy Green Apple, Citrus Orange Pop, Fruit Beer, Zesty Lemon Zing and Spicy Spark Zeera Soda. Find a store near you.";
 const ogImage = "https://oldglorysoda.lovable.app/logo-mark.png";
-const url = "https://oldglorysoda.lovable.app";
-
+const url = "https://oldglory.co.in";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -51,7 +51,11 @@ export const Route = createFileRoute("/")({
           url,
           makesOffer: FLAVORS.map((f) => ({
             "@type": "Offer",
-            itemOffered: { "@type": "Product", name: `${BRAND.name} ${f.name}`, description: f.description },
+            itemOffered: {
+              "@type": "Product",
+              name: `${BRAND.name} ${f.name}`,
+              description: f.description,
+            },
           })),
         }),
       },
@@ -68,9 +72,10 @@ function Index() {
       <Navbar />
       <main>
         <Hero />
-        <Story />
         <Flavors />
+        <ThenNow />
         <PickYourPrice />
+        <Story />
         <Why />
         <GallerySection />
         <Stores />

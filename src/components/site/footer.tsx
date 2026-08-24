@@ -29,7 +29,7 @@ export function Footer() {
         <div className="mb-12 rounded-3xl border border-on-accent/20 bg-footer-surface/80 p-8 sm:p-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6 backdrop-blur-sm">
           <div>
             <span className="text-xs font-bold tracking-widest text-accent-gold uppercase">
-              SINCE 1962 · TRADITIONAL KIRANA COUNTERS
+               TRADITIONAL KIRANA COUNTERS
             </span>
             <h2 className="mt-2 font-display text-3xl font-black uppercase text-on-accent sm:text-4xl">
               FOUND AT THE CORNER SHOP
@@ -49,7 +49,7 @@ export function Footer() {
                 Made in India
               </p>
               <p className="text-[10px] text-on-accent/70 uppercase tracking-widest">
-                Est. 1962 · Chennai & Raipur
+                 Raipur, CG
               </p>
             </div>
           </div>

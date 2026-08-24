@@ -3,7 +3,7 @@ export const BRAND = {
   tagline: "All Season Drink",
   intro:
     "The marble-neck goli soda you grew up chasing down summer streets — bottled bolder, fizzier and ready for every season.",
-  email: "hello@oldglorysoda.in",
+  email: "kajalbeverageindusty@gmail.com",
   phone: "+91 98400 00000",
   address: "Old Glory Bottling Works, Mana, Chhattisgarh",
 };
@@ -255,7 +255,7 @@ export const STORE_LOCATIONS: StoreLocation[] = [
       name: "Raipur Beverage Distributors Hub",
       description: "Primary distribution center supplying retail outlets and soda counters in Raipur.",
       location: "Raipur Central, Chhattisgarh",
-      phone: "Inquiries: hello@oldglorysoda.in",
+      phone: "Inquiries: kajalbeverageindustry@gmail.com",
     },
   },
   { city: "Balod", status: "coming-soon" },
@@ -291,7 +291,7 @@ export const TESTIMONIALS = [
 ];
 
 export const SOCIALS = [
-  { label: "Instagram", href: "https://instagram.com", icon: "instagram" },
+  { label: "Instagram", href: "https://www.instagram.com/old_glory_golisoda/", icon: "instagram" },
   { label: "Facebook", href: "https://facebook.com", icon: "facebook" },
   { label: "YouTube", href: "https://youtube.com", icon: "youtube" },
 ];
