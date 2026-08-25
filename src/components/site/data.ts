@@ -213,39 +213,65 @@ export const FEATURES = [
   },
 ];
 
-export type GalleryItem = {
-  id: string;
-  type: "image" | "video";
-  src: string;
-  caption: string;
-  poster?: string;
-};
+export type GalleryItem =
+  | {
+      id: string;
+      type: "image";
+      src: string;
+      caption: string;
+    }
+  | {
+      id: string;
+      type: "video";
+      src: string;
+      caption: string;
+    };
 
 export const GALLERY: GalleryItem[] = [
-  { id: "g1", type: "image", src: "/Story merge.png", caption: "Crate fresh, ice cold" },
-  { id: "g2", type: "image", src: "/Orange soda.jpeg", caption: "Corner shop classic" },
-  { id: "g3", type: "image", src: "/apple_bottle.jpeg", caption: "Marble pop moment" },
-  { id: "g4", type: "image", src: "/Fruit_Beer_bottle.jpeg", caption: "Festival night pour" },
-  { id: "g5", type: "image", src: "/Lemon_soda_bottl3.jpeg", caption: "Beachside refill" },
-  { id: "g6", type: "video", src: "/video-5.mp4", caption: "" },
+  // BIG FEATURED VIDEO
   {
-    id: "g7",
+    id: "g1",
     type: "video",
-    src: "/video-4.mp4",
+    src: "/GREEN-APPLE.mp4",
+    caption: "",
+  },
+
+  // IMAGES
+  {
+    id: "g2",
+    type: "image",
+    src: "/Story merge.png",
+    caption: "",
+  },
+
+  {
+    id: "g3",
+    type: "image",
+    src: "/Jeera-poster.png",
+    caption: "",
+  },
+
+  {
+    id: "g4",
+    type: "image",
+    src: "/Fruite-beer-poster.png",
+    caption: "",
+  },
+
+  {
+    id: "g5",
+    type: "video",
+    src: "/Zesty-Lemon-Zing-Soda..mp4",
+    caption: "",
+  },
+
+  {
+    id: "g6",
+    type: "video",
+    src: "/ORNGE-SODA.mp4",
     caption: "",
   },
 ];
-
-export type StoreLocation = {
-  city: string;
-  status: "in-stock" | "coming-soon";
-  distributor?: {
-    name: string;
-    description: string;
-    location: string;
-    phone: string;
-  };
-};
 
 export const STORE_LOCATIONS: StoreLocation[] = [
   {
