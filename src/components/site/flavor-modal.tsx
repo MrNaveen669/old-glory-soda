@@ -52,7 +52,7 @@ export function FlavorModal({ flavor, onClose }: { flavor: Flavor | null; onClos
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.97 }}
             transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-            className="relative max-h-[90svh] w-full max-w-3xl overflow-y-auto rounded-3xl border-2 border-border-theme bg-bg-base p-6 sm:p-8 text-text-primary"
+            className="relative max-h-[calc(100svh-2rem)] w-full max-w-3xl overflow-y-auto rounded-3xl border-2 border-border-theme bg-bg-base p-4 text-text-primary sm:max-h-[90svh] sm:p-8"
             style={{ boxShadow: `0 30px 80px -20px color-mix(in srgb, ${accent} 38%, transparent)` }}
           >
             <span
@@ -63,7 +63,7 @@ export function FlavorModal({ flavor, onClose }: { flavor: Flavor | null; onClos
             <button
               onClick={onClose}
               aria-label="Close"
-              className="absolute top-4 right-4 z-10 rounded-full bg-bg-muted p-1.5 text-text-muted transition-colors hover:bg-accent-primary hover:text-on-accent"
+              className="absolute top-3 right-3 z-10 grid h-11 w-11 place-items-center rounded-full bg-bg-muted text-text-muted transition-colors hover:bg-accent-primary hover:text-on-accent sm:top-4 sm:right-4"
             >
               <CloseCircle size={24} variant="Linear" />
             </button>

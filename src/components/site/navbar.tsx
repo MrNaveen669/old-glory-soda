@@ -51,13 +51,15 @@ export function Navbar() {
       <div
         className={`transition-all duration-500 ${scrolled ? "glass-panel border-x-0 border-t-0" : "border-transparent bg-transparent"}`}
       >
-        <nav className="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-5 py-3 lg:flex lg:justify-between">
+        <nav className="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-2 px-4 py-2 sm:px-5 sm:py-3 lg:flex lg:justify-between">
           <button
             onClick={() => go("hero")}
-            className="flex min-w-0 items-center text-left"
+            className="flex min-h-11 min-w-0 items-center text-left"
             aria-label="Old Glory Soda — back to top"
           >
-            <OldGloryLogo className="h-9 w-auto text-foreground sm:h-10" />
+            <OldGloryLogo
+              className={`h-9 w-auto sm:h-10 ${scrolled ? "text-foreground" : "text-hero-text"}`}
+            />
           </button>
 
           <div className="hidden items-center gap-1 lg:flex">
@@ -65,7 +67,7 @@ export function Navbar() {
               <button
                 key={link.id}
                 onClick={() => go(link.id)}
-                className={`relative rounded-full px-3.5 py-1.5 text-sm transition-colors ${
+                className={`relative min-h-11 rounded-full px-3.5 py-1.5 text-sm transition-colors ${
                   active === link.id
                     ? "text-foreground"
                     : "text-muted-foreground hover:text-foreground"
@@ -87,7 +89,7 @@ export function Navbar() {
             <ThemeToggle />
             <button
               onClick={() => go("stores")}
-              className="hidden items-center gap-1.5 rounded-full bg-accent-cta px-5 py-2.5 text-xs font-bold tracking-wider text-on-accent uppercase shadow-md transition-all hover:bg-accent-hover hover:scale-105 active:scale-95 dark:text-bg-base sm:inline-flex"
+              className="hidden min-h-11 items-center gap-1.5 rounded-full bg-accent-cta px-5 py-2.5 text-xs font-bold tracking-wider text-on-accent uppercase shadow-md transition-all hover:scale-105 hover:bg-accent-hover active:scale-95 dark:text-bg-base sm:inline-flex"
             >
               <Location size={16} variant="Linear" />
               Find Old Glory
@@ -96,7 +98,7 @@ export function Navbar() {
               onClick={() => setOpen((o) => !o)}
               aria-label="Toggle menu"
               aria-expanded={open}
-              className="grid h-9 w-9 place-items-center rounded-full border border-border-theme bg-bg-base text-accent-primary lg:hidden"
+              className="grid h-11 w-11 place-items-center rounded-full border border-border-theme bg-bg-base text-accent-primary lg:hidden"
             >
               {open ? (
                 <CloseCircle size={20} variant="Linear" />
@@ -114,9 +116,9 @@ export function Navbar() {
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
               transition={{ duration: 0.32, ease: [0.76, 0, 0.24, 1] }}
-              className="overflow-hidden lg:hidden"
+              className="overflow-hidden border-t border-border-theme/70 bg-bg-base/95 shadow-2xl backdrop-blur-xl lg:hidden"
             >
-              <div className="flex flex-col gap-1 px-5 pb-4">
+              <div className="flex flex-col gap-1 px-4 py-3 sm:px-5">
                 {NAV_LINKS.map((link, i) => (
                   <motion.button
                     key={link.id}
@@ -124,13 +126,20 @@ export function Navbar() {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.04 * i }}
                     onClick={() => go(link.id)}
-                    className={`rounded-xl px-4 py-3 text-left text-base ${
+                    className={`min-h-11 rounded-xl px-4 py-2.5 text-left text-base ${
                       active === link.id ? "bg-secondary text-foreground" : "text-muted-foreground"
                     }`}
                   >
                     {link.label}
                   </motion.button>
                 ))}
+                <button
+                  onClick={() => go("stores")}
+                  className="mt-2 inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-accent-cta px-4 text-sm font-bold text-bg-base sm:hidden"
+                >
+                  <Location size={18} variant="Linear" />
+                  Find Old Glory
+                </button>
               </div>
             </motion.div>
           )}

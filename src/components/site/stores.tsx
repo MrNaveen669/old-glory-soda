@@ -1,16 +1,15 @@
-import { AnimatePresence, motion } from "motion/react";
+import { motion } from "motion/react";
 import {
   useEffect,
+  useMemo,
   useState,
-  type ReactNode,
 } from "react";
 
 import {
+  ArrowLeft2,
   ArrowRight2,
   Call,
-  CloseCircle,
   Location,
-  Profile2User,
   Shop,
 } from "iconsax-reactjs";
 
@@ -37,40 +36,58 @@ import { Section } from "./primitives";
 
 type CityName = "Raipur" | "Balod" | "Dalli";
 
-type StoreStatus = "in-stock" | "coming-soon";
+type StoreStatus =
+  | "in-stock"
+  | "coming-soon";
 
-type LocationData = {
+type MapMode =
+  | "overview"
+  | "raipur";
+
+type CityLocation = {
   city: CityName;
   mapName: string;
   position: LatLngTuple;
   status: StoreStatus;
   subtitle: string;
   address: string;
-  googleMapsQuery: string;
+};
+
+type RaipurOutletSource = {
+  id: string;
+  name: string;
+  address: string;
+  searchQuery: string;
+  googleMapsUrl: string;
+};
+
+type ResolvedRaipurOutlet =
+  RaipurOutletSource & {
+    position: LatLngTuple;
+    resolvedAddress?: string;
+  };
+
+type NominatimResult = {
+  lat: string;
+  lon: string;
+  display_name: string;
 };
 
 /* =========================================================
-   LOCATIONS
+   CITY OVERVIEW
 
-   These are city-level map coordinates.
-
-   If later you get exact shop/distributor latitude and
-   longitude, simply replace the position values.
+   These markers are shown ONLY on the initial map.
 ========================================================= */
 
-const LOCATIONS: LocationData[] = [
+const CITY_LOCATIONS: CityLocation[] = [
   {
     city: "Raipur",
     mapName: "Raipur",
     position: [21.2514, 81.6296],
     status: "in-stock",
-    subtitle: "Current distribution hub",
-
+    subtitle: "View available outlets",
     address:
-      "Near HP Gas, Mana Basti, Raipur, Chhattisgarh 492015",
-
-    googleMapsQuery:
-      "Kajal Beverage Industry, Near HP Gas, Mana Basti, Raipur, Chhattisgarh 492015",
+      "Raipur, Chhattisgarh, India",
   },
 
   {
@@ -79,11 +96,7 @@ const LOCATIONS: LocationData[] = [
     position: [20.7308, 81.2058],
     status: "coming-soon",
     subtitle: "Rolling out shortly",
-
     address:
-      "Balod, Chhattisgarh, India",
-
-    googleMapsQuery:
       "Balod, Chhattisgarh, India",
   },
 
@@ -93,74 +106,277 @@ const LOCATIONS: LocationData[] = [
     position: [20.5857, 81.075],
     status: "coming-soon",
     subtitle: "Rolling out shortly",
-
     address:
-      "Dalli Rajhara, Balod, Chhattisgarh, India",
-
-    googleMapsQuery:
       "Dalli Rajhara, Chhattisgarh, India",
   },
 ];
 
 /* =========================================================
-   RAIPUR CONTACT DETAILS
+   RAIPUR OUTLETS
 
-   Address and customer-care number are based on
-   your product label.
+   Coordinates are resolved automatically through
+   OpenStreetMap Nominatim.
 
-   Kajal Beverage Industry is identified on the label as
-   manufacturer, so we call this Distribution Contact rather
-   than claiming it is a confirmed distributor.
+   NO GOOGLE MAP API KEY REQUIRED.
 ========================================================= */
 
-const RAIPUR_DETAILS = {
-  contact: "Kajal Beverage Industry",
+const RAIPUR_OUTLET_SOURCES:
+  RaipurOutletSource[] = [
+  {
+    id: "pizza-hub",
 
-  about:
-    "Old Glory Soda manufacturing and distribution contact for Raipur.",
+    name: "Pizza Hub Raipur",
 
-  address:
-    "Near HP Gas, Mana Basti, Raipur, Chhattisgarh 492015",
+    address:
+      "Street No. 7, Telibandha, Raipur, Chhattisgarh 492001",
 
-  phone: "94076 26212",
-};
+    searchQuery:
+      "Pizza Hub Raipur, Street No 7, Telibandha, Raipur, Chhattisgarh",
+
+    googleMapsUrl:
+      "https://maps.app.goo.gl/qvcrwTpgbckbiMkk8?g_st=awb",
+  },
+
+  {
+    id: "kaaram-podi",
+
+    name: "Kaaram Podi",
+
+    address:
+      "Aveer Arcade, opposite Chintaharan Hanuman Mandir, Choubey Colony, Raipur, Chhattisgarh 492001",
+
+    searchQuery:
+      "Kaaram Podi, Aveer Arcade, Choubey Colony, Raipur, Chhattisgarh",
+
+    googleMapsUrl:
+      "https://maps.app.goo.gl/j8uCtfSMDSUt6c8MA?g_st=awb",
+  },
+
+  {
+    id: "dilli-wale-chowpatty",
+
+    name: "Dilli Wale Chowpatty",
+
+    address:
+      "Shop L-7, Food Adda, opposite Mona Fuels, Bhatagaon, Raipur, Chhattisgarh",
+
+    searchQuery:
+      "Dilli Wale Chowpatty, Food Adda, Bhatagaon, Raipur, Chhattisgarh",
+
+    googleMapsUrl:
+      "https://maps.app.goo.gl/fVhC5bxKwtYEMKqb6?g_st=awb",
+  },
+];
 
 /* =========================================================
-   GOOGLE MAP URL HELPER
+   OTHER GOOGLE MAP LINKS FROM YOUR SCREENSHOT
 
-   Opening Google Maps externally does NOT require API key.
+   Their names/coordinates are not visible in screenshot,
+   therefore they are NOT given fake map coordinates.
+
+   Once you know their name/address, move them into
+   RAIPUR_OUTLET_SOURCES.
 ========================================================= */
 
-function getGoogleMapsLink(query: string) {
-  return (
-    "https://www.google.com/maps/search/?api=1&query=" +
-    encodeURIComponent(query)
-  );
+const EXTRA_RAIPUR_LINKS = [
+  {
+    id: "shared-2",
+    name: "Shared Raipur Location 2",
+    url:
+      "https://maps.app.goo.gl/wTvuTPdlrkfASsxkA?g_st=awb",
+  },
+
+  {
+    id: "shared-3",
+    name: "Shared Raipur Location 3",
+    url:
+      "https://maps.app.goo.gl/22rhkPeUYPkBXnJk9?g_st=awb",
+  },
+
+  {
+    id: "shared-4",
+    name: "Shared Raipur Location 4",
+    url:
+      "https://maps.app.goo.gl/m6hav2n1KwD1pL4B6?g_st=awb",
+  },
+
+  {
+    id: "shared-5",
+    name: "Shared Raipur Location 5",
+    url:
+      "https://maps.app.goo.gl/1urNiWTGrMmbnaFw5?g_st=awb",
+  },
+];
+
+/* =========================================================
+   CONTACT
+========================================================= */
+
+const RAIPUR_PHONE =
+  "+919407626212";
+
+/* =========================================================
+   SMALL HELPER
+========================================================= */
+
+function sleep(ms: number) {
+  return new Promise<void>((resolve) => {
+    window.setTimeout(resolve, ms);
+  });
+}
+
+/* =========================================================
+   GEOCODE ONE RAIPUR OUTLET
+
+   Uses OpenStreetMap's Nominatim geocoder.
+========================================================= */
+
+async function geocodeOutlet(
+  outlet: RaipurOutletSource,
+  signal: AbortSignal,
+): Promise<ResolvedRaipurOutlet | null> {
+  const params =
+    new URLSearchParams({
+      q: outlet.searchQuery,
+      format: "jsonv2",
+      limit: "1",
+      countrycodes: "in",
+    });
+
+  try {
+    const response = await fetch(
+      `https://nominatim.openstreetmap.org/search?${params.toString()}`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+        },
+        signal,
+      },
+    );
+
+    if (!response.ok) {
+      return null;
+    }
+
+    const data =
+      (await response.json()) as
+        NominatimResult[];
+
+    if (!data.length) {
+      return null;
+    }
+
+    const latitude =
+      Number(data[0].lat);
+
+    const longitude =
+      Number(data[0].lon);
+
+    if (
+      !Number.isFinite(latitude) ||
+      !Number.isFinite(longitude)
+    ) {
+      return null;
+    }
+
+    return {
+      ...outlet,
+
+      position: [
+        latitude,
+        longitude,
+      ],
+
+      resolvedAddress:
+        data[0].display_name,
+    };
+  } catch (error) {
+    if (
+      error instanceof DOMException &&
+      error.name === "AbortError"
+    ) {
+      return null;
+    }
+
+    console.error(
+      `Could not locate ${outlet.name}`,
+      error,
+    );
+
+    return null;
+  }
 }
 
 /* =========================================================
    MAP VIEW CONTROLLER
-
-   - Default: show all three locations
-   - Clicking city card: zoom to that location
 ========================================================= */
 
 function MapViewportController({
+  mode,
   focusedCity,
+  raipurOutlets,
 }: {
+  mode: MapMode;
   focusedCity: CityName | null;
+  raipurOutlets:
+    ResolvedRaipurOutlet[];
 }) {
   const map = useMap();
 
   useEffect(() => {
-    if (focusedCity) {
-      const location = LOCATIONS.find(
-        (item) => item.city === focusedCity,
+    /* -----------------------------------------------
+       RAIPUR OUTLET MODE
+    ----------------------------------------------- */
+
+    if (mode === "raipur") {
+      if (raipurOutlets.length > 0) {
+        const bounds =
+          latLngBounds(
+            raipurOutlets.map(
+              (outlet) =>
+                outlet.position,
+            ),
+          );
+
+        map.fitBounds(bounds, {
+          padding: [55, 55],
+          maxZoom: 14,
+          animate: true,
+        });
+
+        return;
+      }
+
+      /* While outlets are loading */
+
+      map.flyTo(
+        [21.2514, 81.6296],
+        12,
+        {
+          animate: true,
+          duration: 0.8,
+        },
       );
 
-      if (location) {
+      return;
+    }
+
+    /* -----------------------------------------------
+       INDIVIDUAL CITY
+    ----------------------------------------------- */
+
+    if (focusedCity) {
+      const city =
+        CITY_LOCATIONS.find(
+          (item) =>
+            item.city ===
+            focusedCity,
+        );
+
+      if (city) {
         map.flyTo(
-          location.position,
+          city.position,
           11,
           {
             animate: true,
@@ -172,434 +388,904 @@ function MapViewportController({
       return;
     }
 
-    const bounds = latLngBounds(
-      LOCATIONS.map(
-        (location) => location.position,
-      ),
-    );
+    /* -----------------------------------------------
+       SHOW RAIPUR + BALOD + DALLI
+    ----------------------------------------------- */
+
+    const bounds =
+      latLngBounds(
+        CITY_LOCATIONS.map(
+          (city) =>
+            city.position,
+        ),
+      );
 
     map.fitBounds(bounds, {
       padding: [45, 45],
       maxZoom: 9,
+      animate: true,
     });
-  }, [focusedCity, map]);
+  }, [
+    mode,
+    focusedCity,
+    raipurOutlets,
+    map,
+  ]);
 
   return null;
 }
 
 /* =========================================================
-   DISTRIBUTION MAP
+   MAP
 ========================================================= */
 
 function DistributionMap({
+  mode,
   focusedCity,
-  onRaipurDetails,
+  raipurOutlets,
+  onRaipurClick,
 }: {
+  mode: MapMode;
   focusedCity: CityName | null;
-  onRaipurDetails: () => void;
+  raipurOutlets:
+    ResolvedRaipurOutlet[];
+  onRaipurClick: () => void;
 }) {
   return (
     <MapContainer
-      center={[20.9, 81.35]}
+      center={[
+        20.9,
+        81.35,
+      ]}
       zoom={8}
       scrollWheelZoom={false}
-      zoomControl={true}
+      zoomControl
       className="h-full w-full"
       style={{
         height: "100%",
         width: "100%",
-        background: "#304a63",
+        background:
+          "#304a63",
       }}
     >
-      {/* ===================================================
-          OPENSTREETMAP TILES
-      =================================================== */}
+      {/* =================================================
+          OPENSTREETMAP
+      ================================================= */}
 
       <TileLayer
         attribution="&copy; OpenStreetMap contributors"
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
 
-      {/* Automatically control zoom */}
-
       <MapViewportController
+        mode={mode}
         focusedCity={focusedCity}
+        raipurOutlets={
+          raipurOutlets
+        }
       />
 
-      {/* ===================================================
-          RAIPUR + BALOD + DALLI
-      =================================================== */}
+      {/* =================================================
+          DEFAULT MODE:
+          RAIPUR / BALOD / DALLI
+      ================================================= */}
 
-      {LOCATIONS.map((location) => {
-        const isAvailable =
-          location.status === "in-stock";
+      {mode === "overview" &&
+        CITY_LOCATIONS.map(
+          (city) => {
+            const available =
+              city.status ===
+              "in-stock";
 
-        return (
-          <CircleMarker
-            key={location.city}
-            center={location.position}
-            radius={isAvailable ? 11 : 9}
-            pathOptions={{
-              color: "#fff8e8",
+            return (
+              <CircleMarker
+                key={city.city}
+                center={
+                  city.position
+                }
+                radius={
+                  available
+                    ? 11
+                    : 9
+                }
+                pathOptions={{
+                  color:
+                    "#fff7e5",
 
-              fillColor: isAvailable
-                ? "#3f8b45"
-                : "#d25448",
+                  fillColor:
+                    available
+                      ? "#3f8b45"
+                      : "#d25448",
 
-              fillOpacity: 1,
-              weight: 3,
-            }}
-          >
-            <Popup>
-              <div
-                style={{
-                  minWidth: "180px",
-                  padding: "2px",
+                  fillOpacity: 1,
+                  weight: 3,
                 }}
               >
-                {/* STATUS */}
+                <Popup>
+                  <div
+                    style={{
+                      minWidth:
+                        "175px",
+                      padding: "2px",
+                    }}
+                  >
+                    <p
+                      style={{
+                        margin: 0,
 
-                <p
-                  style={{
-                    margin: 0,
-                    fontSize: "9px",
-                    fontWeight: 800,
-                    letterSpacing: "0.12em",
-                    textTransform: "uppercase",
+                        fontSize:
+                          "9px",
 
-                    color: isAvailable
-                      ? "#397441"
-                      : "#777",
-                  }}
-                >
-                  {isAvailable
-                    ? "In Stock"
-                    : "Coming Soon"}
-                </p>
+                        fontWeight:
+                          700,
 
-                {/* CITY */}
+                        textTransform:
+                          "uppercase",
 
-                <h4
-                  style={{
-                    margin: "5px 0 0",
-                    fontSize: "15px",
-                    fontWeight: 800,
-                    color: "#20252e",
-                  }}
-                >
-                  {location.mapName}
-                </h4>
+                        letterSpacing:
+                          ".12em",
 
-                {/* SUBTITLE */}
+                        color:
+                          available
+                            ? "#397441"
+                            : "#777",
+                      }}
+                    >
+                      {available
+                        ? "In Stock"
+                        : "Coming Soon"}
+                    </p>
 
-                <p
-                  style={{
-                    margin: "3px 0 0",
-                    fontSize: "11px",
-                    color: "#666",
-                  }}
-                >
-                  {location.subtitle}
-                </p>
+                    <h4
+                      style={{
+                        margin:
+                          "5px 0 0",
 
-                {/* ADDRESS */}
+                        color:
+                          "#20252e",
 
-                <p
-                  style={{
-                    margin: "7px 0 0",
-                    maxWidth: "190px",
-                    fontSize: "10px",
-                    lineHeight: 1.5,
-                    color: "#777",
-                  }}
-                >
-                  {location.address}
-                </p>
+                        fontSize:
+                          "15px",
 
-                {/* ACTIONS */}
+                        fontWeight:
+                          700,
+                      }}
+                    >
+                      {city.mapName}
+                    </h4>
 
+                    <p
+                      style={{
+                        margin:
+                          "4px 0 0",
+
+                        color:
+                          "#666",
+
+                        fontSize:
+                          "11px",
+                      }}
+                    >
+                      {city.subtitle}
+                    </p>
+
+                    {city.city ===
+                      "Raipur" && (
+                      <button
+                        type="button"
+                        onClick={
+                          onRaipurClick
+                        }
+                        style={{
+                          border: 0,
+
+                          marginTop:
+                            "10px",
+
+                          padding: 0,
+
+                          background:
+                            "transparent",
+
+                          color:
+                            "#267fb4",
+
+                          cursor:
+                            "pointer",
+
+                          fontSize:
+                            "10px",
+
+                          fontWeight:
+                            700,
+                        }}
+                      >
+                        View Raipur
+                        outlets →
+                      </button>
+                    )}
+                  </div>
+                </Popup>
+              </CircleMarker>
+            );
+          },
+        )}
+
+      {/* =================================================
+          RAIPUR MODE:
+          ONLY RAIPUR OUTLETS
+      ================================================= */}
+
+      {mode === "raipur" &&
+        raipurOutlets.map(
+          (outlet) => (
+            <CircleMarker
+              key={outlet.id}
+              center={
+                outlet.position
+              }
+              radius={10}
+              pathOptions={{
+                color: "#fff7e5",
+                fillColor:
+                  "#399257",
+                fillOpacity: 1,
+                weight: 3,
+              }}
+            >
+              <Popup>
                 <div
                   style={{
-                    marginTop: "10px",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "12px",
+                    minWidth:
+                      "200px",
+
+                    maxWidth:
+                      "230px",
+
+                    padding: "3px",
                   }}
                 >
+                  <p
+                    style={{
+                      margin: 0,
+
+                      color:
+                        "#397441",
+
+                      fontSize:
+                        "9px",
+
+                      fontWeight:
+                        700,
+
+                      textTransform:
+                        "uppercase",
+
+                      letterSpacing:
+                        ".12em",
+                    }}
+                  >
+                    Old Glory
+                    Available
+                  </p>
+
+                  <h4
+                    style={{
+                      margin:
+                        "5px 0 0",
+
+                      color:
+                        "#20252e",
+
+                      fontSize:
+                        "15px",
+
+                      fontWeight:
+                        700,
+                    }}
+                  >
+                    {outlet.name}
+                  </h4>
+
+                  <p
+                    style={{
+                      margin:
+                        "6px 0 0",
+
+                      color: "#666",
+
+                      fontSize:
+                        "10px",
+
+                      lineHeight:
+                        1.5,
+                    }}
+                  >
+                    {outlet.address}
+                  </p>
+
                   <a
-                    href={getGoogleMapsLink(
-                      location.googleMapsQuery,
-                    )}
+                    href={
+                      outlet.googleMapsUrl
+                    }
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{
-                      color: "#267fb4",
-                      fontSize: "10px",
-                      fontWeight: 700,
-                      textDecoration: "none",
+                      display:
+                        "inline-block",
+
+                      marginTop:
+                        "10px",
+
+                      color:
+                        "#267fb4",
+
+                      fontSize:
+                        "10px",
+
+                      fontWeight:
+                        700,
+
+                      textDecoration:
+                        "none",
                     }}
                   >
+                    Open in
                     Google Maps ↗
                   </a>
-
-                  {location.city ===
-                    "Raipur" && (
-                    <button
-                      type="button"
-                      onClick={
-                        onRaipurDetails
-                      }
-                      style={{
-                        border: "none",
-                        padding: 0,
-                        background:
-                          "transparent",
-                        cursor: "pointer",
-                        color: "#267fb4",
-                        fontSize: "10px",
-                        fontWeight: 700,
-                      }}
-                    >
-                      Details →
-                    </button>
-                  )}
                 </div>
-              </div>
-            </Popup>
-          </CircleMarker>
-        );
-      })}
+              </Popup>
+            </CircleMarker>
+          ),
+        )}
     </MapContainer>
   );
 }
 
 /* =========================================================
-   DETAIL ROW
-========================================================= */
-
-function DetailRow({
-  icon,
-  label,
-  value,
-}: {
-  icon: ReactNode;
-  label: string;
-  value: string;
-}) {
-  return (
-    <div
-      className="
-        flex min-h-[62px]
-        items-center gap-3
-
-        rounded-[18px]
-
-        border
-        border-border-theme/70
-
-        bg-bg-base/20
-
-        px-4 py-3
-      "
-    >
-      <span
-        className="
-          shrink-0
-          text-[#b9b19a]
-        "
-      >
-        {icon}
-      </span>
-
-      <div className="min-w-0">
-        <p
-          className="
-            text-[10px]
-            leading-none
-            text-text-muted
-          "
-        >
-          {label}
-        </p>
-
-        <p
-          className="
-            mt-1
-            text-xs
-            font-medium
-            leading-relaxed
-            text-text-primary
-          "
-        >
-          {value}
-        </p>
-      </div>
-    </div>
-  );
-}
-
-/* =========================================================
-   MAIN STORES COMPONENT
+   MAIN COMPONENT
 ========================================================= */
 
 export function Stores() {
   const [
-    isRaipurModalOpen,
-    setIsRaipurModalOpen,
-  ] = useState(false);
+    mapMode,
+    setMapMode,
+  ] =
+    useState<MapMode>(
+      "overview",
+    );
 
   const [
     focusedCity,
     setFocusedCity,
-  ] = useState<CityName | null>(null);
+  ] =
+    useState<CityName | null>(
+      null,
+    );
+
+  const [
+    raipurOutlets,
+    setRaipurOutlets,
+  ] = useState<
+    ResolvedRaipurOutlet[]
+  >([]);
+
+  const [
+    isLoadingRaipur,
+    setIsLoadingRaipur,
+  ] =
+    useState(false);
+
+  const [
+    raipurLoaded,
+    setRaipurLoaded,
+  ] =
+    useState(false);
+
+  const [
+    raipurError,
+    setRaipurError,
+  ] =
+    useState<string | null>(
+      null,
+    );
 
   /* =======================================================
-     OPEN RAIPUR
+     ENTER RAIPUR MODE
   ======================================================= */
 
-  const openRaipurDetails = () => {
-    setFocusedCity("Raipur");
-    setIsRaipurModalOpen(true);
-  };
+  const openRaipur =
+    () => {
+      setFocusedCity(null);
+      setMapMode("raipur");
+    };
 
   /* =======================================================
-     ESC CLOSE + SCROLL LOCK
+     RETURN TO THREE-CITY MAP
+  ======================================================= */
+
+  const showAllTowns =
+    () => {
+      setMapMode("overview");
+      setFocusedCity(null);
+    };
+
+  /* =======================================================
+     LOAD RAIPUR OUTLET COORDINATES
+
+     Runs once when Raipur is opened.
   ======================================================= */
 
   useEffect(() => {
-    const handleEscape = (
-      event: KeyboardEvent,
-    ) => {
-      if (event.key === "Escape") {
-        setIsRaipurModalOpen(false);
-      }
-    };
-
-    window.addEventListener(
-      "keydown",
-      handleEscape,
-    );
-
-    if (isRaipurModalOpen) {
-      document.body.style.overflow =
-        "hidden";
-    } else {
-      document.body.style.overflow = "";
+    if (
+      mapMode !== "raipur" ||
+      raipurLoaded
+    ) {
+      return;
     }
 
-    return () => {
-      window.removeEventListener(
-        "keydown",
-        handleEscape,
-      );
+    const controller =
+      new AbortController();
 
-      document.body.style.overflow = "";
+    const loadLocations =
+      async () => {
+        setIsLoadingRaipur(
+          true,
+        );
+
+        setRaipurError(null);
+
+        const resolved:
+          ResolvedRaipurOutlet[] =
+          [];
+
+        try {
+          /*
+            Do sequential requests instead
+            of sending all geocoder requests
+            at exactly the same time.
+          */
+
+          for (
+            let index = 0;
+            index <
+            RAIPUR_OUTLET_SOURCES.length;
+            index++
+          ) {
+            const outlet =
+              RAIPUR_OUTLET_SOURCES[
+                index
+              ];
+
+            const result =
+              await geocodeOutlet(
+                outlet,
+                controller.signal,
+              );
+
+            if (
+              controller.signal
+                .aborted
+            ) {
+              return;
+            }
+
+            if (result) {
+              resolved.push(
+                result,
+              );
+
+              /*
+                Add points progressively,
+                so map starts updating
+                immediately.
+              */
+
+              setRaipurOutlets(
+                [...resolved],
+              );
+            }
+
+            if (
+              index <
+              RAIPUR_OUTLET_SOURCES.length -
+                1
+            ) {
+              await sleep(250);
+            }
+          }
+
+          if (
+            resolved.length === 0
+          ) {
+            setRaipurError(
+              "Outlet coordinates could not be loaded. You can still open the Google Maps links.",
+            );
+          }
+
+          setRaipurLoaded(true);
+        } catch (error) {
+          if (
+            controller.signal
+              .aborted
+          ) {
+            return;
+          }
+
+          console.error(
+            error,
+          );
+
+          setRaipurError(
+            "Could not load Raipur outlet coordinates.",
+          );
+        } finally {
+          if (
+            !controller.signal
+              .aborted
+          ) {
+            setIsLoadingRaipur(
+              false,
+            );
+          }
+        }
+      };
+
+    void loadLocations();
+
+    return () => {
+      controller.abort();
     };
-  }, [isRaipurModalOpen]);
+  }, [
+    mapMode,
+    raipurLoaded,
+  ]);
+
+  /* =======================================================
+     MAPPED COUNT
+  ======================================================= */
+
+  const mappedOutletIds =
+    useMemo(
+      () =>
+        new Set(
+          raipurOutlets.map(
+            (outlet) =>
+              outlet.id,
+          ),
+        ),
+      [raipurOutlets],
+    );
 
   return (
-    <>
-      {/* =====================================================
-          WHERE TO BUY
-      ===================================================== */}
+    <Section
+      id="stores"
+      className="
+        relative
+        overflow-hidden
 
-      <Section
-        id="stores"
+        border-y
+        border-border-theme/40
+
+        bg-bg-surface
+
+        py-20
+        sm:py-24
+      "
+    >
+      {/* ===================================================
+          DECORATION
+      =================================================== */}
+
+      <div
         className="
-          relative
-          overflow-hidden
-
-          border-y
-          border-border-theme/40
-
-          bg-bg-surface
-
-          py-20
-          sm:py-24
+          pointer-events-none
+          absolute inset-0
         "
       >
-        {/* =================================================
-            DECORATION
-        ================================================= */}
+        <span
+          className="
+            absolute
+            right-[20%]
+            top-[31%]
 
+            h-1.5
+            w-1.5
+
+            rounded-full
+
+            bg-[#9a8038]/70
+          "
+        />
+
+        <span
+          className="
+            absolute
+            right-[15%]
+            top-[45%]
+
+            h-1.5
+            w-1.5
+
+            rounded-full
+
+            bg-[#9a8038]/60
+          "
+        />
+      </div>
+
+      <div
+        className="
+          relative
+
+          mx-auto
+          max-w-6xl
+
+          px-4
+          sm:px-6
+          lg:px-8
+        "
+      >
         <div
           className="
-            pointer-events-none
-            absolute inset-0
-            overflow-hidden
+            grid
+            grid-cols-1
+
+            gap-12
+
+            lg:grid-cols-[1fr_1fr]
           "
         >
-          <span
-            className="
-              absolute
-              right-[20%]
-              top-[31%]
+          {/* =================================================
+              LEFT
+          ================================================= */}
 
-              h-1.5 w-1.5
-              rounded-full
-
-              bg-[#9a8038]/70
-            "
-          />
-
-          <span
-            className="
-              absolute
-              right-[17%]
-              top-[40%]
-
-              h-1.5 w-1.5
-              rounded-full
-
-              bg-[#9a8038]/70
-            "
-          />
-
-          <span
-            className="
-              absolute
-              right-[14%]
-              top-[51%]
-
-              h-1.5 w-1.5
-              rounded-full
-
-              bg-[#9a8038]/70
-            "
-          />
-        </div>
-
-        <div
-          className="
-            relative
-
-            mx-auto
-            max-w-6xl
-
-            px-5
-            sm:px-6
-            lg:px-8
-          "
-        >
-          <div
-            className="
-              grid
-              grid-cols-1
-
-              gap-12
-
-              lg:grid-cols-[1fr_1fr]
-              lg:gap-12
-            "
+          <motion.div
+            initial={{
+              opacity: 0,
+              y: 30,
+            }}
+            whileInView={{
+              opacity: 1,
+              y: 0,
+            }}
+            viewport={{
+              once: true,
+            }}
+            transition={{
+              duration: 0.65,
+            }}
           >
+            {/* EYEBROW */}
+
+            <span
+              className="
+                inline-flex
+                items-center
+                gap-2
+
+                rounded-full
+
+                border
+                border-accent-primary/50
+
+                px-3
+                py-1.5
+
+                text-[8px]
+                font-bold
+
+                uppercase
+                tracking-[0.28em]
+
+                text-accent-primary
+              "
+            >
+              <span
+                className="
+                  h-1
+                  w-1
+
+                  rounded-full
+
+                  bg-accent-primary
+                "
+              />
+
+              Where to buy
+            </span>
+
+            {/* HEADING */}
+
+            <h2
+              className="
+                mt-5
+
+                max-w-[500px]
+
+                font-display
+
+                text-[39px]
+                font-bold
+
+                leading-[1.02]
+
+                tracking-[0.01em]
+
+                text-text-primary
+
+                sm:text-[46px]
+                lg:text-[49px]
+              "
+            >
+              A crate is closer
+              <br />
+              than you think.
+            </h2>
+
+            {/* TEXT */}
+
+            <p
+              className="
+                mt-5
+
+                max-w-[500px]
+
+                text-[14px]
+                leading-7
+
+                text-text-muted
+              "
+            >
+              {mapMode ===
+              "raipur"
+                ? "Explore Old Glory Soda availability across Raipur. Select a marker to see the outlet and open its exact Google Maps location."
+                : "Old Glory is rolling out across Chhattisgarh, one town at a time. Select Raipur to see exactly where Old Glory is available."}
+            </p>
+
+            {/* CTA */}
+
+            <div
+              className="
+                mt-7
+
+                flex
+                flex-wrap
+
+                gap-3
+              "
+            >
+              {mapMode ===
+              "overview" ? (
+                <motion.button
+                  type="button"
+                  onClick={
+                    openRaipur
+                  }
+                  whileHover={{
+                    y: -2,
+                  }}
+                  whileTap={{
+                    scale: 0.97,
+                  }}
+                  className="
+                    inline-flex
+                    min-h-11
+
+                    items-center
+                    gap-2
+
+                    rounded-full
+
+                    bg-[#42a8df]
+
+                    px-5
+                    py-2.5
+
+                    text-[11px]
+                    font-semibold
+
+                    text-[#111820]
+
+                    shadow-lg
+                  "
+                >
+                  <Location
+                    size={16}
+                    variant="Bold"
+                  />
+
+                  View Raipur
+                  Outlets
+                </motion.button>
+              ) : (
+                <motion.button
+                  type="button"
+                  onClick={
+                    showAllTowns
+                  }
+                  whileHover={{
+                    x: -2,
+                  }}
+                  whileTap={{
+                    scale: 0.97,
+                  }}
+                  className="
+                    inline-flex
+                    min-h-11
+
+                    items-center
+                    gap-2
+
+                    rounded-full
+
+                    bg-[#42a8df]
+
+                    px-5
+                    py-2.5
+
+                    text-[11px]
+                    font-semibold
+
+                    text-[#111820]
+                  "
+                >
+                  <ArrowLeft2
+                    size={16}
+                  />
+
+                  All Towns
+                </motion.button>
+              )}
+
+              <motion.a
+                href={`tel:${RAIPUR_PHONE}`}
+                whileHover={{
+                  y: -2,
+                }}
+                whileTap={{
+                  scale: 0.97,
+                }}
+                className="
+                  inline-flex
+                  min-h-11
+
+                  items-center
+                  gap-2
+
+                  rounded-full
+
+                  border
+                  border-border-theme
+
+                  px-5
+                  py-2.5
+
+                  text-[11px]
+                  font-semibold
+
+                  text-text-primary
+
+                  transition
+
+                  hover:bg-bg-muted/30
+                "
+              >
+                <Call size={16} />
+
+                Talk to
+                distributor
+              </motion.a>
+            </div>
+
             {/* =================================================
-                LEFT SIDE
+                MAP
             ================================================= */}
 
             <motion.div
               initial={{
                 opacity: 0,
-                y: 30,
+                y: 25,
               }}
               whileInView={{
                 opacity: 1,
@@ -609,307 +1295,224 @@ export function Stores() {
                 once: true,
               }}
               transition={{
-                duration: 0.65,
+                duration: 0.6,
+                delay: 0.15,
               }}
+              className="
+                relative
+
+                mt-9
+
+                h-[330px]
+
+                overflow-hidden
+
+                rounded-[24px]
+
+                border
+                border-border-theme/80
+
+                bg-[#304a63]
+
+                p-2.5
+
+                sm:h-[370px]
+              "
             >
-              {/* EYEBROW */}
-
-              <span
-                className="
-                  inline-flex
-                  items-center
-                  gap-2
-
-                  rounded-full
-
-                  border
-                  border-accent-primary/50
-
-                  px-3
-                  py-1.5
-
-                  text-[8px]
-                  font-bold
-
-                  uppercase
-                  tracking-[0.28em]
-
-                  text-accent-primary
-                "
-              >
-                <span
-                  className="
-                    h-1 w-1
-                    rounded-full
-                    bg-accent-primary
-                  "
-                />
-
-                Where to buy
-              </span>
-
-              {/* HEADING */}
-
-              <h2
-                className="
-                  mt-5
-
-                  max-w-[500px]
-
-                  font-display
-
-                  text-[39px]
-                  font-black
-
-                  leading-[1.02]
-
-                  tracking-[-0.025em]
-
-                  text-text-primary
-
-                  sm:text-[46px]
-                  lg:text-[49px]
-                "
-              >
-                A crate is closer
-                <br />
-                than you think.
-              </h2>
-
-              {/* DESCRIPTION */}
-
-              <p
-                className="
-                  mt-5
-
-                  max-w-[500px]
-
-                  text-[14px]
-                  leading-7
-
-                  text-text-muted
-                "
-              >
-                Old Glory is rolling out across
-                Chhattisgarh, one town at a time.
-                Explore our current and upcoming
-                distribution locations.
-              </p>
-
-              {/* =================================================
-                  CTA
-              ================================================= */}
-
               <div
-                className="
-                  mt-7
-                  flex
-                  flex-wrap
-                  gap-3
-                "
-              >
-                <motion.a
-                  href="#contact"
-                  whileHover={{
-                    y: -2,
-                  }}
-                  whileTap={{
-                    scale: 0.97,
-                  }}
-                  className="
-                    inline-flex
-                    items-center
-                    gap-2
-
-                    rounded-full
-
-                    bg-[#42a8df]
-
-                    px-5
-                    py-3
-
-                    text-[11px]
-                    font-semibold
-
-                    text-[#111820]
-
-                    shadow-lg
-                    shadow-[#42a8df]/10
-                  "
-                >
-                  <Shop
-                    size={16}
-                    variant="Bold"
-                  />
-
-                  Order Online
-                </motion.a>
-
-                <motion.button
-                  type="button"
-                  onClick={openRaipurDetails}
-                  whileHover={{
-                    y: -2,
-                  }}
-                  whileTap={{
-                    scale: 0.97,
-                  }}
-                  className="
-                    inline-flex
-                    items-center
-                    gap-2
-
-                    rounded-full
-
-                    border
-                    border-border-theme
-
-                    px-5
-                    py-3
-
-                    text-[11px]
-                    font-semibold
-
-                    text-text-primary
-
-                    transition-colors
-
-                    hover:bg-bg-muted/30
-                  "
-                >
-                  <Call size={16} />
-
-                  Talk to distributor
-                </motion.button>
-              </div>
-
-              {/* =================================================
-                  REAL INTERACTIVE MAP
-              ================================================= */}
-
-              <motion.div
-                initial={{
-                  opacity: 0,
-                  y: 25,
-                }}
-                whileInView={{
-                  opacity: 1,
-                  y: 0,
-                }}
-                viewport={{
-                  once: true,
-                }}
-                transition={{
-                  duration: 0.6,
-                  delay: 0.15,
-                }}
                 className="
                   relative
 
-                  mt-9
-
-                  h-[310px]
+                  h-full
+                  w-full
 
                   overflow-hidden
 
-                  rounded-[24px]
-
-                  border
-                  border-border-theme/80
-
-                  bg-[#304a63]
-
-                  p-2.5
-
-                  sm:h-[340px]
+                  rounded-[18px]
                 "
               >
+                <DistributionMap
+                  mode={
+                    mapMode
+                  }
+                  focusedCity={
+                    focusedCity
+                  }
+                  raipurOutlets={
+                    raipurOutlets
+                  }
+                  onRaipurClick={
+                    openRaipur
+                  }
+                />
+
+                {/* ===============================
+                    TOP MAP CARD
+                =============================== */}
+
                 <div
                   className="
-                    relative
+                    pointer-events-none
 
-                    h-full
-                    w-full
+                    absolute
+                    left-3
+                    top-3
 
-                    overflow-hidden
+                    z-[500]
 
-                    rounded-[18px]
+                    rounded-xl
+
+                    bg-[#252c36]/92
+
+                    px-3.5
+                    py-2.5
+
+                    shadow-lg
+
+                    backdrop-blur-md
                   "
                 >
-                  {/* MAP */}
-
-                  <DistributionMap
-                    focusedCity={focusedCity}
-                    onRaipurDetails={
-                      openRaipurDetails
-                    }
-                  />
-
-                  {/* =================================================
-                      MAP LABEL
-                  ================================================= */}
-
-                  <div
+                  <p
                     className="
-                      pointer-events-none
+                      text-[8px]
+                      font-bold
 
+                      uppercase
+                      tracking-[0.18em]
+
+                      text-[#a9a18b]
+                    "
+                  >
+                    {mapMode ===
+                    "raipur"
+                      ? "Available in"
+                      : "Distribution Network"}
+                  </p>
+
+                  <p
+                    className="
+                      mt-0.5
+
+                      text-[11px]
+                      font-semibold
+
+                      text-white
+                    "
+                  >
+                    {mapMode ===
+                    "raipur"
+                      ? `Raipur · ${raipurOutlets.length} mapped`
+                      : "Raipur · Balod · Dalli"}
+                  </p>
+                </div>
+
+                {/* ===============================
+                    RAIPUR LOADER
+                =============================== */}
+
+                {mapMode ===
+                  "raipur" &&
+                  isLoadingRaipur &&
+                  raipurOutlets.length ===
+                    0 && (
+                    <div
+                      className="
+                        absolute
+
+                        bottom-4
+                        left-1/2
+
+                        z-[500]
+
+                        -translate-x-1/2
+
+                        rounded-full
+
+                        bg-[#252c36]/95
+
+                        px-4
+                        py-2.5
+
+                        text-[9px]
+                        font-semibold
+
+                        text-white
+
+                        shadow-lg
+                        backdrop-blur-md
+                      "
+                    >
+                      Finding Raipur
+                      outlets...
+                    </div>
+                  )}
+
+                {/* ===============================
+                    BACK BUTTON ON MAP
+                =============================== */}
+
+                {mapMode ===
+                  "raipur" && (
+                  <button
+                    type="button"
+                    onClick={
+                      showAllTowns
+                    }
+                    className="
                       absolute
 
-                      left-3
-                      top-3
+                      bottom-7
+                      right-3
 
                       z-[500]
 
-                      rounded-xl
+                      inline-flex
 
-                      bg-[#252c36]/90
+                      items-center
+                      gap-1.5
 
-                      px-3
+                      rounded-full
+
+                      bg-[#252c36]/95
+
+                      px-3.5
                       py-2.5
+
+                      text-[9px]
+                      font-semibold
+
+                      text-white
 
                       shadow-lg
 
                       backdrop-blur-md
+
+                      transition
+
+                      hover:bg-[#343d49]
                     "
                   >
-                    <p
-                      className="
-                        text-[8px]
-                        font-bold
+                    <ArrowLeft2
+                      size={12}
+                    />
 
-                        uppercase
+                    All Towns
+                  </button>
+                )}
 
-                        tracking-[0.18em]
+                {/* ===============================
+                    RESET CITY ZOOM
+                =============================== */}
 
-                        text-[#a9a18b]
-                      "
-                    >
-                      Distribution Network
-                    </p>
-
-                    <p
-                      className="
-                        mt-0.5
-
-                        text-[11px]
-                        font-semibold
-
-                        text-white
-                      "
-                    >
-                      Raipur · Balod · Dalli
-                    </p>
-                  </div>
-
-                  {/* =================================================
-                      SHOW ALL BUTTON
-                  ================================================= */}
-
-                  {focusedCity && (
+                {mapMode ===
+                  "overview" &&
+                  focusedCity && (
                     <button
                       type="button"
                       onClick={() =>
-                        setFocusedCity(null)
+                        setFocusedCity(
+                          null,
+                        )
                       }
                       className="
                         absolute
@@ -932,24 +1535,18 @@ export function Stores() {
                         text-white
 
                         shadow-lg
-
-                        backdrop-blur-md
-
-                        transition
-
-                        hover:bg-[#343d49]
                       "
                     >
-                      Show All Locations
+                      Show All
                     </button>
                   )}
-                </div>
-              </motion.div>
+              </div>
+            </motion.div>
 
-              {/* =================================================
-                  MAP LEGEND
-              ================================================= */}
+            {/* MAP STATUS */}
 
+            {mapMode ===
+              "overview" ? (
               <div
                 className="
                   mt-4
@@ -976,14 +1573,13 @@ export function Stores() {
                     className="
                       h-2
                       w-2
-
                       rounded-full
-
                       bg-[#3f8b45]
                     "
                   />
 
-                  Raipur — In Stock
+                  Raipur —
+                  In Stock
                 </span>
 
                 <span
@@ -997,14 +1593,13 @@ export function Stores() {
                     className="
                       h-2
                       w-2
-
                       rounded-full
-
                       bg-[#d25448]
                     "
                   />
 
-                  Balod — Coming Soon
+                  Balod —
+                  Coming Soon
                 </span>
 
                 <span
@@ -1018,151 +1613,438 @@ export function Stores() {
                     className="
                       h-2
                       w-2
-
                       rounded-full
-
                       bg-[#d25448]
                     "
                   />
 
-                  Dalli — Coming Soon
+                  Dalli —
+                  Coming Soon
                 </span>
               </div>
-            </motion.div>
+            ) : (
+              <div
+                className="
+                  mt-4
 
+                  flex
+                  items-center
+                  gap-2
+
+                  text-[9px]
+
+                  text-text-muted
+                "
+              >
+                <span
+                  className="
+                    h-2
+                    w-2
+
+                    rounded-full
+
+                    bg-[#399257]
+                  "
+                />
+
+                Green markers =
+                Old Glory available
+                in Raipur
+              </div>
+            )}
+          </motion.div>
+
+          {/* =================================================
+              RIGHT
+          ================================================= */}
+
+          <motion.div
+            initial={{
+              opacity: 0,
+              y: 30,
+            }}
+            whileInView={{
+              opacity: 1,
+              y: 0,
+            }}
+            viewport={{
+              once: true,
+            }}
+            transition={{
+              duration: 0.65,
+              delay: 0.08,
+            }}
+            className="
+              flex
+              flex-col
+
+              lg:pt-3
+            "
+          >
             {/* =================================================
-                RIGHT SIDE — THREE LOCATIONS
+                OVERVIEW CARDS
             ================================================= */}
 
-            <motion.div
-              initial={{
-                opacity: 0,
-                y: 30,
-              }}
-              whileInView={{
-                opacity: 1,
-                y: 0,
-              }}
-              viewport={{
-                once: true,
-              }}
-              transition={{
-                duration: 0.65,
-                delay: 0.08,
-              }}
-              className="
-                flex
-                flex-col
+            {mapMode ===
+              "overview" && (
+              <>
+                <div className="space-y-3">
+                  {CITY_LOCATIONS.map(
+                    (
+                      location,
+                      index,
+                    ) => {
+                      const available =
+                        location.status ===
+                        "in-stock";
 
-                lg:pt-3
-              "
-            >
-              <div className="space-y-3">
-                {LOCATIONS.map(
-                  (location, index) => {
-                    const isAvailable =
-                      location.status ===
-                      "in-stock";
-
-                    return (
-                      <motion.button
-                        key={location.city}
-                        type="button"
-                        initial={{
-                          opacity: 0,
-                          x: 25,
-                        }}
-                        whileInView={{
-                          opacity: 1,
-                          x: 0,
-                        }}
-                        viewport={{
-                          once: true,
-                        }}
-                        transition={{
-                          duration: 0.45,
-
-                          delay:
-                            0.1 +
-                            index * 0.08,
-                        }}
-                        whileHover={{
-                          x: 5,
-                          scale: 1.005,
-                        }}
-                        whileTap={{
-                          scale: 0.985,
-                        }}
-                        onClick={() => {
-                          setFocusedCity(
-                            location.city,
-                          );
-
-                          /*
-                            IMPORTANT:
-
-                            Raipur opens distributor
-                            details modal.
-
-                            Balod and Dalli simply
-                            zoom map to city.
-                          */
-
-                          if (
-                            location.city ===
-                            "Raipur"
-                          ) {
-                            setIsRaipurModalOpen(
-                              true,
-                            );
+                      return (
+                        <motion.button
+                          key={
+                            location.city
                           }
-                        }}
-                        className="
-                          group
+                          type="button"
+                          initial={{
+                            opacity: 0,
+                            x: 25,
+                          }}
+                          whileInView={{
+                            opacity: 1,
+                            x: 0,
+                          }}
+                          viewport={{
+                            once: true,
+                          }}
+                          transition={{
+                            duration:
+                              0.45,
 
-                          flex
+                            delay:
+                              0.1 +
+                              index *
+                                0.08,
+                          }}
+                          whileHover={{
+                            x: 5,
+                          }}
+                          whileTap={{
+                            scale:
+                              0.985,
+                          }}
+                          onClick={() => {
+                            if (
+                              location.city ===
+                              "Raipur"
+                            ) {
+                              openRaipur();
 
-                          min-h-[72px]
+                              return;
+                            }
 
-                          w-full
-
-                          items-center
-                          justify-between
-
-                          rounded-[19px]
-
-                          border
-                          border-border-theme/80
-
-                          bg-bg-base/20
-
-                          px-4
-                          py-3
-
-                          text-left
-
-                          transition-all
-                          duration-300
-
-                          hover:border-accent-primary/40
-                          hover:bg-bg-muted/25
-                          hover:shadow-lg
-
-                          sm:px-5
-                        "
-                      >
-                        {/* LEFT */}
-
-                        <div
+                            setFocusedCity(
+                              location.city,
+                            );
+                          }}
                           className="
                             flex
-                            min-w-0
+                            min-h-[72px]
+                            w-full
+
+                            items-center
+                            justify-between
+
+                            rounded-[19px]
+
+                            border
+                            border-border-theme/80
+
+                            bg-bg-base/20
+
+                            px-4
+                            py-3
+
+                            text-left
+
+                            transition
+
+                            hover:border-accent-primary/40
+                            hover:bg-bg-muted/25
+                            hover:shadow-lg
+
+                            sm:px-5
+                          "
+                        >
+                          <div
+                            className="
+                              flex
+                              min-w-0
+
+                              items-center
+                              gap-3
+                            "
+                          >
+                            <span
+                              className={`
+                                grid
+                                h-10
+                                w-10
+
+                                shrink-0
+
+                                place-items-center
+
+                                rounded-full
+
+                                ${
+                                  available
+                                    ? "bg-accent-primary/15 text-accent-primary"
+                                    : "bg-bg-muted/70 text-[#c5bea9]"
+                                }
+                              `}
+                            >
+                              <Shop
+                                size={
+                                  18
+                                }
+                                variant={
+                                  available
+                                    ? "Bold"
+                                    : "Linear"
+                                }
+                              />
+                            </span>
+
+                            <div>
+                              <p
+                                className="
+                                  font-display
+
+                                  text-sm
+                                  font-bold
+
+                                  text-text-primary
+                                "
+                              >
+                                {
+                                  location.mapName
+                                }
+                              </p>
+
+                              <p
+                                className="
+                                  mt-0.5
+
+                                  text-[10px]
+
+                                  text-text-muted
+                                "
+                              >
+                                {location.city ===
+                                "Raipur"
+                                  ? "Tap to see all Raipur outlets"
+                                  : "Tap to view on map"}
+                              </p>
+                            </div>
+                          </div>
+
+                          <span
+                            className={`
+                              shrink-0
+
+                              rounded-full
+
+                              px-3
+                              py-1.5
+
+                              text-[8px]
+
+                              font-bold
+                              uppercase
+
+                              tracking-[0.18em]
+
+                              ${
+                                available
+                                  ? "bg-[#385f36] text-[#78bd6b]"
+                                  : "bg-bg-muted text-text-muted"
+                              }
+                            `}
+                          >
+                            {available
+                              ? "In Stock"
+                              : "Coming Soon"}
+                          </span>
+                        </motion.button>
+                      );
+                    },
+                  )}
+                </div>
+
+                <p
+                  className="
+                    mt-5
+
+                    text-xs
+                    leading-6
+
+                    text-text-muted
+                  "
+                >
+                  Select Raipur to
+                  explore individual
+                  stores and restaurants
+                  where Old Glory is
+                  currently available.
+                </p>
+              </>
+            )}
+
+            {/* =================================================
+                RAIPUR OUTLET LIST
+            ================================================= */}
+
+            {mapMode ===
+              "raipur" && (
+              <>
+                <div
+                  className="
+                    flex
+                    items-end
+                    justify-between
+
+                    gap-4
+                  "
+                >
+                  <div>
+                    <span
+                      className="
+                        text-[8px]
+                        font-bold
+
+                        uppercase
+
+                        tracking-[0.2em]
+
+                        text-accent-primary
+                      "
+                    >
+                      Available in
+                      Raipur
+                    </span>
+
+                    <h3
+                      className="
+                        mt-2
+
+                        font-display
+
+                        text-2xl
+                        font-bold
+
+                        text-text-primary
+                      "
+                    >
+                      Find Old Glory
+                      nearby.
+                    </h3>
+                  </div>
+
+                  <span
+                    className="
+                      rounded-full
+
+                      border
+                      border-border-theme
+
+                      px-3
+                      py-1.5
+
+                      text-[9px]
+
+                      text-text-muted
+                    "
+                  >
+                    {
+                      RAIPUR_OUTLET_SOURCES.length
+                    }{" "}
+                    identified
+                  </span>
+                </div>
+
+                {/* ===============================
+                    KNOWN OUTLETS
+                =============================== */}
+
+                <div
+                  className="
+                    mt-6
+                    space-y-3
+                  "
+                >
+                  {RAIPUR_OUTLET_SOURCES.map(
+                    (
+                      outlet,
+                      index,
+                    ) => {
+                      const mapped =
+                        mappedOutletIds.has(
+                          outlet.id,
+                        );
+
+                      return (
+                        <motion.a
+                          key={
+                            outlet.id
+                          }
+                          href={
+                            outlet.googleMapsUrl
+                          }
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          initial={{
+                            opacity: 0,
+                            x: 20,
+                          }}
+                          animate={{
+                            opacity: 1,
+                            x: 0,
+                          }}
+                          transition={{
+                            duration:
+                              0.35,
+
+                            delay:
+                              index *
+                              0.07,
+                          }}
+                          className="
+                            group
+
+                            flex
+                            min-h-[82px]
+                            w-full
+
                             items-center
                             gap-3
+
+                            rounded-[19px]
+
+                            border
+                            border-border-theme/80
+
+                            bg-bg-base/20
+
+                            px-4
+                            py-3
+
+                            transition
+
+                            hover:border-accent-primary/40
+                            hover:bg-bg-muted/25
                           "
                         >
                           <span
-                            className={`
+                            className="
                               grid
                               h-10
                               w-10
@@ -1173,778 +2055,262 @@ export function Stores() {
 
                               rounded-full
 
-                              ${
-                                isAvailable
-                                  ? "bg-accent-primary/15 text-accent-primary"
-                                  : "bg-bg-muted/70 text-[#c5bea9]"
-                              }
-                            `}
+                              bg-[#399257]/15
+
+                              text-[#60ad74]
+                            "
                           >
-                            <Shop
-                              size={18}
-                              variant={
-                                isAvailable
-                                  ? "Bold"
-                                  : "Linear"
+                            <Location
+                              size={
+                                18
                               }
+                              variant="Bold"
                             />
                           </span>
 
-                          <div className="min-w-0">
-                            <p
+                          <div
+                            className="
+                              min-w-0
+                              flex-1
+                            "
+                          >
+                            <div
                               className="
-                                font-display
+                                flex
 
-                                text-sm
-                                font-bold
-
-                                text-text-primary
+                                items-center
+                                gap-2
                               "
                             >
-                              {
-                                location.mapName
-                              }
-                            </p>
+                              <p
+                                className="
+                                  truncate
+
+                                  text-xs
+                                  font-bold
+
+                                  text-text-primary
+                                "
+                              >
+                                {
+                                  outlet.name
+                                }
+                              </p>
+
+                              {mapped && (
+                                <span
+                                  className="
+                                    h-1.5
+                                    w-1.5
+
+                                    shrink-0
+
+                                    rounded-full
+
+                                    bg-[#54aa69]
+                                  "
+                                />
+                              )}
+                            </div>
 
                             <p
                               className="
-                                mt-0.5
+                                mt-1
 
-                                text-[10px]
+                                line-clamp-2
+
+                                text-[9px]
+                                leading-4
 
                                 text-text-muted
                               "
                             >
-                              {isAvailable
-                                ? "Tap for distributor details"
-                                : "Tap to view on map"}
+                              {
+                                outlet.address
+                              }
                             </p>
                           </div>
-                        </div>
 
-                        {/* STATUS */}
+                          <ArrowRight2
+                            size={14}
+                            className="
+                              shrink-0
 
-                        <span
-                          className={`
-                            shrink-0
+                              text-text-muted
 
-                            rounded-full
+                              transition
 
-                            px-3
-                            py-1.5
+                              group-hover:translate-x-0.5
+                              group-hover:text-accent-primary
+                            "
+                          />
+                        </motion.a>
+                      );
+                    },
+                  )}
+                </div>
 
-                            text-[8px]
+                {/* ERROR */}
 
-                            font-bold
+                {raipurError && (
+                  <p
+                    className="
+                      mt-3
 
-                            uppercase
+                      rounded-xl
 
-                            tracking-[0.18em]
+                      border
+                      border-border-theme/60
 
-                            ${
-                              isAvailable
-                                ? "bg-[#385f36] text-[#78bd6b]"
-                                : "bg-bg-muted text-text-muted"
-                            }
-                          `}
-                        >
-                          {isAvailable
-                            ? "In Stock"
-                            : "Coming Soon"}
-                        </span>
-                      </motion.button>
-                    );
-                  },
+                      bg-bg-base/20
+
+                      px-3
+                      py-2
+
+                      text-[9px]
+                      leading-4
+
+                      text-text-muted
+                    "
+                  >
+                    {raipurError}
+                  </p>
                 )}
-              </div>
 
-              {/* =================================================
-                  SMALL NOTE
-              ================================================= */}
-
-              <p
-                className="
-                  mt-5
-
-                  text-[10px]
-                  leading-relaxed
-
-                  text-text-muted
-                "
-              >
-                Select any town to locate it on the
-                map. More Old Glory distribution
-                locations will be added as the
-                network expands.
-              </p>
-
-              {/* =================================================
-                  DISTRIBUTION SUMMARY
-              ================================================= */}
-
-              <div
-                className="
-                  mt-8
-
-                  rounded-[22px]
-
-                  border
-                  border-border-theme/60
-
-                  bg-bg-base/20
-
-                  p-5
-                "
-              >
-                <span
-                  className="
-                    text-[8px]
-                    font-bold
-
-                    uppercase
-                    tracking-[0.22em]
-
-                    text-accent-primary
-                  "
-                >
-                  Current Network
-                </span>
-
-                <h3
-                  className="
-                    mt-2
-
-                    font-display
-
-                    text-xl
-                    font-bold
-
-                    text-text-primary
-                  "
-                >
-                  Three towns.
-                  <br />
-                  One growing network.
-                </h3>
+                {/* ===============================
+                    EXTRA SHARED LINKS
+                =============================== */}
 
                 <div
                   className="
-                    mt-5
+                    mt-7
 
-                    grid
-                    grid-cols-3
+                    border-t
+                    border-border-theme/60
 
-                    gap-2
+                    pt-5
                   "
                 >
-                  <button
-                    type="button"
-                    onClick={
-                      openRaipurDetails
-                    }
+                  <p
                     className="
-                      rounded-xl
+                      text-[8px]
+                      font-bold
 
-                      border
-                      border-border-theme/50
+                      uppercase
 
-                      bg-bg-surface
+                      tracking-[0.18em]
 
-                      px-2
-                      py-3
-
-                      text-center
-
-                      transition
-
-                      hover:border-accent-primary/40
+                      text-text-muted
                     "
                   >
-                    <Location
-                      size={16}
-                      variant="Bold"
-                      className="
-                        mx-auto
-                        text-accent-primary
-                      "
-                    />
+                    More shared
+                    Raipur locations
+                  </p>
 
-                    <p
-                      className="
-                        mt-1.5
-
-                        text-[10px]
-                        font-bold
-
-                        text-text-primary
-                      "
-                    >
-                      Raipur
-                    </p>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setFocusedCity("Balod")
-                    }
+                  <div
                     className="
-                      rounded-xl
+                      mt-3
 
-                      border
-                      border-border-theme/50
+                      grid
+                      grid-cols-2
 
-                      bg-bg-surface
-
-                      px-2
-                      py-3
-
-                      text-center
-
-                      transition
-
-                      hover:border-accent-primary/40
+                      gap-2
                     "
                   >
-                    <Location
-                      size={16}
-                      className="
-                        mx-auto
-                        text-text-muted
-                      "
-                    />
+                    {EXTRA_RAIPUR_LINKS.map(
+                      (
+                        location,
+                        index,
+                      ) => (
+                        <a
+                          key={
+                            location.id
+                          }
+                          href={
+                            location.url
+                          }
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="
+                            flex
 
-                    <p
-                      className="
-                        mt-1.5
+                            min-h-12
 
-                        text-[10px]
-                        font-bold
+                            items-center
+                            justify-between
 
-                        text-text-primary
-                      "
-                    >
-                      Balod
-                    </p>
-                  </button>
+                            gap-2
 
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setFocusedCity("Dalli")
-                    }
-                    className="
-                      rounded-xl
+                            rounded-xl
 
-                      border
-                      border-border-theme/50
+                            border
+                            border-border-theme/60
 
-                      bg-bg-surface
+                            bg-bg-base/20
 
-                      px-2
-                      py-3
+                            px-3
 
-                      text-center
+                            text-[9px]
 
-                      transition
+                            text-text-muted
 
-                      hover:border-accent-primary/40
-                    "
-                  >
-                    <Location
-                      size={16}
-                      className="
-                        mx-auto
-                        text-text-muted
-                      "
-                    />
+                            transition
 
-                    <p
-                      className="
-                        mt-1.5
+                            hover:border-accent-primary/40
+                            hover:text-text-primary
+                          "
+                        >
+                          <span>
+                            Location{" "}
+                            {index +
+                              4}
+                          </span>
 
-                        text-[10px]
-                        font-bold
-
-                        text-text-primary
-                      "
-                    >
-                      Dalli
-                    </p>
-                  </button>
+                          <ArrowRight2
+                            size={12}
+                          />
+                        </a>
+                      ),
+                    )}
+                  </div>
                 </div>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </Section>
 
-      {/* =====================================================
-          RAIPUR DETAILS MODAL
-      ===================================================== */}
+                {/* BACK */}
 
-      <AnimatePresence>
-        {isRaipurModalOpen && (
-          <motion.div
-            initial={{
-              opacity: 0,
-            }}
-            animate={{
-              opacity: 1,
-            }}
-            exit={{
-              opacity: 0,
-            }}
-            transition={{
-              duration: 0.2,
-            }}
-            onMouseDown={() =>
-              setIsRaipurModalOpen(false)
-            }
-            className="
-              fixed
-              inset-0
-
-              z-[9999]
-
-              flex
-              items-center
-              justify-center
-
-              overflow-y-auto
-
-              bg-[#151a22]/80
-
-              px-4
-              py-8
-
-              backdrop-blur-[7px]
-            "
-          >
-            {/* =================================================
-                MODAL
-            ================================================= */}
-
-            <motion.div
-              role="dialog"
-              aria-modal="true"
-              aria-label="Raipur distribution details"
-              initial={{
-                opacity: 0,
-                scale: 0.9,
-                y: 30,
-              }}
-              animate={{
-                opacity: 1,
-                scale: 1,
-                y: 0,
-              }}
-              exit={{
-                opacity: 0,
-                scale: 0.94,
-                y: 20,
-              }}
-              transition={{
-                type: "spring",
-                stiffness: 300,
-                damping: 26,
-              }}
-              onMouseDown={(event) =>
-                event.stopPropagation()
-              }
-              className="
-                relative
-
-                w-full
-                max-w-[390px]
-
-                rounded-[24px]
-
-                border
-                border-border-theme
-
-                bg-bg-surface
-
-                p-6
-
-                shadow-[0_30px_90px_rgba(0,0,0,0.42)]
-
-                sm:p-7
-              "
-            >
-              {/* CLOSE */}
-
-              <motion.button
-                type="button"
-                aria-label="Close Raipur details"
-                onClick={() =>
-                  setIsRaipurModalOpen(false)
-                }
-                whileHover={{
-                  rotate: 90,
-                  scale: 1.08,
-                }}
-                whileTap={{
-                  scale: 0.9,
-                }}
-                className="
-                  absolute
-
-                  right-4
-                  top-4
-
-                  grid
-                  h-8
-                  w-8
-
-                  place-items-center
-
-                  rounded-full
-
-                  text-[#b7af94]
-
-                  transition
-
-                  hover:bg-bg-muted/40
-                  hover:text-text-primary
-                "
-              >
-                <CloseCircle size={20} />
-              </motion.button>
-
-              {/* STATUS */}
-
-              <span
-                className="
-                  inline-flex
-
-                  rounded-full
-
-                  bg-[#355c36]
-
-                  px-3
-                  py-1.5
-
-                  text-[8px]
-                  font-black
-
-                  uppercase
-
-                  tracking-[0.2em]
-
-                  text-[#76bd69]
-                "
-              >
-                In Stock
-              </span>
-
-              {/* CITY */}
-
-              <h3
-                className="
-                  mt-3
-
-                  font-display
-
-                  text-[22px]
-                  font-black
-
-                  uppercase
-
-                  tracking-[0.035em]
-
-                  text-text-primary
-                "
-              >
-                Raipur
-              </h3>
-
-              <p
-                className="
-                  mt-1
-
-                  text-[10px]
-
-                  text-text-muted
-                "
-              >
-                Current Old Glory Soda hub
-              </p>
-
-              {/* =================================================
-                  DETAILS
-              ================================================= */}
-
-              <div
-                className="
-                  mt-5
-                  space-y-2.5
-                "
-              >
-                <DetailRow
-                  icon={
-                    <Profile2User
-                      size={17}
-                    />
+                <button
+                  type="button"
+                  onClick={
+                    showAllTowns
                   }
-                  label="Distribution Contact"
-                  value={
-                    RAIPUR_DETAILS.contact
-                  }
-                />
-
-                <DetailRow
-                  icon={<Shop size={17} />}
-                  label="About"
-                  value={
-                    RAIPUR_DETAILS.about
-                  }
-                />
-
-                {/* =================================================
-                    CLICKABLE ADDRESS
-                ================================================= */}
-
-                <a
-                  href={getGoogleMapsLink(
-                    "Kajal Beverage Industry, Near HP Gas, Mana Basti, Raipur, Chhattisgarh 492015",
-                  )}
-                  target="_blank"
-                  rel="noopener noreferrer"
                   className="
-                    group
+                    mt-6
 
-                    flex
-                    min-h-[72px]
+                    inline-flex
 
                     items-center
-                    gap-3
+                    gap-2
 
-                    rounded-[18px]
+                    text-[10px]
+                    font-semibold
 
-                    border
-                    border-border-theme/70
+                    text-accent-primary
 
-                    bg-bg-base/20
+                    transition
 
-                    px-4
-                    py-3
-
-                    transition-all
-
-                    hover:border-accent-primary/50
-                    hover:bg-bg-muted/30
+                    hover:gap-3
                   "
                 >
-                  <Location
-                    size={17}
-                    className="
-                      shrink-0
-
-                      text-[#b9b19a]
-
-                      transition
-
-                      group-hover:text-accent-primary
-                    "
+                  <ArrowLeft2
+                    size={14}
                   />
 
-                  <div
-                    className="
-                      min-w-0
-                      flex-1
-                    "
-                  >
-                    <p
-                      className="
-                        text-[10px]
-                        leading-none
-
-                        text-text-muted
-                      "
-                    >
-                      Location
-                    </p>
-
-                    <p
-                      className="
-                        mt-1
-
-                        text-xs
-
-                        font-medium
-
-                        leading-relaxed
-
-                        text-text-primary
-                      "
-                    >
-                      {
-                        RAIPUR_DETAILS.address
-                      }
-                    </p>
-                  </div>
-
-                  <ArrowRight2
-                    size={15}
-                    className="
-                      shrink-0
-
-                      text-text-muted
-
-                      transition
-
-                      group-hover:translate-x-0.5
-                      group-hover:text-accent-primary
-                    "
-                  />
-                </a>
-
-                {/* =================================================
-                    PHONE
-                ================================================= */}
-
-                <a
-                  href="tel:+919407626212"
-                  className="
-                    group
-
-                    flex
-                    min-h-[62px]
-
-                    items-center
-                    gap-3
-
-                    rounded-[18px]
-
-                    border
-                    border-border-theme/70
-
-                    bg-bg-base/20
-
-                    px-4
-                    py-3
-
-                    transition-all
-
-                    hover:border-accent-primary/50
-                    hover:bg-bg-muted/30
-                  "
-                >
-                  <Call
-                    size={17}
-                    className="
-                      shrink-0
-
-                      text-[#b9b19a]
-
-                      transition
-
-                      group-hover:text-accent-primary
-                    "
-                  />
-
-                  <div
-                    className="
-                      min-w-0
-                      flex-1
-                    "
-                  >
-                    <p
-                      className="
-                        text-[10px]
-                        leading-none
-
-                        text-text-muted
-                      "
-                    >
-                      Phone
-                    </p>
-
-                    <p
-                      className="
-                        mt-1
-
-                        text-xs
-                        font-medium
-
-                        text-text-primary
-                      "
-                    >
-                      {RAIPUR_DETAILS.phone}
-                    </p>
-                  </div>
-
-                  <ArrowRight2
-                    size={15}
-                    className="
-                      shrink-0
-
-                      text-text-muted
-
-                      transition
-
-                      group-hover:translate-x-0.5
-                      group-hover:text-accent-primary
-                    "
-                  />
-                </a>
-              </div>
-
-              {/* =================================================
-                  GOOGLE MAPS BUTTON
-              ================================================= */}
-
-              <a
-                href={getGoogleMapsLink(
-                  "Kajal Beverage Industry, Near HP Gas, Mana Basti, Raipur, Chhattisgarh 492015",
-                )}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="
-                  mt-4
-
-                  flex
-                  w-full
-
-                  items-center
-                  justify-center
-                  gap-2
-
-                  rounded-full
-
-                  bg-accent-primary
-
-                  px-5
-                  py-3
-
-                  text-[10px]
-                  font-bold
-
-                  uppercase
-
-                  tracking-[0.1em]
-
-                  text-on-accent
-
-                  transition-all
-
-                  hover:scale-[1.02]
-                "
-              >
-                <Location
-                  size={15}
-                  variant="Bold"
-                />
-
-                Open in Google Maps
-
-                <ArrowRight2 size={13} />
-              </a>
-            </motion.div>
+                  Back to all towns
+                </button>
+              </>
+            )}
           </motion.div>
-        )}
-      </AnimatePresence>
-    </>
+        </div>
+      </div>
+    </Section>
   );
 }

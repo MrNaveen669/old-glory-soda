@@ -1,6 +1,6 @@
 import { motion } from "motion/react";
 import { useState } from "react";
-import { FLAVORS, type Flavor } from "./data";
+import { FLAVORS } from "./data";
 import { FLAVOR_IMAGES } from "./images";
 import { FlavorModal } from "./flavor-modal";
 import { Section } from "./primitives";
@@ -19,7 +19,7 @@ export function Flavors() {
   const active = FLAVORS.find((f) => f.id === openId) ?? null;
 
   return (
-    <Section id="flavors" className="bg-bg-base py-20">
+    <Section id="flavors" className="bg-bg-base py-16 sm:py-20">
       <div className="mx-auto max-w-7xl">
         {/* Header Row with Stevia Badge */}
         <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
@@ -27,11 +27,12 @@ export function Flavors() {
             <span className="text-xs font-bold tracking-widest text-accent-primary uppercase">
               MARBLE NECK SIGNATURE COLLECTION
             </span>
-            <h2 className="mt-2 font-display text-4xl font-extrabold uppercase tracking-tight sm:text-5xl text-text-primary">
+            <h2 className="mt-2 font-display text-4xl font-bold uppercase tracking-[0.015em] sm:text-5xl text-text-primary">
               SIX FLAVOURS. EVERY SEASON.
             </h2>
             <p className="mt-3 max-w-xl text-base text-text-muted">
-              Bottled in authentic codd-neck glass with the original goli pop ritual — hand-drawn heritage art, crafted for every palate.
+              Bottled in authentic codd-neck glass with the original goli pop ritual — hand-drawn
+              heritage art, crafted for every palate.
             </p>
           </div>
 
@@ -52,7 +53,7 @@ export function Flavors() {
         </div>
 
         {/* 6-Column Flavours Grid */}
-        <div className="mt-14 grid gap-6 grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
+        <div className="mt-10 grid grid-cols-2 gap-3 sm:mt-14 sm:gap-6 md:grid-cols-3 lg:grid-cols-6">
           {FLAVORS.map((f, i) => {
             const tagline = FLAVOR_TAGLINES[f.id] ?? "Heritage Fizz";
             const accent = `var(--flavor-${f.id})`;
@@ -64,7 +65,7 @@ export function Flavors() {
                 viewport={{ once: true, margin: "-40px" }}
                 transition={{ duration: 0.5, delay: i * 0.08 }}
                 onClick={() => setOpenId(f.id)}
-                className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-border-theme bg-bg-surface p-4 text-center shadow-md transition-all hover:-translate-y-2 hover:shadow-2xl focus-visible:outline-2 focus-visible:outline-accent-primary"
+                className="group relative flex min-w-0 flex-col justify-between overflow-hidden rounded-2xl border border-border-theme bg-bg-surface p-3 text-center shadow-md transition-all hover:-translate-y-2 hover:shadow-2xl focus-visible:outline-2 focus-visible:outline-accent-primary sm:p-4"
                 style={{ borderColor: `color-mix(in srgb, ${accent} 31%, transparent)` }}
               >
                 {/* Color Top Border Accent */}
@@ -74,7 +75,7 @@ export function Flavors() {
                 />
 
                 {/* Clean Background-Removed Cutout Illustrated Bottle */}
-                <div className="relative mt-2 flex h-52 w-full items-center justify-center overflow-hidden rounded-xl bg-bg-muted/40 p-1 border border-border-theme/30">
+                <div className="relative mt-2 flex h-48 w-full items-center justify-center overflow-hidden rounded-xl border border-border-theme/30 bg-bg-muted/40 p-1 sm:h-52">
                   <div className="flex h-full w-full shrink-0 items-center justify-center">
                     <img
                       src={FLAVOR_IMAGES[f.id]}
@@ -83,14 +84,14 @@ export function Flavors() {
                     />
                   </div>
                   {/* Subtle "Tap to View" overlay badge on cutout image */}
-                  <div className="absolute inset-x-2 bottom-2 rounded-lg bg-accent-primary/90 py-1 text-[9px] font-extrabold uppercase tracking-widest text-on-accent opacity-0 transition-opacity duration-300 group-hover:opacity-100 shadow-md">
+                  <div className="absolute inset-x-2 bottom-2 rounded-lg bg-accent-primary/90 py-1 text-[9px] font-semibold uppercase tracking-widest text-on-accent opacity-0 transition-opacity duration-300 group-hover:opacity-100 shadow-md">
                     Tap to view full scene
                   </div>
                 </div>
 
                 {/* Flavour Name + Tagline */}
                 <div className="mt-4">
-                  <h3 className="font-display text-sm font-bold uppercase tracking-tight text-text-primary group-hover:text-accent-primary">
+                  <h3 className="font-display text-sm font-bold uppercase tracking-[0.015em] text-text-primary group-hover:text-accent-primary">
                     {f.name}
                   </h3>
                   <span

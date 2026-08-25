@@ -218,7 +218,13 @@
   h3,
   h4 {
     font-family: var(--font-display);
+    font-weight: 700;
     letter-spacing: 0.02em;
+    font-synthesis: none;
+  }
+
+  .font-display {
+    font-synthesis: none;
   }
 
   ::selection {
@@ -303,11 +309,23 @@
 
 @keyframes marquee-x {
   from {
-    transform: translateX(0);
+    transform: translate3d(0, 0, 0);
   }
   to {
-    transform: translateX(-50%);
+    transform: translate3d(-50%, 0, 0);
   }
+}
+
+.leaflet-control-zoom a {
+  width: 44px !important;
+  height: 44px !important;
+  line-height: 44px !important;
+}
+
+.leaflet-control-attribution a {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
 }
 
 @utility animate-marquee {

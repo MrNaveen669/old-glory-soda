@@ -28,7 +28,7 @@ export function Hero() {
         tabIndex={-1}
         className="pointer-events-none absolute inset-0 h-full w-full object-cover"
       >
-        <source src="/ORNGE-SODA.mp4" type="video/mp4" />
+        <source src="/Zesty-Lemon-Zing-Soda..mp4" type="video/mp4" />
       </video>
 
       <div
@@ -56,7 +56,7 @@ export function Hero() {
             className="inline-flex items-center gap-2 rounded-full border border-hero-accent/45 bg-[color-mix(in_srgb,var(--hero-overlay-base)_55%,transparent)] px-4 py-1.5 text-xs font-semibold tracking-widest text-hero-accent uppercase backdrop-blur-sm"
           >
             <span className="h-2 w-2 rounded-full bg-hero-accent animate-pulse" />
-            · MARBLE NECK ORIGINAL
+            MARBLE NECK ORIGINAL
           </motion.div>
 
           {/* Headline: ALL SEASON DRINK */}
@@ -64,7 +64,7 @@ export function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.35, duration: 0.8 }}
-            className="mt-6 font-display text-5xl font-extrabold uppercase leading-[0.95] tracking-tight text-hero-text sm:text-7xl lg:text-8xl"
+            className="mt-6 font-display text-5xl font-bold uppercase leading-[0.98] tracking-[0.015em] text-hero-text sm:text-7xl lg:text-8xl"
           >
             ALL SEASON <br />
             <span className="text-hero-accent">DRINK</span>
@@ -122,29 +122,17 @@ export function Hero() {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.4, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-          className="relative mx-auto w-full max-w-lg lg:max-w-none"
+          className="relative mx-auto w-full max-w-sm lg:max-w-none"
         >
-          <div className="relative p-5">
+          <div className="relative sm:p-5">
             <div className="relative aspect-[4/3] w-full" />
 
-            {/* Foreground Hand-Drawn Illustrated Bottle */}
-            <motion.div
-              animate={reduced ? {} : { y: [0, -8, 0] }}
-              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute inset-x-8 bottom-6 top-8 flex items-center justify-center pointer-events-none"
-            >
-              {/* <img
-                src={IMAGES.heroBottle}
-                alt="Old Glory marble neck goli soda illustrated bottle"
-                className="max-h-full max-w-[200px] drop-shadow-[0_15px_25px_rgba(6,18,34,0.5)] contrast-[1.05] sm:max-w-[240px]"
-              /> */}
-            </motion.div>
 
             {/* Bottom-right Circular Stamp Badge with Fixed Curved Text */}
             <motion.div
               animate={reduced ? {} : { rotate: 360 }}
               transition={{ duration: 28, repeat: Infinity, ease: "linear" }}
-              className="absolute -bottom-4 -right-4 h-28 w-28 rounded-full border-2 border-dashed border-accent-primary bg-bg-base p-1.5 shadow-xl grid place-items-center text-center text-accent-primary"
+              className="absolute right-0 bottom-0 grid h-24 w-24 place-items-center rounded-full border-2 border-dashed border-accent-primary bg-bg-base p-1.5 text-center text-accent-primary shadow-xl sm:h-28 sm:w-28"
             >
               <svg viewBox="0 0 100 100" className="h-full w-full pointer-events-none">
                 <defs>
@@ -153,21 +141,14 @@ export function Hero() {
                   {/* Bottom arc path: right (3 o'clock) to left (9 o'clock) along bottom curve so text reads right-side-up */}
                   <path id="badgeBottomArc" d="M 86 50 A 36 36 0 0 1 14 50" fill="none" />
                 </defs>
-                <text className="text-[9.5px] font-extrabold tracking-widest uppercase fill-accent-primary">
+                <text className="text-[9.5px] font-semibold tracking-widest uppercase fill-accent-primary">
                   <textPath href="#badgeTopArc" startOffset="50%" textAnchor="middle">
-                    MADE IN INDIA
+                    Low Calories
                   </textPath>
                 </text>
-                <text className="text-[9.5px] font-extrabold tracking-widest uppercase fill-accent-primary">
-                  <textPath href="#badgeBottomArc" startOffset="50%" textAnchor="middle">
-                    SINCE 1962
-                  </textPath>
+                <text className="text-[9.5px] font-semibold tracking-widest uppercase fill-accent-primary">
                 </text>
               </svg>
-              {/* <div className="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none">
-                <span className="font-display text-xs font-black text-accent-primary">1962</span>
-                <span className="text-[8px] font-bold tracking-tighter uppercase text-accent-primary">INDIA</span>
-              </div> */}
             </motion.div>
           </div>
         </motion.div>

@@ -16,8 +16,8 @@ export function Why() {
     <Section id="why">
       <SectionHeading
         eyebrow="Why Old Glory"
-        title="Built for the pop, kept for the taste."
-        intro="Four things we refuse to cut corners on, crate after crate."
+        title="Purani Soch. Naya Andaaz."
+        intro="Jo taste pehle generation ko yaad tha, wahi taste aaj ki generation ke liye naye andaaz mein."
       />
 
       <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">

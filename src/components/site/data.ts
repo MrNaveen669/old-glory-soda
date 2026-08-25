@@ -8,6 +8,17 @@ export const BRAND = {
   address: "Old Glory Bottling Works, Mana, Chhattisgarh",
 };
 
+export const FLAVOR_IDS = [
+  "blueberry-blast",
+  "green-apple",
+  "citrus-orange",
+  "fruit-beer",
+  "lemon-zing",
+  "zeera-soda",
+] as const;
+
+export type FlavorId = (typeof FLAVOR_IDS)[number];
+
 export type Flavor = {
   id: string;
   name: string;
@@ -27,7 +38,9 @@ export type Flavor = {
   price?: number;
 };
 
-export const FLAVORS: Flavor[] = [
+export type FlagshipFlavor = Omit<Flavor, "id"> & { id: FlavorId };
+
+export const FLAVORS: FlagshipFlavor[] = [
   {
     id: "blueberry-blast",
     name: "Blueberry Blast Soda",
@@ -44,6 +57,7 @@ export const FLAVORS: Flavor[] = [
     sweetness: "Medium",
     fizz: "High",
     packaging: "glass",
+    price: 30,
   },
   {
     id: "green-apple",
@@ -61,6 +75,7 @@ export const FLAVORS: Flavor[] = [
     sweetness: "Low",
     fizz: "Very high",
     packaging: "glass",
+    price: 30,
   },
   {
     id: "citrus-orange",
@@ -78,6 +93,7 @@ export const FLAVORS: Flavor[] = [
     sweetness: "Medium",
     fizz: "Medium",
     packaging: "glass",
+    price: 30,
   },
   {
     id: "fruit-beer",
@@ -95,6 +111,7 @@ export const FLAVORS: Flavor[] = [
     sweetness: "Rich",
     fizz: "Medium",
     packaging: "glass",
+    price: 30,
   },
   {
     id: "lemon-zing",
@@ -112,6 +129,7 @@ export const FLAVORS: Flavor[] = [
     sweetness: "Low",
     fizz: "Very high",
     packaging: "glass",
+    price: 30,
   },
   {
     id: "zeera-soda",
@@ -129,6 +147,7 @@ export const FLAVORS: Flavor[] = [
     sweetness: "Barely",
     fizz: "High",
     packaging: "glass",
+    price: 30,
   },
 ];
 
@@ -136,7 +155,7 @@ export const FLAVORS: Flavor[] = [
 export const PET_TIERS = [10, 20] as const;
 export type PetTier = (typeof PET_TIERS)[number];
 
-const petFrom = (id: string, price: PetTier): Flavor => {
+const petFrom = (id: FlavorId, price: PetTier): Flavor => {
   const base = FLAVORS.find((f) => f.id === id)!;
   const volume = price === 10 ? "200ml On-The-Go" : "400ml Value Pack";
   return {
@@ -184,7 +203,7 @@ export const STORY = {
     "Summer, monsoon or festival night, there is no off-season for a good soda. That is why we call it the All Season Drink.",
   ],
   stats: [
-    { value: "1962", label: "First crate poured" },
+    { value: "", label: "First crate poured" },
     { value: "6", label: "Signature flavours" },
     { value: "100% Glass", label: "Flagship heritage range" },
   ],
@@ -193,23 +212,23 @@ export const STORY = {
 export const FEATURES = [
   {
     icon: "leaf",
-    title: "Real Fruit Notes",
-    body: "Flavour built from fruit-forward extracts, never a flat syrup hit.",
+    title: "THE OLD TASTE",
+    body: "Wahi goli, wahi fizz, wahi yaadein.Purani generation ke liye ye sirf soda nahi, bachpan ka ek hissa tha.",
   },
   {
     icon: "bottle",
-    title: "Classic Marble Bottle",
-    body: "The flagship range keeps the original codd-neck glass and goli seal — the pop is part of the taste.",
+    title: "THE MARBLE",
+    body: "Kuch cheezein badalne ke liye nahi hoti.Classic marble-neck bottle aur goli ka woh iconic pop — jo Old Glory ki pehchaan hai.",
   },
   {
     icon: "sun",
-    title: "All Season Refreshment",
-    body: "Six profiles tuned across the year, from peak summer to monsoon evenings.",
+    title: "THE NEW FLAVOUR",
+    body: "Purani rooh. Naye flavours.Blueberry, Green Apple, Orange, Lemon, Fruit Beer aur Zeera — naye taste ke saath.",
   },
   {
     icon: "flash",
-    title: "No Compromise Fizz",
-    body: "High-pressure carbonation that stays sharp right down to the final sip.",
+    title: "THE NEW GENERATION",
+    body: "Ab nostalgia sirf yaad nahi, experience hai.Modern packaging, modern quality aur modern storytelling — par dil wahi purana.",
   },
 ];
 
@@ -219,12 +238,14 @@ export type GalleryItem =
       type: "image";
       src: string;
       caption: string;
+      poster?: string;
     }
   | {
       id: string;
       type: "video";
       src: string;
       caption: string;
+      poster?: string;
     };
 
 export const GALLERY: GalleryItem[] = [
@@ -233,43 +254,49 @@ export const GALLERY: GalleryItem[] = [
     id: "g1",
     type: "video",
     src: "/GREEN-APPLE.mp4",
-    caption: "",
+    poster: "/Green-apple-poster.png",
+    caption: "Green apple, freshly popped",
   },
 
   // IMAGES
   {
     id: "g2",
-    type: "image",
-    src: "/Story merge.png",
-    caption: "",
+    type: "video",
+    src: "/Title-video.mp4",
+    poster: "/Fruite-beer-poster.png",
+    caption: "Fruit beer, poured ice cold",
   },
 
   {
     id: "g3",
-    type: "image",
-    src: "/Jeera-poster.png",
-    caption: "",
+    type: "video",
+    src: "/ZEERA-Soda..mp4",
+    poster: "/Jeera-poster.png",
+    caption: "Roasted zeera in motion",
   },
 
   {
     id: "g4",
-    type: "image",
-    src: "/Fruite-beer-poster.png",
-    caption: "",
+    type: "video",
+    src: "/blueberry-SODA.mp4",
+    poster: "/Blueberry-poster.png",
+    caption: "Blueberry fizz in motion",
   },
 
   {
     id: "g5",
     type: "video",
     src: "/Zesty-Lemon-Zing-Soda..mp4",
-    caption: "",
+    poster: "/lemon-poster.png",
+    caption: "A bright lemon pour",
   },
 
   {
     id: "g6",
     type: "video",
     src: "/ORNGE-SODA.mp4",
-    caption: "",
+    poster: "/Orange-poster.png",
+    caption: "Orange pop, ice cold",
   },
 ];
 

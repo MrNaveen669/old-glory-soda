@@ -26,12 +26,12 @@ export function Footer() {
 
       <div className="relative mx-auto max-w-6xl px-5">
         {/* Banner Section inside Footer: Found at the Corner Shop */}
-        <div className="mb-12 rounded-3xl border border-on-accent/20 bg-footer-surface/80 p-8 sm:p-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6 backdrop-blur-sm">
+        <div className="mb-12 flex flex-col gap-6 rounded-3xl border border-on-accent/20 bg-footer-surface/80 p-6 backdrop-blur-sm sm:p-10 md:flex-row md:items-center md:justify-between">
           <div>
             <span className="text-xs font-bold tracking-widest text-accent-gold uppercase">
                TRADITIONAL KIRANA COUNTERS
             </span>
-            <h2 className="mt-2 font-display text-3xl font-black uppercase text-on-accent sm:text-4xl">
+            <h2 className="mt-2 font-display text-3xl font-bold uppercase tracking-[0.015em] text-on-accent sm:text-4xl">
               FOUND AT THE CORNER SHOP
             </h2>
             <p className="mt-2 max-w-xl text-xs sm:text-sm text-on-accent/80">
@@ -60,7 +60,7 @@ export function Footer() {
           {/* Col 1: Brand & Intro */}
           <div>
             <OldGloryLogo className="h-12 w-auto text-on-accent" />
-            <p className="mt-4 text-xs leading-relaxed text-on-accent/75">
+            <p className="mt-4 text-sm leading-relaxed text-on-accent/75">
               {BRAND.tagline}. The original marble-neck codd soda bottled fresh in six signature profiles.
             </p>
             <p className="mt-3 text-[11px] text-accent-gold">
@@ -78,7 +78,7 @@ export function Footer() {
                 <li key={link.id}>
                   <button
                     onClick={() => scrollToSection(link.id)}
-                    className="text-xs text-on-accent/80 transition-colors hover:text-on-accent hover:underline"
+                    className="inline-flex min-h-11 min-w-11 items-center text-sm text-on-accent/80 transition-colors hover:text-on-accent hover:underline"
                   >
                     {link.label}
                   </button>
@@ -97,7 +97,7 @@ export function Footer() {
                 <li key={f.id}>
                   <button
                     onClick={() => scrollToSection("flavors")}
-                    className="text-xs text-on-accent/80 transition-colors hover:text-on-accent"
+                    className="inline-flex min-h-11 min-w-11 items-center text-sm text-on-accent/80 transition-colors hover:text-on-accent"
                   >
                     {f.name}
                   </button>
@@ -111,8 +111,14 @@ export function Footer() {
             <p className="font-display text-xs font-bold uppercase tracking-widest text-accent-gold">
               Connect
             </p>
-            <p className="mt-4 text-xs text-on-accent/80">
-              Inquiries: <a href={`mailto:${BRAND.email}`} className="underline hover:text-on-accent">{BRAND.email}</a>
+            <p className="mt-4 text-sm text-on-accent/80">
+              Inquiries:{" "}
+              <a
+                href={`mailto:${BRAND.email}`}
+                className="inline-flex min-h-11 max-w-full items-center break-all underline hover:text-on-accent"
+              >
+                {BRAND.email}
+              </a>
             </p>
             <div className="mt-5 flex items-center gap-3">
               {SOCIALS.map((s) => {
@@ -125,7 +131,7 @@ export function Footer() {
                     rel="noreferrer"
                     aria-label={s.label}
                     whileHover={{ scale: 1.1, rotate: 6 }}
-                    className="grid h-9 w-9 place-items-center rounded-full border border-on-accent/30 bg-footer-surface text-on-accent transition-colors hover:border-on-accent hover:bg-accent-primary"
+                    className="grid h-11 w-11 place-items-center rounded-full border border-on-accent/30 bg-footer-surface text-on-accent transition-colors hover:border-on-accent hover:bg-accent-primary"
                   >
                     <Icon size={18} variant="Linear" />
                   </motion.a>
@@ -140,7 +146,7 @@ export function Footer() {
           <p>© {new Date().getFullYear()} {BRAND.name}. All rights reserved. Made in India.</p>
           <button
             onClick={() => scrollToSection("hero")}
-            className="text-xs font-bold text-accent-gold uppercase tracking-wider hover:underline"
+            className="inline-flex min-h-11 items-center text-xs font-bold tracking-wider text-accent-gold uppercase hover:underline"
           >
             Back to top ↑
           </button>

@@ -107,7 +107,8 @@ function Tile({ item, index }: TileProps) {
         group
         relative
         isolate
-        min-h-[260px]
+        aspect-video
+        min-h-0
         w-full
         overflow-hidden
         rounded-[24px]
@@ -123,9 +124,9 @@ function Tile({ item, index }: TileProps) {
         hover:border-[#38bdf8]/40
         hover:shadow-[0_30px_80px_rgba(0,0,0,0.40)]
 
-        md:min-h-[300px]
-
+        md:aspect-video
         lg:min-h-0
+        lg:aspect-auto
 
         ${layout}
       `}
@@ -151,6 +152,7 @@ function Tile({ item, index }: TileProps) {
               muted
               loop
               playsInline
+              poster={item.poster}
               preload="metadata"
               aria-label={item.caption}
               className="
@@ -417,7 +419,7 @@ function Tile({ item, index }: TileProps) {
 
 export function GallerySection() {
   return (
-    <Section id="gallery">
+    <Section id="gallery" className="overflow-hidden">
       <div className="relative">
         {/* ============================== */}
         {/* BACKGROUND GLOW                */}

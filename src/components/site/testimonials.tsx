@@ -44,7 +44,7 @@ export function Testimonials() {
             "linear-gradient(90deg, transparent, var(--mask-opaque) 8%, var(--mask-opaque) 92%, transparent)",
         }}
       >
-        <div className="animate-marquee flex w-max gap-4 hover:[animation-play-state:paused]">
+        <div className="animate-marquee flex w-max gap-4 will-change-transform hover:[animation-play-state:paused]">
           {TESTIMONIALS.map((t, i) => (
             <TestimonialCard key={`a-${i}`} t={t} i={i} />
           ))}

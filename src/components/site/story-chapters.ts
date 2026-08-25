@@ -18,11 +18,11 @@ export const STORY_CHAPTERS: Record<string, StoryChapter> = {
     id: "roadside-roots",
     num: "01",
     title: "Roadside Roots",
-    era: "1962",
+    era: "",
     bgImage: VINTAGE_ILLUSTRATIONS.tree,
     subtitle: "Where the marble pop first echoed under the banyan tree",
     paragraphs: [
-      "It started in 1962 under the broad shade of an ancient banyan tree. Our founder set down a handcrafted red wooden crate filled with ice cut from frozen river blocks, housing thick glass codd-neck bottles. Passersby would stop in the afternoon heat, press down on the glass marble seal, and listen to that crisp, legendary pop.",
+      "It started in under the broad shade of an ancient banyan tree. Our founder set down a handcrafted red wooden crate filled with ice cut from frozen river blocks, housing thick glass codd-neck bottles. Passersby would stop in the afternoon heat, press down on the glass marble seal, and listen to that crisp, legendary pop.",
       "Before modern refrigeration and aluminum cans, the goli soda cart was the heart of Indian summer culture. Every sip delivered a mineral-rich fizz with authentic fruit and spice essences that refreshed tired workers, school children, and travelers alike.",
       "That roadside cart established the core principles of Old Glory Soda: zero compromise on carbonation, authentic Indian flavors, and an untouchable heritage pop ritual that remains unchanged six decades later."
     ],

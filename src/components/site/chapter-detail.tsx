@@ -82,7 +82,7 @@ export function ChapterDetail({ chapterId }: { chapterId: string }) {
                   “Pop the goli. Keep the glory.”
                 </p>
                 <p className="mt-1 text-xs text-text-muted uppercase tracking-widest">
-                  Est. 1962 · Handcrafted Indian Refreshment
+                  Handcrafted Indian Refreshment
                 </p>
               </div>
             </div>
