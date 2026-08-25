@@ -8,8 +8,8 @@ export const IMAGES = {
 export const FLAVOR_IMAGES: Record<string, string> = {
   "blueberry-blast": "/blueberry-removebg.png",
   "green-apple": "/green-apple-removebg.png",
-  "citrus-orange": "/orange-removebg.png",
-  "fruit-beer": "/fruite-beer-removebg.png",
+  "citrus-orange": "/orange-remvebg.png",
+  "fruit-beer": "/fruitebeer-reomvebg.png",
   "lemon-zing": "/lemon-removebg.png",
   "zeera-soda": "/jeera-removebg.png",
 };
