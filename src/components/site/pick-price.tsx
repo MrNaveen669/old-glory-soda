@@ -140,7 +140,7 @@ export function PickYourPrice() {
           <div>
             <div className="flex items-center justify-between">
               <span className="inline-block rounded-full border border-on-accent/30 bg-bg-base/15 px-4 py-1 text-xs font-bold tracking-widest text-on-accent uppercase">
-                200ML ON-THE-GO PET RANGE
+                160ML ON-THE-GO PET RANGE
               </span>
 
               {/* Price Circle Badge */}

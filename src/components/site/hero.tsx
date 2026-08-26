@@ -107,7 +107,7 @@ export function Hero() {
                 className="transition-transform group-hover:translate-x-1"
               />
             </button>
-            
+
             <button
               onClick={() => scrollToSection("story")}
               className="inline-flex items-center gap-2 rounded-full border border-hero-text/45 bg-[color-mix(in_srgb,var(--hero-overlay-base)_30%,transparent)] px-7 py-3.5 text-sm font-bold tracking-wider text-hero-text uppercase backdrop-blur-sm transition-all hover:border-hero-accent hover:text-hero-accent active:scale-95"
@@ -131,22 +131,98 @@ export function Hero() {
             {/* Bottom-right Circular Stamp Badge with Fixed Curved Text */}
             <motion.div
               animate={reduced ? {} : { rotate: 360 }}
-              transition={{ duration: 28, repeat: Infinity, ease: "linear" }}
-              className="absolute right-0 bottom-0 grid h-24 w-24 place-items-center rounded-full border-2 border-dashed border-accent-primary bg-bg-base p-1.5 text-center text-accent-primary shadow-xl sm:h-28 sm:w-28"
+              transition={{
+                duration: 28,
+                repeat: Infinity,
+                ease: "linear",
+              }}
+              className="
+    absolute
+    right-0
+    bottom-0
+
+    grid
+    h-32
+    w-32
+    place-items-center
+
+    rounded-full
+    border-[3px]
+    border-dashed
+    border-accent-primary
+
+    bg-bg-base
+
+    p-2
+
+    text-center
+    text-accent-primary
+
+    shadow-xl
+
+    sm:h-36
+    sm:w-36
+
+    lg:h-40
+    lg:w-40
+  "
             >
-              <svg viewBox="0 0 100 100" className="h-full w-full pointer-events-none">
+              <svg
+                viewBox="0 0 100 100"
+                className="h-full w-full pointer-events-none"
+              >
                 <defs>
-                  {/* Top arc path: left (9 o'clock) to right (3 o'clock) along top curve */}
-                  <path id="badgeTopArc" d="M 14 50 A 36 36 0 0 1 86 50" fill="none" />
-                  {/* Bottom arc path: right (3 o'clock) to left (9 o'clock) along bottom curve so text reads right-side-up */}
-                  <path id="badgeBottomArc" d="M 86 50 A 36 36 0 0 1 14 50" fill="none" />
+                  {/* TOP ARC */}
+                  <path
+                    id="badgeTopArc"
+                    d="M 10 50 A 40 40 0 0 1 90 50"
+                    fill="none"
+                  />
+
+                  {/* BOTTOM ARC */}
+                  <path
+                    id="badgeBottomArc"
+                    d="M 90 50 A 40 40 0 0 1 10 50"
+                    fill="none"
+                  />
                 </defs>
-                <text className="text-[9.5px] font-semibold tracking-widest uppercase fill-accent-primary">
-                  <textPath href="#badgeTopArc" startOffset="50%" textAnchor="middle">
+
+                {/* TOP TEXT */}
+                <text
+                  className="
+        fill-accent-primary
+        text-[10px]
+        font-bold
+        uppercase
+        tracking-[0.18em]
+      "
+                >
+                  <textPath
+                    href="#badgeTopArc"
+                    startOffset="50%"
+                    textAnchor="middle"
+                  >
                     Low Calories
                   </textPath>
                 </text>
-                <text className="text-[9.5px] font-semibold tracking-widest uppercase fill-accent-primary">
+
+                {/* BOTTOM TEXT */}
+                <text
+                  className="
+        fill-accent-primary
+        text-[10px]
+        font-bold
+        uppercase
+        tracking-[0.18em]
+      "
+                >
+                  <textPath
+                    href="#badgeBottomArc"
+                    startOffset="50%"
+                    textAnchor="middle"
+                  >
+                    Low Calories
+                  </textPath>
                 </text>
               </svg>
             </motion.div>
