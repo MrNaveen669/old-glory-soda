@@ -5,7 +5,7 @@ import {
   useTransform,
 } from "motion/react";
 
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Gallery as GalleryIcon } from "iconsax-reactjs";
 
 import { GALLERY, type GalleryItem } from "./data";
@@ -55,10 +55,55 @@ type TileProps = {
 
 function Tile({ item, index }: TileProps) {
   const ref = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
+  const isHero = index === 0;
+  const isVideo = item.type === "video";
+
+  /*
+   * margin lets the tile start loading ~250px before it actually enters
+   * the viewport, so by the time the user scrolls to it, playback is
+   * already smooth instead of buffering on arrival.
+   */
   const inView = useInView(ref, {
     amount: 0.15,
+    margin: "250px 0px 250px 0px",
   });
+
+  /*
+   * shouldLoad is set to true ONCE, the first time the tile approaches
+   * the viewport, and is never unset again. This is the key fix: the
+   * previous implementation did `src={inView ? item.src : undefined}`,
+   * which destroyed and re-fetched the video every time the user
+   * scrolled the tile out of view and back in.
+   */
+  const [shouldLoad, setShouldLoad] = useState(isHero);
+
+  useEffect(() => {
+    if (inView) setShouldLoad(true);
+  }, [inView]);
+
+  /*
+   * Play/pause is handled imperatively via ref, completely independent
+   * of `src`/`shouldLoad`. Scrolling a tile out of view simply pauses
+   * the already-buffered video (cheap) instead of unloading it and
+   * forcing a full re-download when it scrolls back in.
+   */
+  useEffect(() => {
+    const el = videoRef.current;
+    if (!el || !isVideo || !shouldLoad) return;
+
+    if (inView) {
+      const playPromise = el.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          // autoplay can be blocked in rare browser/OS combos — fail silently
+        });
+      }
+    } else {
+      el.pause();
+    }
+  }, [inView, shouldLoad, isVideo]);
 
   /*
    * Very subtle image/video parallax while scrolling.
@@ -77,9 +122,6 @@ function Tile({ item, index }: TileProps) {
   const layout =
     TILE_LAYOUTS[index] ??
     "lg:col-span-1 lg:row-span-1";
-
-  const isHero = index === 0;
-  const isVideo = item.type === "video";
 
   return (
     <motion.article
@@ -145,15 +187,17 @@ function Tile({ item, index }: TileProps) {
             w-[114%]
           "
         >
-          {item.type === "video" ? (
+          {isVideo ? (
             <video
-              src={inView ? item.src : undefined}
-              autoPlay
+              ref={videoRef}
               muted
               loop
               playsInline
+              autoPlay={isHero}
               poster={item.poster}
-              preload="metadata"
+              preload={isHero ? "auto" : "none"}
+              // @ts-expect-error - fetchpriority is valid HTML but not yet in React's DOM types
+              fetchpriority={isHero ? "high" : "low"}
               aria-label={item.caption}
               className="
                 h-full
@@ -164,7 +208,18 @@ function Tile({ item, index }: TileProps) {
                 ease-out
                 group-hover:scale-[1.04]
               "
-            />
+            >
+              {shouldLoad && (
+                <>
+                  {/* WebM first — smaller file, browser prefers it if supported */}
+                  <source
+                    src={item.src.replace(/\.mp4$/i, ".webm")}
+                    type="video/webm"
+                  />
+                  <source src={item.src} type="video/mp4" />
+                </>
+              )}
+            </video>
           ) : (
             <img
               src={item.src}
