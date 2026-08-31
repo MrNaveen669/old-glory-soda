@@ -19,6 +19,19 @@ export const FLAVOR_IDS = [
 
 export type FlavorId = (typeof FLAVOR_IDS)[number];
 
+export type NutritionRow = {
+  label: string;
+  per100ml: string | number;
+  per160ml: string | number;
+  rda: string | number;
+};
+
+export type NutritionFacts = {
+  servingSize: string;
+  servingsPerPack: string;
+  rows: NutritionRow[];
+};
+
 export type Flavor = {
   id: string;
   name: string;
@@ -29,6 +42,7 @@ export type Flavor = {
   note: string;
   description: string;
   ingredients: string;
+  nutrition?: NutritionFacts;
   pairs: string[];
   sweetness: string;
   fizz: string;
@@ -52,7 +66,20 @@ export const FLAVORS: FlagshipFlavor[] = [
     description:
       "Our flagship pour. Crushed wild blueberry notes over a sharp mineral fizz — electric blue in the glass, cool and jammy on the tongue.",
     ingredients:
-      "Carbonated Water, Sugar, Acidity Regulators (330, 331), Stabilizers (414, 445), Sweetener (960), Preservative (211), Colour (INS 133), Natural & Nature Identical Blueberry flavour",
+      "Carbonated Water, Sugar, Acidity Regulators (330, 331), Stabilizers (414, 445), Sweetener (960), Preservative (211), Colour (INS 133), Flavours (Natural & Nature Identical - Blueberry). (Contains Plant-Based Sweetener - Steviol Glycosides (960))",
+    nutrition: {
+      servingSize: "160 ml",
+      servingsPerPack: "1.6 serving in this pack",
+      rows: [
+        { label: "Energy [Kcal]", per100ml: "9.48", per160ml: "15.17", rda: "0.76" },
+        { label: "Protein [g]", per100ml: "0", per160ml: "0", rda: "0" },
+        { label: "Carbohydrate [g]", per100ml: "2.37", per160ml: "3.79", rda: "-" },
+        { label: "Total Sugar [g]", per100ml: "2.37", per160ml: "3.79", rda: "-" },
+        { label: "Added Sugar [g]", per100ml: "0", per160ml: "0", rda: "0" },
+        { label: "Fat", per100ml: "0", per160ml: "0", rda: "0" },
+        { label: "Sodium [mg]", per100ml: "70.22", per160ml: "112.35", rda: "5.62" },
+      ],
+    },
     pairs: ["Beach evenings", "Street chaat", "Ice + mint"],
     sweetness: "Medium",
     fizz: "High",
@@ -71,6 +98,19 @@ export const FLAVORS: FlagshipFlavor[] = [
       "First-bite green apple: tart, snappy and unmistakably crisp. A sour top note that finishes clean with no sugary drag.",
     ingredients:
       "Carbonated Water, Sugar, Acidity Regulators (330, 331), Stabilizers (414, 445), Sweetener (960), Preservative (211), Colours (102, 133), Flavours (Natural & Nature Identical - Green Apple)",
+    nutrition: {
+      servingSize: "160 ml",
+      servingsPerPack: "1.6 serving in this pack",
+      rows: [
+        { label: "Energy [Kcal]", per100ml: "10.92", per160ml: "17.47", rda: "0.87" },
+        { label: "Protein [g]", per100ml: "0", per160ml: "0", rda: "0" },
+        { label: "Carbohydrate [g]", per100ml: "2.73", per160ml: "4.37", rda: "-" },
+        { label: "Total Sugar [g]", per100ml: "2.73", per160ml: "4.37", rda: "-" },
+        { label: "Added Sugar [g]", per100ml: "0", per160ml: "0", rda: "0" },
+        { label: "Fat", per100ml: "0", per160ml: "0", rda: "0" },
+        { label: "Sodium [mg]", per100ml: "75.72", per160ml: "121.15", rda: "6.06" },
+      ],
+    },
     pairs: ["Fried snacks", "Hot afternoons", "Chilled neat"],
     sweetness: "Low",
     fizz: "Very high",
@@ -89,6 +129,19 @@ export const FLAVORS: FlagshipFlavor[] = [
       "Hand-pressed orange character with a whisper of peel oil. Sunshine in a codd-neck bottle, from the first goli pop to the last sip.",
     ingredients:
       "Carbonated Water, Sugar, Acidity Regulators (330, 331), Stabilizers (414, 445), Sweetener (960), Preservative (211), Colours (110, 122), Natural & Nature Identical Orange flavour",
+    nutrition: {
+      servingSize: "160 ml",
+      servingsPerPack: "1.6 serving in this pack",
+      rows: [
+        { label: "Energy [Kcal]", per100ml: "7.48", per160ml: "11.97", rda: "0.60" },
+        { label: "Protein [g]", per100ml: "0", per160ml: "0", rda: "0" },
+        { label: "Carbohydrate [g]", per100ml: "1.87", per160ml: "2.99", rda: "-" },
+        { label: "Total Sugar [g]", per100ml: "1.87", per160ml: "2.99", rda: "-" },
+        { label: "Added Sugar [g]", per100ml: "0", per160ml: "0", rda: "0" },
+        { label: "Fat", per100ml: "0", per160ml: "0", rda: "0" },
+        { label: "Sodium [mg]", per100ml: "72.04", per160ml: "115.26", rda: "5.76" },
+      ],
+    },
     pairs: ["Breakfast", "Road trips", "Orange wedge"],
     sweetness: "Medium",
     fizz: "Medium",
@@ -107,6 +160,19 @@ export const FLAVORS: FlagshipFlavor[] = [
       "The nostalgic non-alcoholic fruit beer, done properly. Layered berry, a malt-like depth and a rounded, grown-up finish.",
     ingredients:
       "Carbonated Water, Sugar, Acidity Regulators (330, 331), Sweetener (960), Preservative (211), Colour (150d), Natural & Nature Identical Fruit Beer flavour",
+    nutrition: {
+      servingSize: "160 ml",
+      servingsPerPack: "1.6 serving in this pack",
+      rows: [
+        { label: "Energy [Kcal]", per100ml: "0", per160ml: "0", rda: "0" },
+        { label: "Protein [g]", per100ml: "0", per160ml: "0", rda: "0" },
+        { label: "Carbohydrate [g]", per100ml: "0", per160ml: "0", rda: "-" },
+        { label: "Total Sugar [g]", per100ml: "0", per160ml: "0", rda: "-" },
+        { label: "Added Sugar [g]", per100ml: "0", per160ml: "0", rda: "0" },
+        { label: "Fat", per100ml: "0", per160ml: "0", rda: "0" },
+        { label: "Sodium [mg]", per100ml: "69.57", per160ml: "173.93", rda: "8.70" },
+      ],
+    },
     pairs: ["Celebrations", "Grilled plates", "Tall glass"],
     sweetness: "Rich",
     fizz: "Medium",
@@ -125,6 +191,19 @@ export const FLAVORS: FlagshipFlavor[] = [
       "The classic nimbu soda reborn. Fresh lemon, a pinch of rock salt and a fizz sharp enough to reset a whole afternoon.",
     ingredients:
       "Carbonated Water, Sugar, Salt, Acidity Regulators, Stabilizers, Sweetener, Preservative, Natural & Nature Identical Nimboo Masala flavour",
+    nutrition: {
+      servingSize: "160 ml",
+      servingsPerPack: "1.6 serving in this pack",
+      rows: [
+        { label: "Energy [Kcal]", per100ml: "0", per160ml: "0", rda: "0" },
+        { label: "Protein [g]", per100ml: "0", per160ml: "0", rda: "0" },
+        { label: "Carbohydrate [g]", per100ml: "0", per160ml: "0", rda: "-" },
+        { label: "Total Sugar [g]", per100ml: "0", per160ml: "0", rda: "-" },
+        { label: "Added Sugar [g]", per100ml: "0", per160ml: "0", rda: "0" },
+        { label: "Fat", per100ml: "0", per160ml: "0", rda: "0" },
+        { label: "Sodium [mg]", per100ml: "69.57", per160ml: "111.31", rda: "5.57" },
+      ],
+    },
     pairs: ["Post-workout", "Spicy biryani", "Salt rim"],
     sweetness: "Low",
     fizz: "Very high",
@@ -143,6 +222,19 @@ export const FLAVORS: FlagshipFlavor[] = [
       "Roasted zeera, black salt and a slow warm spice trail. The digestive classic our grandfathers ordered, kept exactly as it should be.",
     ingredients:
       "Carbonated Water, Sugar, Acidity Regulators (330, 331), Stabilizers (414, 445), Sweetener (960), Preservative (211), Colour (150d), Natural & Nature Identical Zeera Masala flavour",
+    nutrition: {
+      servingSize: "160 ml",
+      servingsPerPack: "1.6 serving in this pack",
+      rows: [
+        { label: "Energy [Kcal]", per100ml: "12.48", per160ml: "19.97", rda: "1" },
+        { label: "Protein [g]", per100ml: "0", per160ml: "0", rda: "0" },
+        { label: "Carbohydrate [g]", per100ml: "3.12", per160ml: "4.99", rda: "-" },
+        { label: "Total Sugar [g]", per100ml: "0", per160ml: "0", rda: "-" },
+        { label: "Added Sugar [g]", per100ml: "0", per160ml: "0", rda: "0" },
+        { label: "Fat", per100ml: "0", per160ml: "0", rda: "0" },
+        { label: "Sodium [mg]", per100ml: "18.33", per160ml: "29.33", rda: "1.47" },
+      ],
+    },
     pairs: ["Heavy meals", "Monsoon nights", "Room temp"],
     sweetness: "Barely",
     fizz: "High",

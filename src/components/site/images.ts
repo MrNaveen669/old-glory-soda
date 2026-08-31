@@ -102,7 +102,6 @@ export const PET_IMAGES: Record<string, string> = {
   "citrus-orange-pet-10": "/Rs10orange.png",
   "citrus-orange-pet-20": "/Rs20-orange.png",
   "shikanji-pet-10": "/Rs10-sinkanji.png",
- 
 };
 
 export const VINTAGE_ILLUSTRATIONS = {
@@ -125,6 +124,7 @@ export function flavorImage(id: string): string | undefined {
 }
 
 export function flavorFullImage(id: string): string | undefined {
+  if (PET_IMAGES[id]) return PET_IMAGES[id];
   const baseId = id.replace(/-pet-\d+$/, "");
   return isFlavorId(baseId) ? FLAVOR_FULL_IMAGES[baseId] : flavorImage(id);
 }

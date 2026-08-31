@@ -1,9 +1,67 @@
 import { motion } from "motion/react";
 import { useState } from "react";
-import { PET_IMAGES } from "./images";
+import { PET_RANGE, type Flavor, type PetTier } from "./data";
+import { flavorImage } from "./images";
 import { Section } from "./primitives";
 
-export function PickYourPrice() {
+const PET_PRODUCT_ORDER: Record<PetTier, string[]> = {
+  10: ["zeera-soda-pet-10", "citrus-orange-pet-10", "shikanji-pet-10"],
+  20: ["citrus-orange-pet-20", "zeera-soda-pet-20"],
+};
+
+const PET_TAGLINES: Record<string, string> = {
+  "zeera-soda": "Roasted Zeera",
+  "citrus-orange": "Sun Citrus",
+  shikanji: "Lemon Spice",
+};
+
+function productsForTier(tier: PetTier) {
+  return PET_PRODUCT_ORDER[tier]
+    .map((id) => PET_RANGE[tier].find((flavor) => flavor.id === id))
+    .filter((flavor): flavor is Flavor => Boolean(flavor));
+}
+
+function PetFlavorCard({
+  flavor,
+  onSelect,
+  titleColorClass,
+}: {
+  flavor: Flavor;
+  onSelect: (flavor: Flavor) => void;
+  titleColorClass: string;
+}) {
+  const image = flavorImage(flavor.id);
+  const baseId = flavor.id.replace(/-pet-\d+$/, "");
+  const title = flavor.name.replace(/\s+Soda$/, "");
+  const tagline = PET_TAGLINES[baseId] ?? flavor.short;
+
+  return (
+    <button
+      type="button"
+      onClick={() => onSelect(flavor)}
+      aria-label={`View ${flavor.name} ₹${flavor.price} PET details`}
+      className="group flex min-h-[180px] cursor-pointer flex-col items-center rounded-xl border border-on-accent/25 bg-bg-base p-3 text-center text-text-primary shadow-md transition-[transform,border-color,box-shadow] duration-300 ease-out hover:-translate-y-1 hover:scale-[1.015] hover:border-accent-cta/75 hover:shadow-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-cta active:scale-[1.01]"
+    >
+      <div className="flex h-24 w-full items-center justify-center overflow-hidden rounded-lg bg-bg-muted/50 p-0.5 sm:h-28">
+        {image && (
+          <img
+            src={image}
+            alt={`${flavor.name} ₹${flavor.price} PET bottle`}
+            className="h-[108%] max-h-[108%] w-auto object-contain drop-shadow-md transition-transform duration-300 ease-out group-hover:scale-[1.045] group-active:scale-[1.02]"
+          />
+        )}
+      </div>
+
+      <h4 className={`mt-2 font-display text-xs font-bold uppercase ${titleColorClass}`}>
+        {title}
+      </h4>
+
+      <span className="mt-0.5 text-[10px] font-semibold text-text-muted">{tagline}</span>
+    </button>
+  );
+}
+
+export function PickYourPrice({ onSelectFlavor }: { onSelectFlavor: (flavor: Flavor) => void }) {
   const [activeTier, setActiveTier] = useState<10 | 20>(10);
 
   return (
@@ -62,8 +120,8 @@ export function PickYourPrice() {
             </h2>
 
             <p className="mt-3 max-w-md text-base text-on-accent/90">
-              Double the volume for full afternoon sharing. Crafted for family meals,
-              roadside dhabas and festival gatherings.
+              Double the volume for full afternoon sharing. Crafted for family meals, roadside
+              dhabas and festival gatherings.
             </p>
 
             {/* Visual Flavour Cards Grid for ₹20 Range */}
@@ -73,43 +131,14 @@ export function PickYourPrice() {
               </p>
 
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-                {/* Tile 1: Citrus Orange Pop */}
-                <div className="flex min-h-[180px] flex-col items-center rounded-xl border border-on-accent/25 bg-bg-base p-3 text-center text-text-primary shadow-md transition-transform hover:scale-105">
-                  <div className="flex h-24 w-full items-center justify-center rounded-lg bg-bg-muted/50 p-0.5 sm:h-28">
-                    <img
-                      src={PET_IMAGES["citrus-orange-pet-20"]}
-                      alt="Citrus Orange Pop ₹20 PET bottle"
-                      className="h-[108%] max-h-[108%] w-auto object-contain drop-shadow-md"
-                    />
-                  </div>
-
-                  <h4 className="mt-2 font-display text-xs font-bold uppercase text-accent-support">
-                    Citrus Orange Pop
-                  </h4>
-
-                  <span className="mt-0.5 text-[10px] font-semibold text-text-muted">
-                    Sun Citrus
-                  </span>
-                </div>
-
-                {/* Tile 2: Spicy Spark Zeera */}
-                <div className="flex min-h-[180px] flex-col items-center rounded-xl border border-on-accent/25 bg-bg-base p-3 text-center text-text-primary shadow-md transition-transform hover:scale-105">
-                  <div className="flex h-24 w-full items-center justify-center rounded-lg bg-bg-muted/50 p-0.5 sm:h-28">
-                    <img
-                      src={PET_IMAGES["zeera-soda-pet-20"]}
-                      alt="Spicy Spark Zeera ₹20 PET bottle"
-                      className="h-[108%] max-h-[108%] w-auto object-contain drop-shadow-md"
-                    />
-                  </div>
-
-                  <h4 className="mt-2 font-display text-xs font-bold uppercase text-accent-support">
-                    Spicy Spark Zeera
-                  </h4>
-
-                  <span className="mt-0.5 text-[10px] font-semibold text-text-muted">
-                    Roasted Zeera
-                  </span>
-                </div>
+                {productsForTier(20).map((flavor) => (
+                  <PetFlavorCard
+                    key={flavor.id}
+                    flavor={flavor}
+                    onSelect={onSelectFlavor}
+                    titleColorClass="text-accent-support"
+                  />
+                ))}
               </div>
 
               <div className="mt-4 inline-block rounded-full bg-bg-base px-3.5 py-1 text-[10px] font-bold tracking-wider text-accent-support uppercase">
@@ -145,9 +174,7 @@ export function PickYourPrice() {
 
               {/* Price Circle Badge */}
               <div className="flex h-16 w-16 items-center justify-center rounded-full border-2 border-on-accent bg-accent-primary shadow-xl">
-                <span className="font-display text-2xl font-bold text-on-accent">
-                  ₹10
-                </span>
+                <span className="font-display text-2xl font-bold text-on-accent">₹10</span>
               </div>
             </div>
 
@@ -156,8 +183,8 @@ export function PickYourPrice() {
             </h2>
 
             <p className="mt-3 max-w-md text-base text-on-accent/90">
-              High fizz pocket-sized PET bottles designed for daily street crispness.
-              Portable, recyclable, zero compromise.
+              High fizz pocket-sized PET bottles designed for daily street crispness. Portable,
+              recyclable, zero compromise.
             </p>
 
             {/* Visual Flavour Cards Grid for ₹10 Range */}
@@ -167,62 +194,14 @@ export function PickYourPrice() {
               </p>
 
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-                {/* Tile 1: Spicy Spark Zeera */}
-                <div className="flex min-h-[180px] flex-col items-center rounded-xl border border-on-accent/25 bg-bg-base p-3 text-center text-text-primary shadow-md transition-transform hover:scale-105">
-                  <div className="flex h-24 w-full items-center justify-center rounded-lg bg-bg-muted/50 p-0.5 sm:h-28">
-                    <img
-                      src={PET_IMAGES["zeera-soda-pet-10"]}
-                      alt="Spicy Spark Zeera ₹10 PET bottle"
-                      className="h-[108%] max-h-[108%] w-auto object-contain drop-shadow-md"
-                    />
-                  </div>
-
-                  <h4 className="mt-2 font-display text-xs font-bold uppercase text-accent-primary">
-                    Spicy Spark Zeera
-                  </h4>
-
-                  <span className="mt-0.5 text-[10px] font-semibold text-text-muted">
-                    Roasted Zeera
-                  </span>
-                </div>
-
-                {/* Tile 2: Citrus Orange Pop */}
-                <div className="flex min-h-[180px] flex-col items-center rounded-xl border border-on-accent/25 bg-bg-base p-3 text-center text-text-primary shadow-md transition-transform hover:scale-105">
-                  <div className="flex h-24 w-full items-center justify-center rounded-lg bg-bg-muted/50 p-0.5 sm:h-28">
-                    <img
-                      src={PET_IMAGES["citrus-orange-pet-10"]}
-                      alt="Citrus Orange Pop ₹10 PET bottle"
-                      className="h-[108%] max-h-[108%] w-auto object-contain drop-shadow-md"
-                    />
-                  </div>
-
-                  <h4 className="mt-2 font-display text-xs font-bold uppercase text-accent-primary">
-                    Citrus Orange Pop
-                  </h4>
-
-                  <span className="mt-0.5 text-[10px] font-semibold text-text-muted">
-                    Sun Citrus
-                  </span>
-                </div>
-
-                {/* Tile 3: Shikanji */}
-                <div className="relative flex min-h-[180px] flex-col items-center rounded-xl border border-on-accent/25 bg-bg-base p-3 text-center text-text-primary shadow-md transition-transform hover:scale-105">
-                  <div className="flex h-24 w-full items-center justify-center rounded-lg bg-bg-muted/50 p-0.5 sm:h-28">
-                    <img
-                      src={PET_IMAGES["shikanji-pet-10"]}
-                      alt="Shikanji ₹10 PET bottle"
-                      className="h-[108%] max-h-[108%] w-auto object-contain drop-shadow-md"
-                    />
-                  </div>
-
-                  <h4 className="mt-2 font-display text-xs font-bold uppercase text-accent-primary">
-                    Shikanji
-                  </h4>
-
-                  <span className="mt-0.5 text-[10px] font-semibold text-text-muted">
-                    Lemon Spice
-                  </span>
-                </div>
+                {productsForTier(10).map((flavor) => (
+                  <PetFlavorCard
+                    key={flavor.id}
+                    flavor={flavor}
+                    onSelect={onSelectFlavor}
+                    titleColorClass="text-accent-primary"
+                  />
+                ))}
               </div>
 
               <div className="mt-4 inline-block rounded-full bg-bg-base px-3.5 py-1 text-[10px] font-bold tracking-wider text-accent-primary uppercase">

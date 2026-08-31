@@ -1,8 +1,6 @@
 import { motion } from "motion/react";
-import { useState } from "react";
-import { FLAVORS } from "./data";
+import { FLAVORS, type Flavor } from "./data";
 import { FLAVOR_IMAGES } from "./images";
-import { FlavorModal } from "./flavor-modal";
 import { Section } from "./primitives";
 
 const FLAVOR_TAGLINES: Record<string, string> = {
@@ -14,10 +12,7 @@ const FLAVOR_TAGLINES: Record<string, string> = {
   "zeera-soda": "Roasted Zeera",
 };
 
-export function Flavors() {
-  const [openId, setOpenId] = useState<string | null>(null);
-  const active = FLAVORS.find((f) => f.id === openId) ?? null;
-
+export function Flavors({ onSelectFlavor }: { onSelectFlavor: (flavor: Flavor) => void }) {
   return (
     <Section id="flavors" className="bg-bg-base py-16 sm:py-20">
       <div className="mx-auto max-w-7xl">
@@ -64,7 +59,7 @@ export function Flavors() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-40px" }}
                 transition={{ duration: 0.5, delay: i * 0.08 }}
-                onClick={() => setOpenId(f.id)}
+                onClick={() => onSelectFlavor(f)}
                 className="group relative flex min-w-0 flex-col justify-between overflow-hidden rounded-2xl border border-border-theme bg-bg-surface p-3 text-center shadow-md transition-all hover:-translate-y-2 hover:shadow-2xl focus-visible:outline-2 focus-visible:outline-accent-primary sm:p-4"
                 style={{ borderColor: `color-mix(in srgb, ${accent} 31%, transparent)` }}
               >
@@ -115,8 +110,6 @@ export function Flavors() {
           })}
         </div>
       </div>
-
-      <FlavorModal flavor={active} onClose={() => setOpenId(null)} />
     </Section>
   );
 }

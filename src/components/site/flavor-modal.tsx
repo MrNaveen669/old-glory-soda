@@ -3,23 +3,20 @@ import { useEffect } from "react";
 import { CloseCircle, Location, Star1 } from "iconsax-reactjs";
 import type { Flavor } from "./data";
 import { flavorImage, flavorFullImage } from "./images";
+import { NutritionFacts } from "./nutrition-facts";
 import { scrollToSection } from "./use-lenis";
 
-function parseIngredients(raw: string): { name: string; code: string }[] {
-  return raw
-    .split(/,(?![^(]*\))/g)
-    .map((part) => part.trim())
-    .filter(Boolean)
-    .map((part) => {
-      const match = part.match(/^(.*?)\s*\(([^)]*)\)\s*$/);
-      if (match?.[1] && match[2]) {
-        const inner = match[2].trim();
-        if (/\d/.test(inner) && /^(INS\s*)?[\w\d]+([,\s]+[\w\d]+)*$/.test(inner)) {
-          return { name: match[1].trim(), code: inner };
-        }
-      }
-      return { name: part, code: "—" };
-    });
+function splitIngredientNote(raw: string) {
+  const noteStart = raw.indexOf("(Contains Plant-Based Sweetener");
+
+  if (noteStart === -1) {
+    return { ingredients: raw, note: null };
+  }
+
+  return {
+    ingredients: raw.slice(0, noteStart).trim(),
+    note: raw.slice(noteStart).replace(/^\(|\)$/g, ""),
+  };
 }
 
 export function FlavorModal({ flavor, onClose }: { flavor: Flavor | null; onClose: () => void }) {
@@ -32,12 +29,21 @@ export function FlavorModal({ flavor, onClose }: { flavor: Flavor | null; onClos
   const cutout = flavor ? flavorImage(flavor.id) : undefined;
   const fullScene = flavor ? flavorFullImage(flavor.id) : undefined;
   const accent = flavor ? `var(--flavor-${flavor.id})` : "var(--accent-primary)";
+  const ingredientCopy = flavor?.ingredients ? splitIngredientNote(flavor.ingredients) : null;
+  const petVolume =
+    flavor?.packaging === "pet"
+      ? flavor.price === 10
+        ? "200 ML"
+        : flavor.price === 20
+          ? "400 ML"
+          : null
+      : null;
 
   return (
     <AnimatePresence>
       {flavor && (
         <motion.div
-          className="fixed inset-0 z-[80] grid place-items-center bg-overlay/75 p-4 backdrop-blur-md"
+          className="fixed inset-0 z-[80] grid place-items-center bg-overlay/75 p-2 backdrop-blur-md sm:p-4"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -52,13 +58,17 @@ export function FlavorModal({ flavor, onClose }: { flavor: Flavor | null; onClos
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.97 }}
             transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-            className="relative max-h-[calc(100svh-2rem)] w-full max-w-3xl overflow-y-auto rounded-3xl border-2 border-border-theme bg-bg-base p-4 text-text-primary sm:max-h-[90svh] sm:p-8"
-            style={{ boxShadow: `0 30px 80px -20px color-mix(in srgb, ${accent} 38%, transparent)` }}
+            className="relative max-h-[calc(100svh-1rem)] w-full max-w-3xl overflow-y-auto rounded-3xl border-2 border-border-theme bg-bg-base p-3 text-text-primary sm:max-h-[90svh] sm:p-8"
+            style={{
+              boxShadow: `0 30px 80px -20px color-mix(in srgb, ${accent} 38%, transparent)`,
+            }}
           >
             <span
               aria-hidden
               className="absolute inset-0 opacity-15 pointer-events-none"
-              style={{ background: `radial-gradient(80% 50% at 80% 0%, ${accent}, transparent 70%)` }}
+              style={{
+                background: `radial-gradient(80% 50% at 80% 0%, ${accent}, transparent 70%)`,
+              }}
             />
             <button
               onClick={onClose}
@@ -71,7 +81,7 @@ export function FlavorModal({ flavor, onClose }: { flavor: Flavor | null; onClos
             <div className="relative grid gap-6 sm:grid-cols-[0.95fr_1.05fr] sm:items-center">
               {/* Image Container displaying Full Scene artwork */}
               <div className="relative mx-auto w-full overflow-hidden rounded-2xl border border-border-theme bg-bg-surface p-2 shadow-inner">
-                {fullScene && !flavor.comingSoon ? (
+                {fullScene && flavor.packaging === "glass" && !flavor.comingSoon ? (
                   <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl bg-bg-muted/50">
                     <img
                       src={fullScene}
@@ -113,62 +123,80 @@ export function FlavorModal({ flavor, onClose }: { flavor: Flavor | null; onClos
                   >
                     {flavor.note}
                   </span>
-                  {flavor.lowCalorie && (
+                  {flavor.lowCalorie && flavor.packaging !== "pet" && (
                     <span className="rounded-full bg-highlight/20 px-2.5 py-0.5 text-[10px] font-semibold tracking-[0.16em] text-highlight uppercase">
                       Low Calorie Drink
                     </span>
                   )}
                 </div>
                 <h3 className="mt-2 font-brand text-2xl sm:text-3xl">{flavor.name}</h3>
+                {flavor.packaging === "pet" && (
+                  <div
+                    className="mt-2 flex flex-wrap gap-1.5"
+                    aria-label={`${flavor.price ? `₹${flavor.price}` : "PET"} product details`}
+                  >
+                    {flavor.price && (
+                      <span
+                        className="rounded-full border px-2.5 py-1 text-[9px] font-bold tracking-[0.1em] uppercase"
+                        style={{ borderColor: accent, color: accent }}
+                      >
+                        ₹{flavor.price}
+                      </span>
+                    )}
+                    <span className="rounded-full border border-border-theme bg-bg-surface px-2.5 py-1 text-[9px] font-semibold tracking-[0.1em] text-text-muted uppercase">
+                      PET Bottle
+                    </span>
+                    {petVolume && (
+                      <span className="rounded-full border border-border-theme bg-bg-surface px-2.5 py-1 text-[9px] font-semibold tracking-[0.1em] text-text-muted uppercase">
+                        {petVolume}
+                      </span>
+                    )}
+                    {flavor.lowCalorie && (
+                      <span className="rounded-full border border-accent-cta/45 bg-accent-cta/10 px-2.5 py-1 text-[9px] font-semibold tracking-[0.1em] text-accent-cta uppercase">
+                        Low Calorie
+                      </span>
+                    )}
+                    {flavor.comingSoon && (
+                      <span className="rounded-full border border-accent-secondary/55 bg-accent-secondary/10 px-2.5 py-1 text-[9px] font-semibold tracking-[0.1em] text-accent-secondary uppercase">
+                        Coming Soon
+                      </span>
+                    )}
+                  </div>
+                )}
                 <p className="mt-4 text-sm text-muted-foreground sm:text-base">
                   {flavor.description}
                 </p>
 
-                {flavor.ingredients && (
-                  <div className="mt-4">
-                    <p className="text-xs font-semibold tracking-[0.16em] text-foreground uppercase">
-                      Ingredients ({flavor.flavourType})
+                {flavor.nutrition && (
+                  <NutritionFacts nutrition={flavor.nutrition} accent={accent} />
+                )}
+
+                {ingredientCopy && (
+                  <div className="mt-4 border-l-2 pl-3" style={{ borderColor: accent }}>
+                    <p className="text-[10px] font-semibold tracking-[0.16em] text-text-primary uppercase">
+                      Ingredients
                     </p>
-                    <div className="mt-2 overflow-hidden rounded-2xl border border-silver/30 bg-background/60 transition-transform duration-300 ease-out hover:scale-[1.03]">
-                      <table className="w-full border-collapse text-left text-xs sm:text-sm">
-                        <thead>
-                          <tr className="bg-secondary/60 text-foreground">
-                            <th className="px-3 py-2 font-semibold">Ingredient</th>
-                            <th className="w-28 px-3 py-2 font-semibold">Code/Type</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {parseIngredients(flavor.ingredients).map((row) => (
-                            <tr
-                              key={row.name}
-                              className="border-t border-silver/25 transition-transform duration-200 ease-out hover:scale-[1.02] hover:bg-secondary/40"
-                            >
-                              <td className="px-3 py-2 text-foreground/90">{row.name}</td>
-                              <td className="px-3 py-2 text-muted-foreground">{row.code}</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
+                    <p className="mt-1.5 text-[11px] leading-relaxed text-text-muted sm:text-xs">
+                      {ingredientCopy.ingredients}
+                    </p>
+                    {ingredientCopy.note && (
+                      <p className="mt-2 text-[10px] font-semibold leading-relaxed text-text-primary sm:text-[11px]">
+                        {ingredientCopy.note}
+                      </p>
+                    )}
                   </div>
                 )}
 
-                {!flavor.comingSoon && (
-                  <div className="mt-5 grid grid-cols-2 gap-3 text-sm">
-                    <div className="rounded-2xl border border-silver/20 p-3">
-                      <p className="text-xs text-muted-foreground">Sweetness</p>
-                      <p className="mt-1 font-semibold">{flavor.sweetness}</p>
-                    </div>
-                    <div className="rounded-2xl border border-silver/20 p-3">
-                      <p className="text-xs text-muted-foreground">
-                        {flavor.packaging === "pet" ? "Packaging" : "Fizz level"}
-                      </p>
-                      <p className="mt-1 font-semibold">
-                        {flavor.packaging === "pet" ? "PET bottle, blue cap" : flavor.fizz}
-                      </p>
-                    </div>
+                <div className="mt-5 grid grid-cols-2 gap-3 text-sm">
+                  <div className="rounded-2xl border border-silver/20 p-3">
+                    <p className="text-xs text-muted-foreground">Sweetness</p>
+                    <p className="mt-1 font-semibold">{flavor.sweetness}</p>
                   </div>
-                )}
+                  <div className="rounded-2xl border border-silver/20 p-3">
+                    <p className="text-xs text-muted-foreground">Fizz level</p>
+                    <p className="mt-1 font-semibold">{flavor.fizz}</p>
+                  </div>
+                </div>
 
                 {flavor.pairs.length > 0 && (
                   <div className="mt-5 flex flex-wrap gap-2">
@@ -190,14 +218,16 @@ export function FlavorModal({ flavor, onClose }: { flavor: Flavor | null; onClos
 
                 <button
                   onClick={() => {
+                    if (flavor.comingSoon) return;
                     onClose();
                     scrollToSection("stores");
                   }}
-                  className="mt-6 inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold text-primary-foreground"
-                  style={{ background: accent }}
+                  disabled={flavor.comingSoon}
+                  className="mt-6 inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold text-primary-foreground disabled:cursor-not-allowed disabled:opacity-65"
+                  style={{ background: flavor.comingSoon ? "var(--bg-muted)" : accent }}
                 >
                   <Location size={18} variant="Linear" />
-                  Find this near me
+                  {flavor.comingSoon ? "Coming Soon" : "Find this near me"}
                 </button>
               </div>
             </div>

@@ -1,6 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
 import { Toaster } from "@/components/ui/sonner";
 import { Flavors } from "@/components/site/flavors";
+import { FlavorModal } from "@/components/site/flavor-modal";
 import { Footer } from "@/components/site/footer";
 import { GallerySection } from "@/components/site/gallery";
 import { Hero } from "@/components/site/hero";
@@ -14,7 +16,7 @@ import { Testimonials } from "@/components/site/testimonials";
 import { ThenNow } from "@/components/site/then-now";
 import { Why } from "@/components/site/why";
 import { useLenis } from "@/components/site/use-lenis";
-import { BRAND, FLAVORS } from "@/components/site/data";
+import { BRAND, FLAVORS, type Flavor } from "@/components/site/data";
 
 const title = "Old Glory Soda — All Season Drink | Marble Goli Soda";
 const description =
@@ -65,6 +67,7 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   useLenis();
+  const [selectedFlavor, setSelectedFlavor] = useState<Flavor | null>(null);
 
   return (
     <>
@@ -72,9 +75,9 @@ function Index() {
       <Navbar />
       <main>
         <Hero />
-        <Flavors />
+        <Flavors onSelectFlavor={setSelectedFlavor} />
         <ThenNow />
-        <PickYourPrice />
+        <PickYourPrice onSelectFlavor={setSelectedFlavor} />
         <Story />
         <Why />
         <GallerySection />
@@ -82,6 +85,7 @@ function Index() {
         <Testimonials />
         <Newsletter />
       </main>
+      <FlavorModal flavor={selectedFlavor} onClose={() => setSelectedFlavor(null)} />
       <Footer />
       <Toaster />
     </>
