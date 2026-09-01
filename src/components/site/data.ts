@@ -249,7 +249,7 @@ export type PetTier = (typeof PET_TIERS)[number];
 
 const petFrom = (id: FlavorId, price: PetTier): Flavor => {
   const base = FLAVORS.find((f) => f.id === id)!;
-  const volume = price === 10 ? "200ml On-The-Go" : "400ml Value Pack";
+  const volume = price === 10 ? "160ml On-The-Go" : "300ml Value Pack";
   return {
     ...base,
     id: `${id}-pet-${price}`,
