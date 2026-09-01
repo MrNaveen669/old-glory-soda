@@ -14,6 +14,7 @@ import { Stores } from "@/components/site/stores";
 import { Story } from "@/components/site/story";
 import { Testimonials } from "@/components/site/testimonials";
 import { ThenNow } from "@/components/site/then-now";
+import { ColaSection } from "@/components/site/cola-section";
 import { Why } from "@/components/site/why";
 import { useLenis } from "@/components/site/use-lenis";
 import { BRAND, FLAVORS, type Flavor } from "@/components/site/data";
@@ -77,6 +78,7 @@ function Index() {
         <Hero />
         <Flavors onSelectFlavor={setSelectedFlavor} />
         <ThenNow />
+        <ColaSection onSelectProduct={setSelectedFlavor} />
         <PickYourPrice onSelectFlavor={setSelectedFlavor} />
         <Story />
         <Why />

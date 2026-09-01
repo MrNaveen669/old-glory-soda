@@ -1,17 +1,17 @@
-export type CityName = "Raipur" | "Balod" | "Dalli";
-export type StoreStatus = "IN_STOCK" | "COMING_SOON";
+import { STORE_LOCATIONS, type StoreCity, type StoreLocation } from "./data";
+
+export type CityName = StoreCity;
 export type MapMode = "overview" | "raipur";
+export type MapPosition = [number, number];
 
 export type Coordinates = {
   lat: number | null;
   lng: number | null;
 };
 
-export type CityLocation = {
-  city: CityName;
+export type CityLocation = StoreLocation & {
   lat: number;
   lng: number;
-  status: StoreStatus;
 };
 
 export type RaipurOutlet = Coordinates & {
@@ -21,42 +21,34 @@ export type RaipurOutlet = Coordinates & {
   approximate: boolean;
 };
 
-export type MapPosition = [number, number];
-
 export type MappedOutlet = {
   outlet: RaipurOutlet;
   position: MapPosition;
 };
 
-/* OpenStreetMap Nominatim records verified on 2026-08-26. */
-export const CITY_LOCATIONS: readonly CityLocation[] = [
-  {
-    city: "Raipur",
-    lat: 21.2380912,
-    lng: 81.6336993,
-    status: "IN_STOCK",
-  },
-  {
-    city: "Balod",
-    lat: 20.7272006,
-    lng: 81.2054198,
-    status: "COMING_SOON",
-  },
-  {
-    city: "Dalli",
-    lat: 20.5884403,
-    lng: 81.071724,
-    status: "COMING_SOON",
-  },
-];
+const CITY_COORDINATES: Record<CityName, MapPosition> = {
+  Dhamtari: [20.7015, 81.554158],
+  Nagari: [20.34646, 81.95998],
+  Keshkal: [20.08266, 81.5876],
+  Kondagaon: [19.59515, 81.66747],
+  Jagdalpur: [19.08136, 82.02131],
+  Raipur: [21.2380912, 81.6336993],
+  Balod: [20.7272006, 81.2054198],
+  Dalli: [20.5884403, 81.071724],
+};
 
-/*
- * Nominatim has an exact record for Kalinga University. Storefront searches
- * for the other outlets did not resolve, so their pins use confirmed locality
- * anchors and are explicitly marked approximate. Samta Colony uses a published
- * locality centroid whose coordinate reverse-geocodes to Raipur in Nominatim,
- * rather than a storefront claim.
- */
+export const CITY_LOCATIONS: readonly CityLocation[] = STORE_LOCATIONS.map((location) => {
+  const [lat, lng] = CITY_COORDINATES[location.city];
+
+  return {
+    ...location,
+    lat,
+    lng,
+  };
+});
+
+export const DEFAULT_CITY: CityName = "Dhamtari";
+
 export const RAIPUR_OUTLETS: readonly RaipurOutlet[] = [
   {
     id: "karam-podi-samta-colony",
@@ -116,8 +108,7 @@ export const RAIPUR_OUTLETS: readonly RaipurOutlet[] = [
   },
 ];
 
-export const RAIPUR_PHONE = "+919407626212";
-export const RAIPUR_CENTER: MapPosition = [21.2380912, 81.6336993];
+export const RAIPUR_CENTER: MapPosition = CITY_COORDINATES.Raipur;
 
 export function hasCoordinates(
   location: Coordinates,
@@ -140,16 +131,29 @@ export const MAPPED_RAIPUR_OUTLETS: readonly MappedOutlet[] = RAIPUR_OUTLETS.fla
   return position ? [{ outlet, position }] : [];
 });
 
-export function getGoogleMapsUrl(outlet: RaipurOutlet) {
-  if (hasCoordinates(outlet)) {
-    return `https://www.google.com/maps?q=${outlet.lat},${outlet.lng}`;
+export function getGoogleMapsUrl(location: CityLocation | RaipurOutlet) {
+  if ("city" in location) {
+    return `https://www.google.com/maps?q=${location.lat},${location.lng}`;
+  }
+
+  if (
+    typeof location.lat === "number" &&
+    Number.isFinite(location.lat) &&
+    typeof location.lng === "number" &&
+    Number.isFinite(location.lng)
+  ) {
+    return `https://www.google.com/maps?q=${location.lat},${location.lng}`;
   }
 
   return `https://www.google.com/maps?q=${encodeURIComponent(
-    `${outlet.name}, ${outlet.area}, Raipur, Chhattisgarh`,
+    `${location.name}, ${location.area}, Raipur, Chhattisgarh`,
   )}`;
 }
 
-export function getStatusLabel(status: StoreStatus) {
-  return status === "IN_STOCK" ? "IN STOCK" : "COMING SOON";
+export function formatPhoneNumber(phone: string) {
+  return `+91 ${phone.slice(0, 5)} ${phone.slice(5)}`;
+}
+
+export function getStatusLabel(status: StoreLocation["status"]) {
+  return status === "in-stock" ? "IN STOCK" : "COMING SOON";
 }

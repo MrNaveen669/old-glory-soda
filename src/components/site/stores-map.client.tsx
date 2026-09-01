@@ -1,4 +1,4 @@
-import { useEffect, useRef, type MutableRefObject } from "react";
+import { useEffect, type MutableRefObject } from "react";
 
 import { CircleMarker, MapContainer, Popup, TileLayer, useMap } from "react-leaflet";
 
@@ -8,6 +8,8 @@ import "leaflet/dist/leaflet.css";
 
 import {
   CITY_LOCATIONS,
+  DEFAULT_CITY,
+  formatPhoneNumber,
   getGoogleMapsUrl,
   MAPPED_RAIPUR_OUTLETS,
   RAIPUR_CENTER,
@@ -19,38 +21,99 @@ import {
   type RaipurOutlet,
 } from "./stores-data";
 
-const CITY_OVERVIEW_BOUNDS = latLngBounds(CITY_LOCATIONS.map((city) => [city.lat, city.lng]));
-
 const RAIPUR_OUTLET_BOUNDS = latLngBounds(MAPPED_RAIPUR_OUTLETS.map(({ position }) => position));
 
+function CityPopup({ location }: { location: CityLocation }) {
+  return (
+    <Popup>
+      <div style={{ minWidth: "205px", maxWidth: "235px", padding: "3px" }}>
+        <p
+          style={{
+            margin: 0,
+            color: location.status === "in-stock" ? "#397441" : "#9b6f2d",
+            fontSize: "9px",
+            fontWeight: 700,
+            textTransform: "uppercase",
+            letterSpacing: ".12em",
+          }}
+        >
+          {location.status === "in-stock" ? "OLD GLORY AVAILABLE" : "COMING SOON"}
+        </p>
+
+        <h4 style={{ margin: "5px 0 0", color: "#20252e", fontSize: "15px", fontWeight: 700 }}>
+          {location.city}
+        </h4>
+
+        <p style={{ margin: "6px 0 0", color: "#666", fontSize: "10px", lineHeight: 1.5 }}>
+          {location.status === "in-stock"
+            ? location.distributor.location
+            : `${location.city}, Chhattisgarh`}
+        </p>
+
+        {location.status === "in-stock" && (
+          <a
+            href={`tel:${location.distributor.phone}`}
+            style={{
+              display: "block",
+              marginTop: "9px",
+              color: "#267fb4",
+              fontSize: "11px",
+              fontWeight: 700,
+              textDecoration: "none",
+            }}
+          >
+            ☎ {formatPhoneNumber(location.distributor.phone)}
+          </a>
+        )}
+
+        <a
+          href={getGoogleMapsUrl(location)}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            display: "inline-block",
+            marginTop: "8px",
+            color: "#267fb4",
+            fontSize: "10px",
+            fontWeight: 700,
+            textDecoration: "none",
+          }}
+        >
+          Open in Maps ↗
+        </a>
+      </div>
+    </Popup>
+  );
+}
+
 function CityMarkers({
-  focusedCity,
+  selectedCity,
   onSelectCity,
 }: {
-  focusedCity: CityName | null;
+  selectedCity: CityName;
   onSelectCity: (city: CityLocation) => void;
 }) {
   return (
     <>
-      {CITY_LOCATIONS.map((city) => {
-        const available = city.status === "IN_STOCK";
-        const selected = focusedCity === city.city;
+      {CITY_LOCATIONS.map((location) => {
+        const available = location.status === "in-stock";
+        const selected = selectedCity === location.city;
 
         return (
           <CircleMarker
-            key={city.city}
-            center={[city.lat, city.lng]}
-            radius={available ? (selected ? 13 : 11) : selected ? 11 : 9}
+            key={location.city}
+            center={[location.lat, location.lng]}
+            radius={selected ? 13 : available ? 10 : 9}
             pathOptions={{
               color: "#fff7e5",
-              fillColor: available ? "#3f8b45" : "#d25448",
+              fillColor: selected ? "#42a8df" : available ? "#399257" : "#d25448",
               fillOpacity: 1,
               weight: selected ? 4 : 3,
             }}
-            eventHandlers={{
-              click: () => onSelectCity(city),
-            }}
-          />
+            eventHandlers={{ click: () => onSelectCity(location) }}
+          >
+            <CityPopup location={location} />
+          </CircleMarker>
         );
       })}
     </>
@@ -60,13 +123,7 @@ function CityMarkers({
 function OutletPopup({ outlet }: { outlet: RaipurOutlet }) {
   return (
     <Popup>
-      <div
-        style={{
-          minWidth: "200px",
-          maxWidth: "230px",
-          padding: "3px",
-        }}
-      >
+      <div style={{ minWidth: "200px", maxWidth: "230px", padding: "3px" }}>
         <p
           style={{
             margin: 0,
@@ -79,29 +136,12 @@ function OutletPopup({ outlet }: { outlet: RaipurOutlet }) {
         >
           OLD GLORY AVAILABLE
         </p>
-
-        <h4
-          style={{
-            margin: "5px 0 0",
-            color: "#20252e",
-            fontSize: "15px",
-            fontWeight: 700,
-          }}
-        >
+        <h4 style={{ margin: "5px 0 0", color: "#20252e", fontSize: "15px", fontWeight: 700 }}>
           {outlet.name}
         </h4>
-
-        <p
-          style={{
-            margin: "6px 0 0",
-            color: "#666",
-            fontSize: "10px",
-            lineHeight: 1.5,
-          }}
-        >
+        <p style={{ margin: "6px 0 0", color: "#666", fontSize: "10px", lineHeight: 1.5 }}>
           {outlet.area}, Raipur
         </p>
-
         <a
           href={getGoogleMapsUrl(outlet)}
           target="_blank"
@@ -150,9 +190,7 @@ function OutletMarkers({
               fillOpacity: 1,
               weight: selected ? 4 : 3,
             }}
-            eventHandlers={{
-              click: () => onSelectOutlet(outlet.id),
-            }}
+            eventHandlers={{ click: () => onSelectOutlet(outlet.id) }}
           >
             <OutletPopup outlet={outlet} />
           </CircleMarker>
@@ -164,17 +202,31 @@ function OutletMarkers({
 
 function MapViewportController({
   mapMode,
-  focusedCity,
+  selectedCity,
   selectedOutletId,
   markerRefs,
 }: {
   mapMode: MapMode;
-  focusedCity: CityName | null;
+  selectedCity: CityName;
   selectedOutletId: string | null;
   markerRefs: MutableRefObject<Record<string, LeafletCircleMarker | null>>;
 }) {
   const map = useMap();
-  const hasSetInitialOverview = useRef(false);
+
+  useEffect(() => {
+    if (mapMode !== "overview") {
+      return;
+    }
+
+    const location = CITY_LOCATIONS.find((city) => city.city === selectedCity);
+
+    if (!location) {
+      return;
+    }
+
+    map.stop();
+    map.flyTo([location.lat, location.lng], 12, { animate: true, duration: 0.8 });
+  }, [map, mapMode, selectedCity]);
 
   useEffect(() => {
     if (mapMode !== "raipur") {
@@ -182,66 +234,17 @@ function MapViewportController({
     }
 
     const fitRaipurOutlets = () => {
-      map.fitBounds(RAIPUR_OUTLET_BOUNDS, {
-        animate: true,
-        maxZoom: 15,
-        padding: [40, 40],
-      });
+      map.fitBounds(RAIPUR_OUTLET_BOUNDS, { animate: true, maxZoom: 15, padding: [40, 40] });
     };
 
     map.stop();
     map.once("moveend", fitRaipurOutlets);
-    map.flyTo(RAIPUR_CENTER, 12, {
-      animate: true,
-      duration: 1.2,
-    });
+    map.flyTo(RAIPUR_CENTER, 12, { animate: true, duration: 1.2 });
 
     return () => {
       map.off("moveend", fitRaipurOutlets);
     };
   }, [map, mapMode]);
-
-  useEffect(() => {
-    if (mapMode !== "overview" || focusedCity) {
-      return;
-    }
-
-    map.stop();
-
-    if (hasSetInitialOverview.current) {
-      map.flyToBounds(CITY_OVERVIEW_BOUNDS, {
-        animate: true,
-        duration: 1.2,
-        maxZoom: 9,
-        padding: [40, 40],
-      });
-    } else {
-      map.fitBounds(CITY_OVERVIEW_BOUNDS, {
-        animate: true,
-        maxZoom: 9,
-        padding: [40, 40],
-      });
-      hasSetInitialOverview.current = true;
-    }
-  }, [focusedCity, map, mapMode]);
-
-  useEffect(() => {
-    if (mapMode !== "overview" || !focusedCity) {
-      return;
-    }
-
-    const city = CITY_LOCATIONS.find((location) => location.city === focusedCity);
-
-    if (!city) {
-      return;
-    }
-
-    map.stop();
-    map.flyTo([city.lat, city.lng], 11, {
-      animate: true,
-      duration: 0.8,
-    });
-  }, [focusedCity, map, mapMode]);
 
   useEffect(() => {
     if (mapMode !== "raipur" || !selectedOutletId) {
@@ -261,10 +264,7 @@ function MapViewportController({
 
     map.stop();
     map.once("moveend", openSelectedPopup);
-    map.flyTo(position, 16, {
-      animate: true,
-      duration: 0.8,
-    });
+    map.flyTo(position, 16, { animate: true, duration: 0.8 });
 
     return () => {
       map.off("moveend", openSelectedPopup);
@@ -276,31 +276,29 @@ function MapViewportController({
 
 export default function DistributionMap({
   mapMode,
-  focusedCity,
+  selectedCity,
   selectedOutletId,
   markerRefs,
   onSelectCity,
   onSelectOutlet,
 }: {
   mapMode: MapMode;
-  focusedCity: CityName | null;
+  selectedCity: CityName;
   selectedOutletId: string | null;
   markerRefs: MutableRefObject<Record<string, LeafletCircleMarker | null>>;
   onSelectCity: (city: CityLocation) => void;
   onSelectOutlet: (outletId: string) => void;
 }) {
+  const defaultLocation = CITY_LOCATIONS.find((city) => city.city === DEFAULT_CITY)!;
+
   return (
     <MapContainer
-      center={[20.9, 81.35]}
-      zoom={8}
+      center={[defaultLocation.lat, defaultLocation.lng]}
+      zoom={12}
       scrollWheelZoom={false}
       zoomControl
       className="h-full w-full"
-      style={{
-        height: "100%",
-        width: "100%",
-        background: "#304a63",
-      }}
+      style={{ height: "100%", width: "100%", background: "#304a63" }}
     >
       <TileLayer
         attribution="&copy; OpenStreetMap contributors"
@@ -309,13 +307,13 @@ export default function DistributionMap({
 
       <MapViewportController
         mapMode={mapMode}
-        focusedCity={focusedCity}
+        selectedCity={selectedCity}
         selectedOutletId={selectedOutletId}
         markerRefs={markerRefs}
       />
 
       {mapMode === "overview" && (
-        <CityMarkers focusedCity={focusedCity} onSelectCity={onSelectCity} />
+        <CityMarkers selectedCity={selectedCity} onSelectCity={onSelectCity} />
       )}
 
       {mapMode === "raipur" && (

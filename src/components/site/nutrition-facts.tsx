@@ -7,6 +7,8 @@ export function NutritionFacts({
   nutrition: NutritionFactsData;
   accent?: string;
 }) {
+  const servingColumnLabel = nutrition.servingSize.replace(/\s+/g, "");
+
   return (
     <section className="mt-5" aria-label="Nutritional facts">
       <div
@@ -46,7 +48,7 @@ export function NutritionFacts({
                   scope="col"
                   className="border-l-2 border-text-primary/25 px-1 py-2 text-center font-bold sm:px-2"
                 >
-                  *Per 160ml
+                  *Per {servingColumnLabel}
                 </th>
                 <th
                   scope="col"
@@ -69,7 +71,7 @@ export function NutritionFacts({
                     {row.per100ml}
                   </td>
                   <td className="h-11 border-l-2 border-text-primary/25 px-1 py-2 text-center font-bold tabular-nums sm:h-12 sm:px-2 sm:text-sm">
-                    {row.per160ml}
+                    {row.perServing}
                   </td>
                   <td className="h-11 border-l-2 border-text-primary/25 px-1 py-2 text-center font-bold tabular-nums sm:h-12 sm:px-2 sm:text-sm">
                     {row.rda}

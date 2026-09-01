@@ -21,9 +21,9 @@ export type FlavorId = (typeof FLAVOR_IDS)[number];
 
 export type NutritionRow = {
   label: string;
-  per100ml: string | number;
-  per160ml: string | number;
-  rda: string | number;
+  per100ml: string;
+  perServing: string;
+  rda: string;
 };
 
 export type NutritionFacts = {
@@ -31,6 +31,19 @@ export type NutritionFacts = {
   servingsPerPack: string;
   rows: NutritionRow[];
 };
+
+export type ProductMediaSource =
+  | {
+      type: "image";
+      src: string;
+      alt?: string;
+    }
+  | {
+      type: "video";
+      src: string;
+      poster?: string;
+      alt?: string;
+    };
 
 export type Flavor = {
   id: string;
@@ -50,6 +63,8 @@ export type Flavor = {
   lowCalorie?: boolean;
   comingSoon?: boolean;
   price?: number;
+  volume?: string;
+  media?: ProductMediaSource;
 };
 
 export type FlagshipFlavor = Omit<Flavor, "id"> & { id: FlavorId };
@@ -71,13 +86,13 @@ export const FLAVORS: FlagshipFlavor[] = [
       servingSize: "160 ml",
       servingsPerPack: "1.6 serving in this pack",
       rows: [
-        { label: "Energy [Kcal]", per100ml: "9.48", per160ml: "15.17", rda: "0.76" },
-        { label: "Protein [g]", per100ml: "0", per160ml: "0", rda: "0" },
-        { label: "Carbohydrate [g]", per100ml: "2.37", per160ml: "3.79", rda: "-" },
-        { label: "Total Sugar [g]", per100ml: "2.37", per160ml: "3.79", rda: "-" },
-        { label: "Added Sugar [g]", per100ml: "0", per160ml: "0", rda: "0" },
-        { label: "Fat", per100ml: "0", per160ml: "0", rda: "0" },
-        { label: "Sodium [mg]", per100ml: "70.22", per160ml: "112.35", rda: "5.62" },
+        { label: "Energy [Kcal]", per100ml: "9.48", perServing: "15.17", rda: "0.76" },
+        { label: "Protein [g]", per100ml: "0", perServing: "0", rda: "0" },
+        { label: "Carbohydrate [g]", per100ml: "2.37", perServing: "3.79", rda: "-" },
+        { label: "Total Sugar [g]", per100ml: "2.37", perServing: "3.79", rda: "-" },
+        { label: "Added Sugar [g]", per100ml: "0", perServing: "0", rda: "0" },
+        { label: "Fat", per100ml: "0", perServing: "0", rda: "0" },
+        { label: "Sodium [mg]", per100ml: "70.22", perServing: "112.35", rda: "5.62" },
       ],
     },
     pairs: ["Beach evenings", "Street chaat", "Ice + mint"],
@@ -102,13 +117,13 @@ export const FLAVORS: FlagshipFlavor[] = [
       servingSize: "160 ml",
       servingsPerPack: "1.6 serving in this pack",
       rows: [
-        { label: "Energy [Kcal]", per100ml: "10.92", per160ml: "17.47", rda: "0.87" },
-        { label: "Protein [g]", per100ml: "0", per160ml: "0", rda: "0" },
-        { label: "Carbohydrate [g]", per100ml: "2.73", per160ml: "4.37", rda: "-" },
-        { label: "Total Sugar [g]", per100ml: "2.73", per160ml: "4.37", rda: "-" },
-        { label: "Added Sugar [g]", per100ml: "0", per160ml: "0", rda: "0" },
-        { label: "Fat", per100ml: "0", per160ml: "0", rda: "0" },
-        { label: "Sodium [mg]", per100ml: "75.72", per160ml: "121.15", rda: "6.06" },
+        { label: "Energy [Kcal]", per100ml: "10.92", perServing: "17.47", rda: "0.87" },
+        { label: "Protein [g]", per100ml: "0", perServing: "0", rda: "0" },
+        { label: "Carbohydrate [g]", per100ml: "2.73", perServing: "4.37", rda: "-" },
+        { label: "Total Sugar [g]", per100ml: "2.73", perServing: "4.37", rda: "-" },
+        { label: "Added Sugar [g]", per100ml: "0", perServing: "0", rda: "0" },
+        { label: "Fat", per100ml: "0", perServing: "0", rda: "0" },
+        { label: "Sodium [mg]", per100ml: "75.72", perServing: "121.15", rda: "6.06" },
       ],
     },
     pairs: ["Fried snacks", "Hot afternoons", "Chilled neat"],
@@ -126,20 +141,20 @@ export const FLAVORS: FlagshipFlavor[] = [
     tint: "#FFC08A",
     note: "Sun citrus · bright orange",
     description:
-      "Hand-pressed orange character with a whisper of peel oil. Sunshine in a codd-neck bottle, from the first goli pop to the last sip.",
+      "orange character with a whisper of peel oil. Sunshine in a codd-neck bottle, from the first goli pop to the last sip.",
     ingredients:
       "Carbonated Water, Sugar, Acidity Regulators (330, 331), Stabilizers (414, 445), Sweetener (960), Preservative (211), Colours (110, 122), Natural & Nature Identical Orange flavour",
     nutrition: {
       servingSize: "160 ml",
       servingsPerPack: "1.6 serving in this pack",
       rows: [
-        { label: "Energy [Kcal]", per100ml: "7.48", per160ml: "11.97", rda: "0.60" },
-        { label: "Protein [g]", per100ml: "0", per160ml: "0", rda: "0" },
-        { label: "Carbohydrate [g]", per100ml: "1.87", per160ml: "2.99", rda: "-" },
-        { label: "Total Sugar [g]", per100ml: "1.87", per160ml: "2.99", rda: "-" },
-        { label: "Added Sugar [g]", per100ml: "0", per160ml: "0", rda: "0" },
-        { label: "Fat", per100ml: "0", per160ml: "0", rda: "0" },
-        { label: "Sodium [mg]", per100ml: "72.04", per160ml: "115.26", rda: "5.76" },
+        { label: "Energy [Kcal]", per100ml: "9.16", perServing: "13.74", rda: "0.69" },
+        { label: "Protein [g]", per100ml: "0", perServing: "0", rda: "0" },
+        { label: "Carbohydrate [g]", per100ml: "2.29", perServing: "3.44", rda: "2.65" },
+        { label: "Total Sugar [g]", per100ml: "2.29", perServing: "3.44", rda: "-" },
+        { label: "Added Sugar [g]", per100ml: "2.29", perServing: "3.44", rda: "6.88" },
+        { label: "Fat", per100ml: "0", perServing: "0", rda: "0" },
+        { label: "Sodium [mg]", per100ml: "10.53", perServing: "15.80", rda: "0.79" },
       ],
     },
     pairs: ["Breakfast", "Road trips", "Orange wedge"],
@@ -164,13 +179,13 @@ export const FLAVORS: FlagshipFlavor[] = [
       servingSize: "160 ml",
       servingsPerPack: "1.6 serving in this pack",
       rows: [
-        { label: "Energy [Kcal]", per100ml: "0", per160ml: "0", rda: "0" },
-        { label: "Protein [g]", per100ml: "0", per160ml: "0", rda: "0" },
-        { label: "Carbohydrate [g]", per100ml: "0", per160ml: "0", rda: "-" },
-        { label: "Total Sugar [g]", per100ml: "0", per160ml: "0", rda: "-" },
-        { label: "Added Sugar [g]", per100ml: "0", per160ml: "0", rda: "0" },
-        { label: "Fat", per100ml: "0", per160ml: "0", rda: "0" },
-        { label: "Sodium [mg]", per100ml: "69.57", per160ml: "173.93", rda: "8.70" },
+        { label: "Energy [Kcal]", per100ml: "0", perServing: "0", rda: "0" },
+        { label: "Protein [g]", per100ml: "0", perServing: "0", rda: "0" },
+        { label: "Carbohydrate [g]", per100ml: "0", perServing: "0", rda: "-" },
+        { label: "Total Sugar [g]", per100ml: "0", perServing: "0", rda: "-" },
+        { label: "Added Sugar [g]", per100ml: "0", perServing: "0", rda: "0" },
+        { label: "Fat", per100ml: "0", perServing: "0", rda: "0" },
+        { label: "Sodium [mg]", per100ml: "69.57", perServing: "173.93", rda: "8.70" },
       ],
     },
     pairs: ["Celebrations", "Grilled plates", "Tall glass"],
@@ -195,13 +210,13 @@ export const FLAVORS: FlagshipFlavor[] = [
       servingSize: "160 ml",
       servingsPerPack: "1.6 serving in this pack",
       rows: [
-        { label: "Energy [Kcal]", per100ml: "0", per160ml: "0", rda: "0" },
-        { label: "Protein [g]", per100ml: "0", per160ml: "0", rda: "0" },
-        { label: "Carbohydrate [g]", per100ml: "0", per160ml: "0", rda: "-" },
-        { label: "Total Sugar [g]", per100ml: "0", per160ml: "0", rda: "-" },
-        { label: "Added Sugar [g]", per100ml: "0", per160ml: "0", rda: "0" },
-        { label: "Fat", per100ml: "0", per160ml: "0", rda: "0" },
-        { label: "Sodium [mg]", per100ml: "69.57", per160ml: "111.31", rda: "5.57" },
+        { label: "Energy [Kcal]", per100ml: "0", perServing: "0", rda: "0" },
+        { label: "Protein [g]", per100ml: "0", perServing: "0", rda: "0" },
+        { label: "Carbohydrate [g]", per100ml: "0", perServing: "0", rda: "-" },
+        { label: "Total Sugar [g]", per100ml: "0", perServing: "0", rda: "-" },
+        { label: "Added Sugar [g]", per100ml: "0", perServing: "0", rda: "0" },
+        { label: "Fat", per100ml: "0", perServing: "0", rda: "0" },
+        { label: "Sodium [mg]", per100ml: "69.57", perServing: "111.31", rda: "5.57" },
       ],
     },
     pairs: ["Post-workout", "Spicy biryani", "Salt rim"],
@@ -226,13 +241,13 @@ export const FLAVORS: FlagshipFlavor[] = [
       servingSize: "160 ml",
       servingsPerPack: "1.6 serving in this pack",
       rows: [
-        { label: "Energy [Kcal]", per100ml: "12.48", per160ml: "19.97", rda: "1" },
-        { label: "Protein [g]", per100ml: "0", per160ml: "0", rda: "0" },
-        { label: "Carbohydrate [g]", per100ml: "3.12", per160ml: "4.99", rda: "-" },
-        { label: "Total Sugar [g]", per100ml: "0", per160ml: "0", rda: "-" },
-        { label: "Added Sugar [g]", per100ml: "0", per160ml: "0", rda: "0" },
-        { label: "Fat", per100ml: "0", per160ml: "0", rda: "0" },
-        { label: "Sodium [mg]", per100ml: "18.33", per160ml: "29.33", rda: "1.47" },
+        { label: "Energy [Kcal]", per100ml: "12.76", perServing: "19.14", rda: "0.96" },
+        { label: "Protein [g]", per100ml: "0", perServing: "0", rda: "0" },
+        { label: "Carbohydrate [g]", per100ml: "3.19", perServing: "4.79", rda: "3.68" },
+        { label: "Total Sugar [g]", per100ml: "3.19", perServing: "4.79", rda: "-" },
+        { label: "Added Sugar [g]", per100ml: "3.19", perServing: "4.79", rda: "9.58" },
+        { label: "Fat", per100ml: "0", perServing: "0", rda: "0" },
+        { label: "Sodium [mg]", per100ml: "148.43", perServing: "222.65", rda: "11.13" },
       ],
     },
     pairs: ["Heavy meals", "Monsoon nights", "Room temp"],
@@ -247,6 +262,48 @@ export const FLAVORS: FlagshipFlavor[] = [
 export const PET_TIERS = [10, 20] as const;
 export type PetTier = (typeof PET_TIERS)[number];
 
+export const PET_10_NUTRITION: NutritionFacts = {
+  servingSize: "160 ml",
+  servingsPerPack: "1 serving in this Pack",
+  rows: [
+    { label: "Energy (Kcal)", per100ml: "9.16", perServing: "14.66", rda: "0.73" },
+    { label: "Protein (g)", per100ml: "0", perServing: "0", rda: "0" },
+    { label: "Carbohydrate (g)", per100ml: "2.29", perServing: "3.66", rda: "2.82" },
+    { label: "Total Sugar (g)", per100ml: "2.29", perServing: "3.66", rda: "-" },
+    { label: "Added Sugar (g)", per100ml: "2.29", perServing: "3.66", rda: "7.33" },
+    { label: "Fat", per100ml: "0", perServing: "0", rda: "0" },
+    { label: "Sodium(mg)", per100ml: "10.53", perServing: "16.85", rda: "0.84" },
+  ],
+};
+
+export const PET_20_NUTRITION: NutritionFacts = {
+  servingSize: "150 ml",
+  servingsPerPack: "2 serving in this Pack",
+  rows: [
+    { label: "Energy (Kcal)", per100ml: "9.16", perServing: "13.74", rda: "0.69" },
+    { label: "Protein (g)", per100ml: "0", perServing: "0", rda: "0" },
+    { label: "Carbohydrate (g)", per100ml: "2.29", perServing: "3.44", rda: "2.65" },
+    { label: "Total Sugar (g)", per100ml: "2.29", perServing: "3.44", rda: "-" },
+    { label: "Added Sugar (g)", per100ml: "2.29", perServing: "3.44", rda: "6.88" },
+    { label: "Fat", per100ml: "0", perServing: "0", rda: "0" },
+    { label: "Sodium(mg)", per100ml: "10.53", perServing: "15.80", rda: "0.79" },
+  ],
+};
+
+export const SHIKANJI_NUTRITION: NutritionFacts = {
+  servingSize: "160 ml",
+  servingsPerPack: "1 serving in this Pack",
+  rows: [
+    { label: "Energy (Kcal)", per100ml: "16.40", perServing: "26.24", rda: "1.31" },
+    { label: "Protein (g)", per100ml: "0", perServing: "0", rda: "0" },
+    { label: "Carbohydrate (g)", per100ml: "4.10", perServing: "6.56", rda: "5.05" },
+    { label: "Total Sugar (g)", per100ml: "4.10", perServing: "6.56", rda: "13.12" },
+    { label: "Added Sugar (g)", per100ml: "4.10", perServing: "6.56", rda: "-" },
+    { label: "Fat", per100ml: "0", perServing: "0", rda: "0" },
+    { label: "Sodium(mg)", per100ml: "16.92", perServing: "27.07", rda: "1.35" },
+  ],
+};
+
 const petFrom = (id: FlavorId, price: PetTier): Flavor => {
   const base = FLAVORS.find((f) => f.id === id)!;
   const volume = price === 10 ? "160ml On-The-Go" : "300ml Value Pack";
@@ -256,6 +313,7 @@ const petFrom = (id: FlavorId, price: PetTier): Flavor => {
     packaging: "pet",
     lowCalorie: true,
     price,
+    nutrition: price === 10 ? PET_10_NUTRITION : PET_20_NUTRITION,
     note: `PET bottle (${volume}) · ₹${price}`,
   };
 };
@@ -271,8 +329,8 @@ export const PET_RANGE: Record<PetTier, Flavor[]> = {
       short: "Shikanji",
       color: "#C4CBD4",
       tint: "#E4E9EE",
-      note: "PET bottle (200ml) · ₹10",
-      description: "Traditional citrus spiced lemonade soda. Rolling out in our 200ml PET range.",
+      note: "PET bottle (160ml) · ₹10",
+      description: "Traditional citrus spiced lemonade soda. Rolling out in our 160ml PET range.",
       ingredients: "Carbonated Water, Lemon Extract, Spices, Sweetener (960), Preservative (211)",
       pairs: ["Summer afternoons", "Street snacks"],
       sweetness: "Low",
@@ -281,10 +339,63 @@ export const PET_RANGE: Record<PetTier, Flavor[]> = {
       lowCalorie: true,
       comingSoon: true,
       price: 10,
+      nutrition: SHIKANJI_NUTRITION,
     },
   ],
   20: [petFrom("zeera-soda", 20), petFrom("citrus-orange", 20)],
 };
+
+export const COLA_PRODUCTS: Flavor[] = [
+  {
+    id: "diet-cola",
+    name: "Diet Cola",
+    flavourType: "Diet Cola",
+    short: "Diet Cola",
+    color: "#3DB8FF",
+    tint: "#A9E2FF",
+    note: "Low calorie cola · crisp finish",
+    description:
+      "A lighter take on the classic cola pour, balancing familiar spice and caramel notes with a clean, refreshing finish.",
+    ingredients:
+      "Carbonated Water, Acidity Regulators, Permitted Sweeteners, Preservative, Natural and Nature Identical Cola Flavour.",
+    pairs: ["Burgers", "Movie nights", "Serve ice-cold"],
+    sweetness: "Light",
+    fizz: "High",
+    packaging: "pet",
+    lowCalorie: true,
+    price: 20,
+    volume: "160ml",
+    media: {
+      type: "video",
+      src: "/Deit cola.mp4",
+      alt: "Old Glory Diet Cola bottle video",
+    },
+  },
+  {
+    id: "cola",
+    name: "Cola",
+    flavourType: "Cola",
+    short: "Cola",
+    color: "#E8544A",
+    tint: "#FFAAA4",
+    note: "Classic cola · bold fizz",
+    description:
+      "A full-flavoured cola with rounded caramel spice, lively bubbles and the unmistakable Old Glory finish.",
+    ingredients:
+      "Carbonated Water, Sugar, Acidity Regulators, Preservative, Natural and Nature Identical Cola Flavour.",
+    pairs: ["Street snacks", "Family meals", "Serve ice-cold"],
+    sweetness: "Classic",
+    fizz: "High",
+    packaging: "pet",
+    price: 20,
+    volume: "160ml",
+    media: {
+      type: "video",
+      src: "/cola.mp4",
+      alt: "Old Glory Cola bottle video",
+    },
+  },
+];
 
 export const STORY = {
   eyebrow: "Since the marble days",
@@ -392,15 +503,80 @@ export const GALLERY: GalleryItem[] = [
   },
 ];
 
+export type StoreCity =
+  "Dhamtari" | "Nagari" | "Keshkal" | "Kondagaon" | "Jagdalpur" | "Raipur" | "Balod" | "Dalli";
+
+type StoreDistributor = {
+  name: string;
+  location: string;
+  phone: string;
+};
+
+export type StoreLocation =
+  | {
+      city: StoreCity;
+      status: "in-stock";
+      distributor: StoreDistributor;
+    }
+  | {
+      city: StoreCity;
+      status: "coming-soon";
+      distributor?: never;
+    };
+
 export const STORE_LOCATIONS: StoreLocation[] = [
+  {
+    city: "Dhamtari",
+    status: "in-stock",
+    distributor: {
+      name: "Old Glory Soda - Dhamtari",
+      location: "Dhamtari, Chhattisgarh",
+      phone: "9827902843",
+    },
+  },
+  {
+    city: "Nagari",
+    status: "in-stock",
+    distributor: {
+      name: "Old Glory Soda - Nagari",
+      location: "Nagari, Chhattisgarh",
+      phone: "9827902843",
+    },
+  },
+  {
+    city: "Keshkal",
+    status: "in-stock",
+    distributor: {
+      name: "Old Glory Soda - Keshkal",
+      location: "Keshkal, Chhattisgarh",
+      phone: "7389509007",
+    },
+  },
+  {
+    city: "Kondagaon",
+    status: "in-stock",
+    distributor: {
+      name: "Old Glory Soda - Kondagaon",
+      location: "Kondagaon, Chhattisgarh",
+      phone: "7000851309",
+    },
+  },
+  {
+    city: "Jagdalpur",
+    status: "in-stock",
+    distributor: {
+      name: "Old Glory Soda - Jagdalpur",
+      location: "Jagdalpur, Chhattisgarh",
+      phone: "9425261364",
+    },
+  },
   {
     city: "Raipur",
     status: "in-stock",
     distributor: {
       name: "Raipur Beverage Distributors Hub",
-      description: "Primary distribution center supplying retail outlets and soda counters in Raipur.",
-      location: "Raipur Central, Chhattisgarh",
-      phone: "Inquiries: kajalbeverageindustry@gmail.com",
+      location: "Raipur, Chhattisgarh",
+      phone: "9407626212",
     },
   },
   { city: "Balod", status: "coming-soon" },
@@ -409,12 +585,14 @@ export const STORE_LOCATIONS: StoreLocation[] = [
 
 export const TESTIMONIALS = [
   {
-    quote: "Honestly? The blueberry one tastes like the soda cart outside my school. That goli pop sound still gets a cheer from everyone.",
+    quote:
+      "Honestly? The blueberry one tastes like the soda cart outside my school. That goli pop sound still gets a cheer from everyone.",
     name: "Anitha",
     place: "Coimbatore",
   },
   {
-    quote: "Zeera soda after a heavy biryani is unbeatable. We keep a crate at the restaurant now — customers ask for it by name.",
+    quote:
+      "Zeera soda after a heavy biryani is unbeatable. We keep a crate at the restaurant now — customers ask for it by name.",
     name: "Imran Sheikh",
     place: "Hyderabad",
   },
@@ -424,12 +602,14 @@ export const TESTIMONIALS = [
     place: "Kochi",
   },
   {
-    quote: "Finally a fruit beer that doesn't taste like cough syrup. Price is fair, availability is still patchy in my area, but when I find it I buy six.",
+    quote:
+      "Finally a fruit beer that doesn't taste like cough syrup. Price is fair, availability is still patchy in my area, but when I find it I buy six.",
     name: "Dev",
     place: "Mumbai",
   },
   {
-    quote: "Glass bottles, real fizz, zero fuss. My kids fight over the blueberry and I secretly grab the lemon zing for myself.",
+    quote:
+      "Glass bottles, real fizz, zero fuss. My kids fight over the blueberry and I secretly grab the lemon zing for myself.",
     name: "Sudha Mani",
     place: "Chennai",
   },

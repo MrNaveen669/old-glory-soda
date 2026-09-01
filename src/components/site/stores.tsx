@@ -1,6 +1,6 @@
 import { ClientOnly } from "@tanstack/react-router";
 import { motion } from "motion/react";
-import { lazy, Suspense, useEffect, useRef, useState } from "react";
+import { lazy, Suspense, useRef, useState } from "react";
 
 import { ArrowLeft2, ArrowRight2, Call, ExportSquare, Location, Shop } from "iconsax-reactjs";
 
@@ -8,11 +8,11 @@ import type { CircleMarker as LeafletCircleMarker } from "leaflet";
 
 import {
   CITY_LOCATIONS,
+  DEFAULT_CITY,
+  formatPhoneNumber,
   getGoogleMapsUrl,
   getStatusLabel,
-  hasCoordinates,
   RAIPUR_OUTLETS,
-  RAIPUR_PHONE,
   type CityLocation,
   type CityName,
   type MapMode,
@@ -37,22 +37,16 @@ function OutletCard({
   selected: boolean;
   onSelect: () => void;
 }) {
-  const hasLocation = hasCoordinates(outlet);
-
   return (
     <motion.div
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.35, delay: index * 0.07 }}
-      className={`
-        group flex min-h-[86px] w-full items-stretch overflow-hidden rounded-[19px]
-        border bg-bg-base/20 transition
-        ${
-          selected
-            ? "border-accent-primary/80 bg-bg-muted/35 shadow-lg"
-            : "border-border-theme/80 hover:border-accent-primary/40 hover:bg-bg-muted/25"
-        }
-      `}
+      className={`group flex min-h-[86px] w-full items-stretch overflow-hidden rounded-[19px] border bg-bg-base/20 transition ${
+        selected
+          ? "border-accent-primary/80 bg-bg-muted/35 shadow-lg"
+          : "border-border-theme/80 hover:border-accent-primary/40 hover:bg-bg-muted/25"
+      }`}
     >
       <button
         type="button"
@@ -61,14 +55,9 @@ function OutletCard({
         className="flex min-w-0 flex-1 items-center gap-3 px-4 py-3 text-left sm:px-5"
       >
         <span
-          className={`
-            grid h-10 w-10 shrink-0 place-items-center rounded-full
-            ${
-              selected
-                ? "bg-accent-primary/25 text-accent-primary"
-                : "bg-[#399257]/15 text-[#60ad74]"
-            }
-          `}
+          className={`grid h-10 w-10 shrink-0 place-items-center rounded-full ${
+            selected ? "bg-accent-primary/25 text-accent-primary" : "bg-[#399257]/15 text-[#60ad74]"
+          }`}
         >
           <Location size={18} variant="Bold" />
         </span>
@@ -80,30 +69,19 @@ function OutletCard({
               IN STOCK
             </span>
           </span>
-
           <span className="mt-1 block text-[9px] leading-4 text-text-muted">
             {outlet.area}
             {outlet.approximate ? " · Area pin" : ""}
           </span>
-
-          {!hasLocation && (
-            <span className="mt-1 block text-[8px] leading-3 text-[#d9bb72]">
-              Outlet coordinates could not be loaded. You can still open this location in Google
-              Maps.
-            </span>
-          )}
         </span>
 
         <ArrowRight2
           size={14}
-          className={`
-            shrink-0 transition
-            ${
-              selected
-                ? "translate-x-0.5 text-accent-primary"
-                : "text-text-muted group-hover:translate-x-0.5 group-hover:text-accent-primary"
-            }
-          `}
+          className={`shrink-0 transition ${
+            selected
+              ? "translate-x-0.5 text-accent-primary"
+              : "text-text-muted group-hover:translate-x-0.5 group-hover:text-accent-primary"
+          }`}
         />
       </button>
 
@@ -123,51 +101,20 @@ function OutletCard({
 
 export function Stores() {
   const [mapMode, setMapMode] = useState<MapMode>("overview");
+  const [selectedCity, setSelectedCity] = useState<CityName>(DEFAULT_CITY);
   const [selectedOutletId, setSelectedOutletId] = useState<string | null>(null);
-  const [focusedCity, setFocusedCity] = useState<CityName | null>(null);
   const markerRefs = useRef<Record<string, LeafletCircleMarker | null>>({});
-  const modeHeadingRef = useRef<HTMLHeadingElement | null>(null);
-  const previousMapMode = useRef(mapMode);
+  const selectedLocation = CITY_LOCATIONS.find((location) => location.city === selectedCity)!;
 
-  useEffect(() => {
-    if (previousMapMode.current === mapMode) {
-      return;
-    }
-
-    previousMapMode.current = mapMode;
-
-    const frame = window.requestAnimationFrame(() => {
-      modeHeadingRef.current?.focus({ preventScroll: true });
-    });
-
-    return () => {
-      window.cancelAnimationFrame(frame);
-    };
-  }, [mapMode]);
-
-  const openRaipur = () => {
-    setMapMode("raipur");
+  const selectCity = (location: CityLocation) => {
+    setSelectedCity(location.city);
     setSelectedOutletId(null);
-    setFocusedCity(null);
+    setMapMode(location.city === "Raipur" ? "raipur" : "overview");
   };
 
   const showAllTowns = () => {
     setMapMode("overview");
-    setFocusedCity(null);
     setSelectedOutletId(null);
-  };
-
-  const selectCity = (city: CityLocation) => {
-    if (city.city === "Raipur") {
-      openRaipur();
-      return;
-    }
-
-    setFocusedCity(city.city);
-  };
-
-  const selectOutlet = (outletId: string) => {
-    setSelectedOutletId(outletId);
   };
 
   return (
@@ -201,23 +148,12 @@ export function Stores() {
 
             <p className="mt-5 max-w-[500px] text-[14px] leading-7 text-text-muted">
               {mapMode === "raipur"
-                ? "Explore Old Glory Soda availability across Raipur. Select a location to see its area pin and open directions when you are ready."
-                : "Old Glory is rolling out across Chhattisgarh, one town at a time. Select Raipur to see exactly where Old Glory is available."}
+                ? "Explore seven Old Glory outlets across Raipur. Select an outlet to see its map pin and open directions."
+                : "Old Glory is expanding across Chhattisgarh. Select a city to see its availability, distributor details and map location."}
             </p>
 
             <div className="mt-7 flex flex-wrap gap-3">
-              {mapMode === "overview" ? (
-                <motion.button
-                  type="button"
-                  onClick={openRaipur}
-                  whileHover={{ y: -2 }}
-                  whileTap={{ scale: 0.97 }}
-                  className="inline-flex min-h-11 items-center gap-2 rounded-full bg-[#42a8df] px-5 py-2.5 text-[11px] font-semibold text-[#111820] shadow-lg"
-                >
-                  <Location size={16} variant="Bold" />
-                  View Raipur Outlets
-                </motion.button>
-              ) : (
+              {mapMode === "raipur" ? (
                 <motion.button
                   type="button"
                   onClick={showAllTowns}
@@ -226,19 +162,33 @@ export function Stores() {
                   className="inline-flex min-h-11 items-center gap-2 rounded-full bg-[#42a8df] px-5 py-2.5 text-[11px] font-semibold text-[#111820]"
                 >
                   <ArrowLeft2 size={16} />
-                  All Towns
+                  All Cities
                 </motion.button>
+              ) : (
+                <motion.a
+                  href={getGoogleMapsUrl(selectedLocation)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ y: -2 }}
+                  whileTap={{ scale: 0.97 }}
+                  className="inline-flex min-h-11 items-center gap-2 rounded-full bg-[#42a8df] px-5 py-2.5 text-[11px] font-semibold text-[#111820] shadow-lg"
+                >
+                  <Location size={16} variant="Bold" />
+                  Open {selectedCity} Map
+                </motion.a>
               )}
 
-              <motion.a
-                href={`tel:${RAIPUR_PHONE}`}
-                whileHover={{ y: -2 }}
-                whileTap={{ scale: 0.97 }}
-                className="inline-flex min-h-11 items-center gap-2 rounded-full border border-border-theme px-5 py-2.5 text-[11px] font-semibold text-text-primary transition hover:bg-bg-muted/30"
-              >
-                <Call size={16} />
-                Talk to distributor
-              </motion.a>
+              {selectedLocation.status === "in-stock" && (
+                <motion.a
+                  href={`tel:${selectedLocation.distributor.phone}`}
+                  whileHover={{ y: -2 }}
+                  whileTap={{ scale: 0.97 }}
+                  className="inline-flex min-h-11 items-center gap-2 rounded-full border border-border-theme px-5 py-2.5 text-[11px] font-semibold text-text-primary transition hover:bg-bg-muted/30"
+                >
+                  <Call size={16} />
+                  Call {selectedCity}
+                </motion.a>
+              )}
             </div>
 
             <motion.div
@@ -253,11 +203,11 @@ export function Stores() {
                   <Suspense fallback={<MapFallback />}>
                     <DistributionMap
                       mapMode={mapMode}
-                      focusedCity={focusedCity}
+                      selectedCity={selectedCity}
                       selectedOutletId={selectedOutletId}
                       markerRefs={markerRefs}
                       onSelectCity={selectCity}
-                      onSelectOutlet={selectOutlet}
+                      onSelectOutlet={setSelectedOutletId}
                     />
                   </Suspense>
                 </ClientOnly>
@@ -266,50 +216,27 @@ export function Stores() {
                   <p className="text-[8px] font-bold uppercase tracking-[0.18em] text-[#a9a18b]">
                     {mapMode === "raipur" ? "AVAILABLE IN RAIPUR" : "DISTRIBUTION NETWORK"}
                   </p>
-
-                  <div className="mt-0.5 flex items-center gap-3">
-                    <h3
-                      ref={modeHeadingRef}
-                      tabIndex={-1}
-                      className="rounded-sm text-[11px] font-semibold text-white outline-none focus-visible:ring-2 focus-visible:ring-[#d9bb72]"
-                    >
-                      {mapMode === "raipur" ? "7 LOCATIONS" : "Raipur · Balod · Dalli"}
-                    </h3>
-
-                    {mapMode === "raipur" && (
-                      <button
-                        type="button"
-                        onClick={showAllTowns}
-                        className="pointer-events-auto rounded-full border border-white/20 px-2 py-1 text-[8px] font-semibold text-white transition hover:bg-white/10"
-                      >
-                        ← All Towns
-                      </button>
-                    )}
-                  </div>
+                  <h3 className="mt-0.5 text-[11px] font-semibold text-white">
+                    {mapMode === "raipur" ? "7 LOCATIONS" : selectedCity}
+                  </h3>
                 </div>
-
-                {mapMode === "overview" && focusedCity && (
-                  <button
-                    type="button"
-                    onClick={() => setFocusedCity(null)}
-                    className="absolute bottom-7 right-3 z-[500] rounded-full bg-[#252c36]/95 px-3.5 py-2.5 text-[9px] font-semibold text-white shadow-lg transition hover:bg-[#343d49]"
-                  >
-                    Show All
-                  </button>
-                )}
               </div>
             </motion.div>
 
             {mapMode === "overview" ? (
               <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-[9px] text-text-muted">
-                {CITY_LOCATIONS.map((city) => (
-                  <span key={city.city} className="flex items-center gap-1.5">
+                {CITY_LOCATIONS.map((location) => (
+                  <span key={location.city} className="flex items-center gap-1.5">
                     <span
                       className={`h-2 w-2 rounded-full ${
-                        city.status === "IN_STOCK" ? "bg-[#3f8b45]" : "bg-[#d25448]"
+                        selectedCity === location.city
+                          ? "bg-accent-primary"
+                          : location.status === "in-stock"
+                            ? "bg-[#399257]"
+                            : "bg-[#d25448]"
                       }`}
                     />
-                    {city.city} — {getStatusLabel(city.status)}
+                    {location.city} — {getStatusLabel(location.status)}
                   </span>
                 ))}
               </div>
@@ -326,70 +253,73 @@ export function Stores() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.65, delay: 0.08 }}
-            className="flex flex-col lg:pt-3"
+            className="flex min-w-0 flex-col lg:pt-3"
           >
-            {mapMode === "overview" && (
+            {mapMode === "overview" ? (
               <>
-                <div className="space-y-3">
+                <div>
+                  <span className="text-[8px] font-bold uppercase tracking-[0.2em] text-accent-primary">
+                    DISTRIBUTION NETWORK
+                  </span>
+                  <h3 className="mt-2 font-display text-2xl font-bold text-text-primary">
+                    Choose your city.
+                  </h3>
+                </div>
+
+                <div className="mt-6 space-y-3">
                   {CITY_LOCATIONS.map((location, index) => {
-                    const available = location.status === "IN_STOCK";
-                    const selected = focusedCity === location.city;
+                    const selected = selectedCity === location.city;
+                    const available = location.status === "in-stock";
 
                     return (
                       <motion.button
                         key={location.city}
                         type="button"
+                        aria-pressed={selected}
                         initial={{ opacity: 0, x: 25 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
-                        transition={{ duration: 0.45, delay: 0.1 + index * 0.08 }}
+                        transition={{ duration: 0.45, delay: 0.1 + index * 0.06 }}
                         whileHover={{ x: 5 }}
                         whileTap={{ scale: 0.985 }}
                         onClick={() => selectCity(location)}
-                        className={`
-                          flex min-h-[72px] w-full items-center justify-between rounded-[19px]
-                          border px-4 py-3 text-left transition sm:px-5
-                          ${
-                            selected
-                              ? "border-accent-primary/80 bg-bg-muted/35 shadow-lg"
-                              : "border-border-theme/80 bg-bg-base/20 hover:border-accent-primary/40 hover:bg-bg-muted/25 hover:shadow-lg"
-                          }
-                        `}
+                        className={`flex min-h-[72px] w-full items-center justify-between gap-3 rounded-[19px] border px-4 py-3 text-left transition sm:px-5 ${
+                          selected
+                            ? "border-accent-primary/80 bg-bg-muted/35 shadow-lg shadow-accent-primary/10"
+                            : "border-border-theme/80 bg-bg-base/20 hover:border-accent-primary/40 hover:bg-bg-muted/25 hover:shadow-lg"
+                        }`}
                       >
                         <span className="flex min-w-0 items-center gap-3">
                           <span
-                            className={`
-                              grid h-10 w-10 shrink-0 place-items-center rounded-full
-                              ${
-                                available
-                                  ? "bg-accent-primary/15 text-accent-primary"
-                                  : "bg-bg-muted/70 text-[#c5bea9]"
-                              }
-                            `}
+                            className={`grid h-10 w-10 shrink-0 place-items-center rounded-full ${
+                              available
+                                ? "bg-accent-primary/15 text-accent-primary"
+                                : "bg-bg-muted/70 text-[#c5bea9]"
+                            }`}
                           >
                             <Shop size={18} variant={available ? "Bold" : "Linear"} />
                           </span>
 
-                          <span>
-                            <span className="block font-display text-sm font-bold text-text-primary">
+                          <span className="min-w-0">
+                            <span className="block truncate font-display text-sm font-bold text-text-primary">
                               {location.city}
                             </span>
-                            <span className="mt-0.5 block text-[10px] text-text-muted">
-                              {location.city === "Raipur" ? "Tap to see locations" : "Coming soon"}
+                            <span className="mt-0.5 block truncate text-[10px] text-text-muted">
+                              {location.city === "Raipur"
+                                ? "Tap to see 7 locations"
+                                : available
+                                  ? location.distributor.location
+                                  : "Coming soon"}
                             </span>
                           </span>
                         </span>
 
                         <span
-                          className={`
-                            shrink-0 rounded-full px-3 py-1.5 text-[8px] font-bold uppercase
-                            tracking-[0.18em]
-                            ${
-                              available
-                                ? "bg-[#385f36] text-[#78bd6b]"
-                                : "bg-bg-muted text-text-muted"
-                            }
-                          `}
+                          className={`shrink-0 rounded-full px-3 py-1.5 text-[8px] font-bold uppercase tracking-[0.18em] ${
+                            available
+                              ? "bg-[#385f36] text-[#78bd6b]"
+                              : "bg-bg-muted text-text-muted"
+                          }`}
                         >
                           {getStatusLabel(location.status)}
                         </span>
@@ -398,14 +328,78 @@ export function Stores() {
                   })}
                 </div>
 
-                <p className="mt-5 text-xs leading-6 text-text-muted">
-                  Select Raipur to explore individual stores and restaurants where Old Glory is
-                  currently available.
-                </p>
-              </>
-            )}
+                <motion.div
+                  key={selectedCity}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  aria-live="polite"
+                  className="mt-6 overflow-hidden rounded-[22px] border border-accent-primary/60 bg-bg-base/30 p-5 shadow-lg shadow-accent-primary/10 sm:p-6"
+                >
+                  <div className="flex flex-wrap items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <span className="text-[8px] font-bold uppercase tracking-[0.2em] text-accent-primary">
+                        SELECTED LOCATION
+                      </span>
+                      <h4 className="mt-2 font-display text-xl font-bold text-text-primary">
+                        {selectedLocation.status === "in-stock"
+                          ? selectedLocation.distributor.name
+                          : `Old Glory Soda - ${selectedCity}`}
+                      </h4>
+                    </div>
+                    <span
+                      className={`rounded-full px-3 py-1.5 text-[8px] font-bold uppercase tracking-[0.18em] ${
+                        selectedLocation.status === "in-stock"
+                          ? "bg-[#385f36] text-[#78bd6b]"
+                          : "bg-bg-muted text-text-muted"
+                      }`}
+                    >
+                      {getStatusLabel(selectedLocation.status)}
+                    </span>
+                  </div>
 
-            {mapMode === "raipur" && (
+                  <p className="mt-4 flex items-center gap-2 text-xs text-text-muted">
+                    <Location size={16} className="shrink-0 text-accent-primary" variant="Bold" />
+                    {selectedLocation.status === "in-stock"
+                      ? selectedLocation.distributor.location
+                      : `${selectedCity}, Chhattisgarh`}
+                  </p>
+
+                  {selectedLocation.status === "in-stock" ? (
+                    <a
+                      href={`tel:${selectedLocation.distributor.phone}`}
+                      aria-label={`Call Old Glory Soda in ${selectedCity} at ${selectedLocation.distributor.phone}`}
+                      className="mt-4 flex min-h-12 w-full items-center gap-3 rounded-2xl border border-accent-primary/50 bg-accent-primary/10 px-4 py-3 text-accent-primary transition hover:bg-accent-primary/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary sm:w-fit"
+                    >
+                      <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-accent-primary/20">
+                        <Call size={18} variant="Bold" />
+                      </span>
+                      <span>
+                        <span className="block text-[8px] font-bold uppercase tracking-[0.16em] text-text-muted">
+                          CALL DISTRIBUTOR
+                        </span>
+                        <span className="mt-0.5 block text-base font-semibold tabular-nums">
+                          {formatPhoneNumber(selectedLocation.distributor.phone)}
+                        </span>
+                      </span>
+                    </a>
+                  ) : (
+                    <p className="mt-4 text-xs leading-6 text-text-muted">
+                      Distributor details will be added when Old Glory launches in {selectedCity}.
+                    </p>
+                  )}
+
+                  <a
+                    href={getGoogleMapsUrl(selectedLocation)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-4 inline-flex min-h-11 items-center gap-2 text-[10px] font-semibold text-accent-primary transition hover:gap-3"
+                  >
+                    Open {selectedCity} in Google Maps
+                    <ExportSquare size={14} />
+                  </a>
+                </motion.div>
+              </>
+            ) : (
               <>
                 <div className="flex items-end justify-between gap-4">
                   <div>
@@ -416,7 +410,6 @@ export function Stores() {
                       Find Old Glory nearby.
                     </h3>
                   </div>
-
                   <span className="rounded-full border border-border-theme px-3 py-1.5 text-[9px] text-text-muted">
                     7 locations
                   </span>
@@ -429,7 +422,7 @@ export function Stores() {
                       outlet={outlet}
                       index={index}
                       selected={selectedOutletId === outlet.id}
-                      onSelect={() => selectOutlet(outlet.id)}
+                      onSelect={() => setSelectedOutletId(outlet.id)}
                     />
                   ))}
                 </div>
@@ -439,7 +432,8 @@ export function Stores() {
                   onClick={showAllTowns}
                   className="mt-6 inline-flex items-center gap-2 text-[10px] font-semibold text-accent-primary transition hover:gap-3"
                 >
-                  <ArrowLeft2 size={14} />← All Towns
+                  <ArrowLeft2 size={14} />
+                  All Cities
                 </button>
               </>
             )}

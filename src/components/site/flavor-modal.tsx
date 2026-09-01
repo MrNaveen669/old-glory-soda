@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "motion/react";
-import { useEffect } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { CloseCircle, Location, Star1 } from "iconsax-reactjs";
 import type { Flavor } from "./data";
 import { flavorImage, flavorFullImage } from "./images";
@@ -19,19 +19,46 @@ function splitIngredientNote(raw: string) {
   };
 }
 
+function stopAndResetVideo(video: HTMLVideoElement | null) {
+  if (!video) return;
+
+  video.pause();
+  try {
+    video.currentTime = 0;
+  } catch {
+    // The video's metadata may not have loaded before the modal closes.
+  }
+}
+
 export function FlavorModal({ flavor, onClose }: { flavor: Flavor | null; onClose: () => void }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const handleClose = useCallback(() => {
+    stopAndResetVideo(videoRef.current);
+    onClose();
+  }, [onClose]);
+
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && handleClose();
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [onClose]);
+  }, [handleClose]);
+
+  useEffect(() => {
+    const activeVideo = videoRef.current;
+    return () => stopAndResetVideo(activeVideo);
+  }, [flavor?.id]);
 
   const cutout = flavor ? flavorImage(flavor.id) : undefined;
   const fullScene = flavor ? flavorFullImage(flavor.id) : undefined;
-  const accent = flavor ? `var(--flavor-${flavor.id})` : "var(--accent-primary)";
+  const accent = flavor
+    ? flavor.media
+      ? flavor.color
+      : `var(--flavor-${flavor.id})`
+    : "var(--accent-primary)";
   const ingredientCopy = flavor?.ingredients ? splitIngredientNote(flavor.ingredients) : null;
-  const petVolume =
-    flavor?.packaging === "pet"
+  const petVolume = flavor?.volume
+    ? flavor.volume
+    : flavor?.packaging === "pet"
       ? flavor.price === 10
         ? "160 ML"
         : flavor.price === 20
@@ -47,7 +74,7 @@ export function FlavorModal({ flavor, onClose }: { flavor: Flavor | null; onClos
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          onClick={onClose}
+          onClick={handleClose}
           role="dialog"
           aria-modal="true"
           aria-label={`${flavor.name} details`}
@@ -71,7 +98,7 @@ export function FlavorModal({ flavor, onClose }: { flavor: Flavor | null; onClos
               }}
             />
             <button
-              onClick={onClose}
+              onClick={handleClose}
               aria-label="Close"
               className="absolute top-3 right-3 z-10 grid h-11 w-11 place-items-center rounded-full bg-bg-muted text-text-muted transition-colors hover:bg-accent-primary hover:text-on-accent sm:top-4 sm:right-4"
             >
@@ -81,7 +108,31 @@ export function FlavorModal({ flavor, onClose }: { flavor: Flavor | null; onClos
             <div className="relative grid gap-6 sm:grid-cols-[0.95fr_1.05fr] sm:items-center">
               {/* Image Container displaying Full Scene artwork */}
               <div className="relative mx-auto w-full overflow-hidden rounded-2xl border border-border-theme bg-bg-surface p-2 shadow-inner">
-                {fullScene && flavor.packaging === "glass" && !flavor.comingSoon ? (
+                {flavor.media?.type === "video" ? (
+                  <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl bg-bg-muted/50">
+                    <video
+                      key={flavor.media.src}
+                      ref={videoRef}
+                      src={flavor.media.src}
+                      poster={flavor.media.poster}
+                      aria-label={flavor.media.alt ?? `${flavor.name} product video`}
+                      className="h-full w-full object-cover"
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      preload="metadata"
+                    />
+                  </div>
+                ) : flavor.media?.type === "image" ? (
+                  <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl bg-bg-muted/50">
+                    <img
+                      src={flavor.media.src}
+                      alt={flavor.media.alt ?? `Old Glory ${flavor.name}`}
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
+                ) : fullScene && flavor.packaging === "glass" && !flavor.comingSoon ? (
                   <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl bg-bg-muted/50">
                     <img
                       src={fullScene}
@@ -157,9 +208,7 @@ export function FlavorModal({ flavor, onClose }: { flavor: Flavor | null; onClos
                       </span>
                     )}
                     {flavor.comingSoon && (
-                      <span className="rounded-full border border-accent-secondary/55 bg-accent-secondary/10 px-2.5 py-1 text-[9px] font-semibold tracking-[0.1em] text-accent-secondary uppercase">
-                        Coming Soon
-                      </span>
+                      <span className="rounded-full border border-accent-secondary/55 bg-accent-secondary/10 px-2.5 py-1 text-[9px] font-semibold tracking-[0.1em] text-accent-secondary uppercase"></span>
                     )}
                   </div>
                 )}
@@ -219,7 +268,7 @@ export function FlavorModal({ flavor, onClose }: { flavor: Flavor | null; onClos
                 <button
                   onClick={() => {
                     if (flavor.comingSoon) return;
-                    onClose();
+                    handleClose();
                     scrollToSection("stores");
                   }}
                   disabled={flavor.comingSoon}
