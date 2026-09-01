@@ -347,7 +347,7 @@ export const GALLERY: GalleryItem[] = [
     type: "video",
     src: "/GREEN-APPLE.mp4",
     poster: "/Green-apple-poster.png",
-    caption: "Green apple, freshly popped",
+    caption: "",
   },
 
   // IMAGES
@@ -356,7 +356,7 @@ export const GALLERY: GalleryItem[] = [
     type: "video",
     src: "/Title-video.mp4",
     poster: "/Fruite-beer-poster.png",
-    caption: "Fruit beer, poured ice cold",
+    caption: "",
   },
 
   {
@@ -364,7 +364,7 @@ export const GALLERY: GalleryItem[] = [
     type: "video",
     src: "/ZEERA-Soda..mp4",
     poster: "/Jeera-poster.png",
-    caption: "Roasted zeera in motion",
+    caption: "",
   },
 
   {
@@ -372,7 +372,7 @@ export const GALLERY: GalleryItem[] = [
     type: "video",
     src: "/blueberry-SODA.mp4",
     poster: "/Blueberry-poster.png",
-    caption: "Blueberry fizz in motion",
+    caption: "",
   },
 
   {
@@ -380,7 +380,7 @@ export const GALLERY: GalleryItem[] = [
     type: "video",
     src: "/Zesty-Lemon-Zing-Soda..mp4",
     poster: "/lemon-poster.png",
-    caption: "A bright lemon pour",
+    caption: "",
   },
 
   {
@@ -388,7 +388,7 @@ export const GALLERY: GalleryItem[] = [
     type: "video",
     src: "/ORNGE-SODA.mp4",
     poster: "/Orange-poster.png",
-    caption: "Orange pop, ice cold",
+    caption: "",
   },
 ];
 

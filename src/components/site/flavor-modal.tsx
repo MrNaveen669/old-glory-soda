@@ -33,9 +33,9 @@ export function FlavorModal({ flavor, onClose }: { flavor: Flavor | null; onClos
   const petVolume =
     flavor?.packaging === "pet"
       ? flavor.price === 10
-        ? "200 ML"
+        ? "160 ML"
         : flavor.price === 20
-          ? "400 ML"
+          ? "300 ML"
           : null
       : null;
 
