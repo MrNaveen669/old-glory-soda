@@ -30,6 +30,7 @@ export type NutritionFacts = {
   servingSize: string;
   servingsPerPack: string;
   rows: NutritionRow[];
+  statements?: string[];
 };
 
 export type ProductMediaSource =
@@ -55,7 +56,7 @@ export type Flavor = {
   note: string;
   description: string;
   ingredients: string;
-  nutrition?: NutritionFacts;
+  nutrition: NutritionFacts | null;
   pairs: string[];
   sweetness: string;
   fizz: string;
@@ -262,21 +263,7 @@ export const FLAVORS: FlagshipFlavor[] = [
 export const PET_TIERS = [10, 20] as const;
 export type PetTier = (typeof PET_TIERS)[number];
 
-export const PET_10_NUTRITION: NutritionFacts = {
-  servingSize: "160 ml",
-  servingsPerPack: "1 serving in this Pack",
-  rows: [
-    { label: "Energy (Kcal)", per100ml: "9.16", perServing: "14.66", rda: "0.73" },
-    { label: "Protein (g)", per100ml: "0", perServing: "0", rda: "0" },
-    { label: "Carbohydrate (g)", per100ml: "2.29", perServing: "3.66", rda: "2.82" },
-    { label: "Total Sugar (g)", per100ml: "2.29", perServing: "3.66", rda: "-" },
-    { label: "Added Sugar (g)", per100ml: "2.29", perServing: "3.66", rda: "7.33" },
-    { label: "Fat", per100ml: "0", perServing: "0", rda: "0" },
-    { label: "Sodium(mg)", per100ml: "10.53", perServing: "16.85", rda: "0.84" },
-  ],
-};
-
-export const PET_20_NUTRITION: NutritionFacts = {
+export const ORANGE_20_NUTRITION: NutritionFacts = {
   servingSize: "150 ml",
   servingsPerPack: "2 serving in this Pack",
   rows: [
@@ -290,7 +277,21 @@ export const PET_20_NUTRITION: NutritionFacts = {
   ],
 };
 
-export const SHIKANJI_NUTRITION: NutritionFacts = {
+export const ZEERA_20_NUTRITION: NutritionFacts = {
+  servingSize: "150 ml",
+  servingsPerPack: "2 serving in this Pack",
+  rows: [
+    { label: "Energy (Kcal)", per100ml: "12.76", perServing: "19.14", rda: "0.96" },
+    { label: "Protein (g)", per100ml: "0", perServing: "0", rda: "0" },
+    { label: "Carbohydrate (g)", per100ml: "3.19", perServing: "4.79", rda: "3.68" },
+    { label: "Total Sugar (g)", per100ml: "3.19", perServing: "4.79", rda: "-" },
+    { label: "Added Sugar (g)", per100ml: "3.19", perServing: "4.79", rda: "9.58" },
+    { label: "Fat", per100ml: "0", perServing: "0", rda: "0" },
+    { label: "Sodium(mg)", per100ml: "148.43", perServing: "222.65", rda: "11.13" },
+  ],
+};
+
+export const SHIKANJI_10_NUTRITION: NutritionFacts = {
   servingSize: "160 ml",
   servingsPerPack: "1 serving in this Pack",
   rows: [
@@ -304,7 +305,70 @@ export const SHIKANJI_NUTRITION: NutritionFacts = {
   ],
 };
 
-const petFrom = (id: FlavorId, price: PetTier): Flavor => {
+export const ORANGE_10_NUTRITION: NutritionFacts = {
+  servingSize: "160 ml",
+  servingsPerPack: "1 serving in this Pack",
+  rows: [
+    { label: "Energy (Kcal)", per100ml: "9.16", perServing: "14.66", rda: "0.73" },
+    { label: "Protein (g)", per100ml: "0", perServing: "0", rda: "0" },
+    { label: "Carbohydrate (g)", per100ml: "2.29", perServing: "3.66", rda: "2.82" },
+    { label: "Total Sugar (g)", per100ml: "2.29", perServing: "3.66", rda: "-" },
+    { label: "Added Sugar (g)", per100ml: "2.29", perServing: "3.66", rda: "7.33" },
+    { label: "Fat", per100ml: "0", perServing: "0", rda: "0" },
+    { label: "Sodium(mg)", per100ml: "10.53", perServing: "16.85", rda: "0.84" },
+  ],
+};
+
+export const ZEERA_10_NUTRITION: NutritionFacts = {
+  servingSize: "160 ml",
+  servingsPerPack: "1 serving in this Pack",
+  rows: [
+    { label: "Energy (Kcal)", per100ml: "12.76", perServing: "20.42", rda: "1.02" },
+    { label: "Protein (g)", per100ml: "0", perServing: "0", rda: "0" },
+    { label: "Carbohydrate (g)", per100ml: "3.19", perServing: "5.10", rda: "3.92" },
+    { label: "Total Sugar (g)", per100ml: "3.19", perServing: "5.10", rda: "-" },
+    { label: "Added Sugar (g)", per100ml: "3.19", perServing: "5.10", rda: "10.21" },
+    { label: "Fat", per100ml: "0", perServing: "0", rda: "0" },
+    { label: "Sodium(mg)", per100ml: "148.43", perServing: "237.45", rda: "11.87" },
+  ],
+};
+
+export const COLA_NUTRITION: NutritionFacts = {
+  servingSize: "300 ml",
+  servingsPerPack: "1 serving in this pack",
+  rows: [
+    { label: "Energy [Kcal]", per100ml: "<2", perServing: "<6", rda: "<0.3" },
+    { label: "Protein [g]", per100ml: "0", perServing: "0", rda: "0" },
+    { label: "Carbohydrate [g]", per100ml: "0", perServing: "0", rda: "-" },
+    { label: "Total Sugar [g]", per100ml: "0", perServing: "0", rda: "-" },
+    { label: "Added Sugar [g]", per100ml: "0", perServing: "0", rda: "0" },
+    { label: "Fat", per100ml: "0", perServing: "0", rda: "0" },
+    { label: "Sodium [mg]", per100ml: "60.35", perServing: "181.05", rda: "9.05" },
+  ],
+  statements: ["CONTAINS CAFFEINE", "CONTAINS PLANT BASED SWEETENER"],
+};
+
+export const DIET_COLA_NUTRITION: NutritionFacts = {
+  servingSize: "300 ml",
+  servingsPerPack: "1 serving in this pack",
+  rows: [
+    { label: "Energy [Kcal]", per100ml: "0", perServing: "0", rda: "0" },
+    { label: "Protein [g]", per100ml: "0", perServing: "0", rda: "0" },
+    { label: "Carbohydrate [g]", per100ml: "0", perServing: "0", rda: "-" },
+    { label: "Total Sugar [g]", per100ml: "0", perServing: "0", rda: "-" },
+    { label: "Added Sugar [g]", per100ml: "0", perServing: "0", rda: "0" },
+    { label: "Fat", per100ml: "0", perServing: "0", rda: "0" },
+    { label: "Sodium [mg]", per100ml: "60.35", perServing: "181.05", rda: "9.05" },
+  ],
+  statements: ["CONTAINS CAFFEINE", "CONTAIN NON - CALORIC SWEETENERS"],
+};
+
+type PetProductOptions = {
+  price: PetTier;
+  nutrition: NutritionFacts | null;
+};
+
+const petFrom = (id: FlavorId, { price, nutrition }: PetProductOptions): Flavor => {
   const base = FLAVORS.find((f) => f.id === id)!;
   const volume = price === 10 ? "160ml On-The-Go" : "300ml Value Pack";
   return {
@@ -313,15 +377,15 @@ const petFrom = (id: FlavorId, price: PetTier): Flavor => {
     packaging: "pet",
     lowCalorie: true,
     price,
-    nutrition: price === 10 ? PET_10_NUTRITION : PET_20_NUTRITION,
+    nutrition,
     note: `PET bottle (${volume}) · ₹${price}`,
   };
 };
 
 export const PET_RANGE: Record<PetTier, Flavor[]> = {
   10: [
-    petFrom("zeera-soda", 10),
-    petFrom("citrus-orange", 10),
+    petFrom("zeera-soda", { price: 10, nutrition: ZEERA_10_NUTRITION }),
+    petFrom("citrus-orange", { price: 10, nutrition: ORANGE_10_NUTRITION }),
     {
       id: "shikanji-pet-10",
       name: "Shikanji",
@@ -339,10 +403,13 @@ export const PET_RANGE: Record<PetTier, Flavor[]> = {
       lowCalorie: true,
       comingSoon: true,
       price: 10,
-      nutrition: SHIKANJI_NUTRITION,
+      nutrition: SHIKANJI_10_NUTRITION,
     },
   ],
-  20: [petFrom("zeera-soda", 20), petFrom("citrus-orange", 20)],
+  20: [
+    petFrom("zeera-soda", { price: 20, nutrition: ZEERA_20_NUTRITION }),
+    petFrom("citrus-orange", { price: 20, nutrition: ORANGE_20_NUTRITION }),
+  ],
 };
 
 export const COLA_PRODUCTS: Flavor[] = [
@@ -364,7 +431,8 @@ export const COLA_PRODUCTS: Flavor[] = [
     packaging: "pet",
     lowCalorie: true,
     price: 20,
-    volume: "160ml",
+    volume: "300ml",
+    nutrition: DIET_COLA_NUTRITION,
     media: {
       type: "video",
       src: "/Deit cola.mp4",
@@ -388,7 +456,8 @@ export const COLA_PRODUCTS: Flavor[] = [
     fizz: "High",
     packaging: "pet",
     price: 20,
-    volume: "160ml",
+    volume: "300ml",
+    nutrition: COLA_NUTRITION,
     media: {
       type: "video",
       src: "/cola.mp4",
