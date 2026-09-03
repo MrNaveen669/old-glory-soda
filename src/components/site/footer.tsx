@@ -112,12 +112,30 @@ export function Footer() {
               Connect
             </p>
             <p className="mt-4 text-sm text-on-accent/80">
-              Inquiries:{" "}
+              Inquiries: {" "}
               <a
                 href={`mailto:${BRAND.email}`}
-                className="inline-flex min-h-11 max-w-full items-center break-all underline hover:text-on-accent"
+                className="inline-flex min-h-11 items-center break-all underline hover:text-on-accent"
               >
-                {BRAND.email}, Phone : +91 94076 26212
+                {BRAND.email}
+              </a>
+              <span className="mx-2 text-on-accent/60">|</span>
+              <a
+                href="tel:+919407626212"
+                className="inline-flex min-h-11 items-center underline hover:text-on-accent"
+                aria-label="Call +91 94076 26212"
+              >
+                Phone: +91 94076 26212
+              </a>
+              <span className="mx-2 text-on-accent/60">|</span>
+              <a
+                href="https://wa.me/917509434343"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex min-h-11 items-center underline hover:text-on-accent"
+                aria-label="WhatsApp +91 75094 34343"
+              >
+                WhatsApp: +91 75094 34343
               </a>
             </p>
             <div className="mt-5 flex items-center gap-3">
