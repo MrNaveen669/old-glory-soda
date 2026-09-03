@@ -1,6 +1,6 @@
 import { motion } from "motion/react";
 import { Facebook, Instagram, Youtube } from "iconsax-reactjs";
-import { BRAND, FLAVORS, NAV_LINKS, SOCIALS } from "./data";
+import { BRAND, NAV_LINKS, SOCIALS } from "./data";
 import { VINTAGE_ILLUSTRATIONS } from "./images";
 import { OldGloryLogo } from "./logo";
 import { scrollToSection } from "./use-lenis";
@@ -11,9 +11,19 @@ const SOCIAL_ICONS: Record<string, typeof Instagram> = {
   youtube: Youtube,
 };
 
+const PRODUCT_RANGES = [
+  { label: "₹30/- PREMIUM RANGE", href: "#premium-30" },
+  { label: "₹20/- PREMIUM RANGE", href: "#premium-20" },
+  { label: "₹20/- RANGE", href: "#range-20" },
+  { label: "₹10/- RANGE", href: "#range-10" },
+] as const;
+
 export function Footer() {
   return (
-    <footer className="relative overflow-hidden bg-footer-bg text-on-accent pt-16 pb-12 border-t-2 border-border-theme/20">
+    <footer
+      id="contact"
+      className="relative overflow-hidden bg-footer-bg text-on-accent pt-16 pb-12 border-t-2 border-border-theme/20"
+    >
       {/* Background Illustrated Corner Shop Scene / Crates Watermark */}
       <div className="pointer-events-none absolute inset-0 opacity-15 overflow-hidden">
         <img
@@ -29,13 +39,14 @@ export function Footer() {
         <div className="mb-12 flex flex-col gap-6 rounded-3xl border border-on-accent/20 bg-footer-surface/80 p-6 backdrop-blur-sm sm:p-10 md:flex-row md:items-center md:justify-between">
           <div>
             <span className="text-xs font-bold tracking-widest text-accent-gold uppercase">
-               TRADITIONAL KIRANA COUNTERS
+              TRADITIONAL KIRANA COUNTERS
             </span>
             <h2 className="mt-2 font-display text-3xl font-bold uppercase tracking-[0.015em] text-on-accent sm:text-4xl">
               FOUND AT THE CORNER SHOP
             </h2>
             <p className="mt-2 max-w-xl text-xs sm:text-sm text-on-accent/80">
-              Look for the wooden crates and chilled marble bottles at your neighborhood store. Made for every season of India.
+              Look for the wooden crates and chilled marble bottles at your neighborhood store. Made
+              for every season of India.
             </p>
           </div>
 
@@ -48,9 +59,7 @@ export function Footer() {
               <p className="font-display text-xs font-bold uppercase tracking-wider text-on-accent">
                 Made in India
               </p>
-              <p className="text-[10px] text-on-accent/70 uppercase tracking-widest">
-                 Raipur, CG
-              </p>
+              <p className="text-[10px] text-on-accent/70 uppercase tracking-widest">Raipur, CG</p>
             </div>
           </div>
         </div>
@@ -61,11 +70,10 @@ export function Footer() {
           <div>
             <OldGloryLogo className="h-12 w-auto text-on-accent" />
             <p className="mt-4 text-sm leading-relaxed text-on-accent/75">
-              {BRAND.tagline}. The original marble-neck codd soda bottled fresh in six signature profiles.
+              {BRAND.tagline}. The original marble-neck codd soda bottled fresh in six signature
+              profiles.
             </p>
-            <p className="mt-3 text-[11px] text-accent-gold">
-              {BRAND.address}
-            </p>
+            <p className="mt-3 text-[11px] text-accent-gold">{BRAND.address}</p>
           </div>
 
           {/* Col 2: Navigation Links */}
@@ -87,20 +95,20 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Col 3: Flavours Lineup */}
+          {/* Col 3: Product Ranges */}
           <div>
             <p className="font-display text-xs font-bold uppercase tracking-widest text-accent-gold">
-              Six Flavours
+              FOUR CATEGORIES
             </p>
             <ul className="mt-4 space-y-2.5">
-              {FLAVORS.map((f) => (
-                <li key={f.id}>
-                  <button
-                    onClick={() => scrollToSection("flavors")}
+              {PRODUCT_RANGES.map((range) => (
+                <li key={range.href}>
+                  <a
+                    href={range.href}
                     className="inline-flex min-h-11 min-w-11 items-center text-sm text-on-accent/80 transition-colors hover:text-on-accent"
                   >
-                    {f.name}
-                  </button>
+                    {range.label}
+                  </a>
                 </li>
               ))}
             </ul>
@@ -111,33 +119,37 @@ export function Footer() {
             <p className="font-display text-xs font-bold uppercase tracking-widest text-accent-gold">
               Connect
             </p>
-            <p className="mt-4 text-sm text-on-accent/80">
-              Inquiries: {" "}
-              <a
-                href={`mailto:${BRAND.email}`}
-                className="inline-flex min-h-11 items-center break-all underline hover:text-on-accent"
-              >
-                {BRAND.email}
-              </a>
-              <span className="mx-2 text-on-accent/60">|</span>
-              <a
-                href="tel:+919407626212"
-                className="inline-flex min-h-11 items-center underline hover:text-on-accent"
-                aria-label="Call +91 94076 26212"
-              >
-                Phone: +91 94076 26212
-              </a>
-              <span className="mx-2 text-on-accent/60">|</span>
-              <a
-                href="https://wa.me/917509434343"
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex min-h-11 items-center underline hover:text-on-accent"
-                aria-label="WhatsApp +91 75094 34343"
-              >
-                WhatsApp: +91 75094 34343
-              </a>
-            </p>
+            <ul className="mt-4 space-y-2.5 text-sm text-on-accent/80">
+              <li>
+                <a
+                  href="tel:+919407626212"
+                  className="inline-flex min-h-11 items-center underline transition-colors hover:text-on-accent"
+                >
+                  CALL : 94076-26212
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://wa.me/917509434343"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex min-h-11 items-center underline transition-colors hover:text-on-accent"
+                >
+                  WHATSAPP : 75094-34343
+                </a>
+              </li>
+              <li>
+                <a
+                  href="mailto:kajalbeverageindustry@gmail.com"
+                  className="inline-flex min-h-11 items-center break-all underline transition-colors hover:text-on-accent"
+                >
+                  MAIL : KAJALBEVERAGEINDUSTRY@GMAIL.COM
+                </a>
+              </li>
+              <li className="leading-relaxed">
+                ADDRESS : Near HP Gas Agency, Mana Basti, Raipur CG-492015
+              </li>
+            </ul>
             <div className="mt-5 flex items-center gap-3">
               {SOCIALS.map((s) => {
                 const Icon = SOCIAL_ICONS[s.icon] ?? Instagram;
@@ -161,7 +173,9 @@ export function Footer() {
 
         {/* Bottom Rights & Back to Top */}
         <div className="mt-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 text-xs text-on-accent/60">
-          <p>© {new Date().getFullYear()} {BRAND.name}. All rights reserved. Made in India.</p>
+          <p>
+            © {new Date().getFullYear()} {BRAND.name}. All rights reserved. Made in India.
+          </p>
           <button
             onClick={() => scrollToSection("hero")}
             className="inline-flex min-h-11 items-center text-xs font-bold tracking-wider text-accent-gold uppercase hover:underline"

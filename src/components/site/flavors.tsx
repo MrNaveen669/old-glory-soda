@@ -15,7 +15,7 @@ const FLAVOR_TAGLINES: Record<string, string> = {
 export function Flavors({ onSelectFlavor }: { onSelectFlavor: (flavor: Flavor) => void }) {
   return (
     <Section id="flavors" className="bg-bg-base py-16 sm:py-20">
-      <div className="mx-auto max-w-7xl">
+      <div id="premium-30" className="mx-auto max-w-7xl scroll-mt-24">
         {/* Header Row with Stevia Badge */}
         <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <div>

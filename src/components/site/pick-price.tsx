@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PET_RANGE, type Flavor, type PetTier } from "./data";
 import { flavorImage } from "./images";
 import { Section } from "./primitives";
@@ -64,6 +64,33 @@ function PetFlavorCard({
 export function PickYourPrice({ onSelectFlavor }: { onSelectFlavor: (flavor: Flavor) => void }) {
   const [activeTier, setActiveTier] = useState<10 | 20>(10);
 
+  useEffect(() => {
+    const syncTierFromHash = () => {
+      const tier =
+        window.location.hash === "#range-20"
+          ? 20
+          : window.location.hash === "#range-10"
+            ? 10
+            : null;
+      if (!tier) return;
+
+      setActiveTier(tier);
+
+      // On smaller screens the inactive tier is hidden. Wait until React reveals
+      // the requested panel before applying the browser's deep-link scroll.
+      window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(() => {
+          document.getElementById(`range-${tier}`)?.scrollIntoView({ block: "start" });
+        });
+      });
+    };
+
+    syncTierFromHash();
+    window.addEventListener("hashchange", syncTierFromHash);
+
+    return () => window.removeEventListener("hashchange", syncTierFromHash);
+  }, []);
+
   return (
     <Section id="pricing" className="!p-0 overflow-hidden">
       <div className="border-y border-border-theme bg-bg-base px-5 py-4 lg:hidden">
@@ -90,13 +117,14 @@ export function PickYourPrice({ onSelectFlavor }: { onSelectFlavor: (flavor: Fla
       <div className="grid w-full grid-cols-1 lg:grid-cols-2">
         {/* Right Half: ₹20 Pack */}
         <motion.div
+          id="range-20"
           initial={{ opacity: 0, x: 30 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7 }}
           className={`${
             activeTier === 20 ? "flex" : "hidden"
-          } relative flex-col justify-between bg-price-secondary p-6 text-on-accent sm:p-12 md:p-16 lg:flex`}
+          } relative scroll-mt-24 flex-col justify-between bg-price-secondary p-6 text-on-accent sm:p-12 md:p-16 lg:flex`}
         >
           {/* Background fizz grid watermark */}
           <div className="pointer-events-none absolute inset-0 opacity-10 fizz-grid" />
@@ -155,13 +183,14 @@ export function PickYourPrice({ onSelectFlavor }: { onSelectFlavor: (flavor: Fla
 
         {/* Left Half: ₹10 Pack */}
         <motion.div
+          id="range-10"
           initial={{ opacity: 0, x: -30 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7 }}
           className={`${
             activeTier === 10 ? "flex" : "hidden"
-          } relative flex-col justify-between bg-accent-primary p-6 text-on-accent sm:p-12 md:p-16 lg:flex`}
+          } relative scroll-mt-24 flex-col justify-between bg-accent-primary p-6 text-on-accent sm:p-12 md:p-16 lg:flex`}
         >
           {/* Background fizz grid watermark */}
           <div className="pointer-events-none absolute inset-0 opacity-10 fizz-grid" />

@@ -78,7 +78,7 @@ function ColaCard({
 
         {product.lowCalorie && (
           <span className="absolute top-4 left-4 rounded-full border border-accent-primary/60 bg-bg-base/90 px-3 py-1.5 text-[10px] font-semibold tracking-widest text-accent-primary uppercase shadow-lg backdrop-blur-sm">
-            Low Calorie
+            Zero Calorie
           </span>
         )}
       </span>
@@ -106,7 +106,7 @@ function ColaCard({
 export function ColaSection({ onSelectProduct }: { onSelectProduct: (product: Flavor) => void }) {
   return (
     <Section id="cola" className="overflow-hidden bg-bg-base py-16 sm:py-20">
-      <div className="mx-auto max-w-7xl">
+      <div id="premium-20" className="mx-auto max-w-7xl scroll-mt-24">
         <div className="max-w-2xl">
           <span className="text-xs font-bold tracking-widest text-accent-primary uppercase">
             New · 160ml PET Cola Range

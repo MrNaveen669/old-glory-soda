@@ -141,8 +141,7 @@ export const FLAVORS: FlagshipFlavor[] = [
     color: "#F97316",
     tint: "#FFC08A",
     note: "Sun citrus · bright orange",
-    description:
-      "",
+    description: "",
     ingredients:
       "Carbonated Water, Sugar, Acidity Regulators (330, 331), Stabilizers (414, 445), Sweetener (960), Preservative (211), Colours (110, 122), Natural & Nature Identical Orange flavour",
     nutrition: {
@@ -172,8 +171,7 @@ export const FLAVORS: FlagshipFlavor[] = [
     color: "#E4405F",
     tint: "#FF9AAC",
     note: "Mixed berry · zero alcohol",
-    description:
-      "",
+    description: "",
     ingredients:
       "Carbonated Water, Sugar, Acidity Regulators (330, 331), Sweetener (960), Preservative (211), Colour (150d), Natural & Nature Identical Fruit Beer flavour",
     nutrition: {
@@ -203,8 +201,7 @@ export const FLAVORS: FlagshipFlavor[] = [
     color: "#FDE74C",
     tint: "#FFF6A8",
     note: "Nimboo masala · bright yellow",
-    description:
-      "",
+    description: "",
     ingredients:
       "Carbonated Water, Sugar, Salt, Acidity Regulators, Stabilizers, Sweetener, Preservative, Natural & Nature Identical Nimboo Masala flavour",
     nutrition: {
@@ -234,8 +231,7 @@ export const FLAVORS: FlagshipFlavor[] = [
     color: "#B5651D",
     tint: "#E0A76A",
     note: "Roasted zeera · heritage amber",
-    description:
-      "",
+    description: "",
     ingredients:
       "Carbonated Water, Sugar, Acidity Regulators (330, 331), Stabilizers (414, 445), Sweetener (960), Preservative (211), Colour (150d), Natural & Nature Identical Zeera Masala flavour",
     nutrition: {
@@ -420,7 +416,7 @@ export const COLA_PRODUCTS: Flavor[] = [
     short: "Diet Cola",
     color: "#3DB8FF",
     tint: "#A9E2FF",
-    note: "Low calorie cola · crisp finish",
+    note: "Zero calorie cola · crisp finish",
     description:
       "A lighter take on the classic cola pour, balancing familiar spice and caramel notes with a clean, refreshing finish.",
     ingredients:
@@ -578,7 +574,7 @@ export type StoreCity =
 type StoreDistributor = {
   name: string;
   location: string;
-  phone: string;
+  phone?: string;
 };
 
 export type StoreLocation =
@@ -600,7 +596,6 @@ export const STORE_LOCATIONS: StoreLocation[] = [
     distributor: {
       name: "Old Glory Soda - Dhamtari",
       location: "Dhamtari, Chhattisgarh",
-      phone: "9827902843",
     },
   },
   {
@@ -609,7 +604,6 @@ export const STORE_LOCATIONS: StoreLocation[] = [
     distributor: {
       name: "Old Glory Soda - Nagari",
       location: "Nagari, Chhattisgarh",
-      phone: "9827902843",
     },
   },
   {
@@ -618,7 +612,6 @@ export const STORE_LOCATIONS: StoreLocation[] = [
     distributor: {
       name: "Old Glory Soda - Keshkal",
       location: "Keshkal, Chhattisgarh",
-      phone: "7389509007",
     },
   },
   {
@@ -627,7 +620,6 @@ export const STORE_LOCATIONS: StoreLocation[] = [
     distributor: {
       name: "Old Glory Soda - Kondagaon",
       location: "Kondagaon, Chhattisgarh",
-      phone: "7000851309",
     },
   },
   {
@@ -636,7 +628,6 @@ export const STORE_LOCATIONS: StoreLocation[] = [
     distributor: {
       name: "Old Glory Soda - Jagdalpur",
       location: "Jagdalpur, Chhattisgarh",
-      phone: "9425261364",
     },
   },
   {

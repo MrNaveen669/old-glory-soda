@@ -50,9 +50,9 @@ function CityPopup({ location }: { location: CityLocation }) {
             : `${location.city}, Chhattisgarh`}
         </p>
 
-        {location.status === "in-stock" && (
+        {location.status === "in-stock" && location.distributor.phone ? (
           <a
-            href={`tel:${location.distributor.phone}`}
+            href={`tel:+91${location.distributor.phone}`}
             style={{
               display: "block",
               marginTop: "9px",
@@ -64,7 +64,21 @@ function CityPopup({ location }: { location: CityLocation }) {
           >
             ☎ {formatPhoneNumber(location.distributor.phone)}
           </a>
-        )}
+        ) : location.status === "in-stock" ? (
+          <a
+            href="#contact"
+            style={{
+              display: "block",
+              marginTop: "9px",
+              color: "#267fb4",
+              fontSize: "11px",
+              fontWeight: 700,
+              textDecoration: "none",
+            }}
+          >
+            Contact Us
+          </a>
+        ) : null}
 
         <a
           href={getGoogleMapsUrl(location)}

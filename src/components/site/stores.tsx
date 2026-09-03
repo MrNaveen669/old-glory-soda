@@ -105,6 +105,8 @@ export function Stores() {
   const [selectedOutletId, setSelectedOutletId] = useState<string | null>(null);
   const markerRefs = useRef<Record<string, LeafletCircleMarker | null>>({});
   const selectedLocation = CITY_LOCATIONS.find((location) => location.city === selectedCity)!;
+  const selectedPhone =
+    selectedLocation.status === "in-stock" ? selectedLocation.distributor.phone : undefined;
 
   const selectCity = (location: CityLocation) => {
     setSelectedCity(location.city);
@@ -178,17 +180,27 @@ export function Stores() {
                 </motion.a>
               )}
 
-              {selectedLocation.status === "in-stock" && (
+              {selectedPhone ? (
                 <motion.a
-                  href={`tel:${selectedLocation.distributor.phone}`}
+                  href={`tel:+91${selectedPhone}`}
                   whileHover={{ y: -2 }}
                   whileTap={{ scale: 0.97 }}
                   className="inline-flex min-h-11 items-center gap-2 rounded-full border border-border-theme px-5 py-2.5 text-[11px] font-semibold text-text-primary transition hover:bg-bg-muted/30"
                 >
                   <Call size={16} />
-                  Call {selectedCity}
+                  Call {formatPhoneNumber(selectedPhone)}
                 </motion.a>
-              )}
+              ) : selectedLocation.status === "in-stock" ? (
+                <motion.a
+                  href="#contact"
+                  whileHover={{ y: -2 }}
+                  whileTap={{ scale: 0.97 }}
+                  className="inline-flex min-h-11 items-center gap-2 rounded-full border border-border-theme px-5 py-2.5 text-[11px] font-semibold text-text-primary transition hover:bg-bg-muted/30"
+                >
+                  <Call size={16} />
+                  Contact Us
+                </motion.a>
+              ) : null}
             </div>
 
             <motion.div
@@ -364,10 +376,10 @@ export function Stores() {
                       : `${selectedCity}, Chhattisgarh`}
                   </p>
 
-                  {selectedLocation.status === "in-stock" ? (
+                  {selectedPhone ? (
                     <a
-                      href={`tel:${selectedLocation.distributor.phone}`}
-                      aria-label={`Call Old Glory Soda in ${selectedCity} at ${selectedLocation.distributor.phone}`}
+                      href={`tel:+91${selectedPhone}`}
+                      aria-label={`Call Old Glory Soda in ${selectedCity} at ${formatPhoneNumber(selectedPhone)}`}
                       className="mt-4 flex min-h-12 w-full items-center gap-3 rounded-2xl border border-accent-primary/50 bg-accent-primary/10 px-4 py-3 text-accent-primary transition hover:bg-accent-primary/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary sm:w-fit"
                     >
                       <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-accent-primary/20">
@@ -378,8 +390,23 @@ export function Stores() {
                           CALL DISTRIBUTOR
                         </span>
                         <span className="mt-0.5 block text-base font-semibold tabular-nums">
-                          {formatPhoneNumber(selectedLocation.distributor.phone)}
+                          {formatPhoneNumber(selectedPhone)}
                         </span>
+                      </span>
+                    </a>
+                  ) : selectedLocation.status === "in-stock" ? (
+                    <a
+                      href="#contact"
+                      className="mt-4 flex min-h-12 w-full items-center gap-3 rounded-2xl border border-accent-primary/50 bg-accent-primary/10 px-4 py-3 text-accent-primary transition hover:bg-accent-primary/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary sm:w-fit"
+                    >
+                      <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-accent-primary/20">
+                        <Call size={18} variant="Bold" />
+                      </span>
+                      <span>
+                        <span className="block text-[8px] font-bold uppercase tracking-[0.16em] text-text-muted">
+                          NEED HELP FINDING A STORE?
+                        </span>
+                        <span className="mt-0.5 block text-base font-semibold">Contact Us</span>
                       </span>
                     </a>
                   ) : (
