@@ -142,7 +142,7 @@ export const FLAVORS: FlagshipFlavor[] = [
     tint: "#FFC08A",
     note: "Sun citrus · bright orange",
     description:
-      "orange character with a whisper of peel oil. Sunshine in a codd-neck bottle, from the first goli pop to the last sip.",
+      "",
     ingredients:
       "Carbonated Water, Sugar, Acidity Regulators (330, 331), Stabilizers (414, 445), Sweetener (960), Preservative (211), Colours (110, 122), Natural & Nature Identical Orange flavour",
     nutrition: {
@@ -173,7 +173,7 @@ export const FLAVORS: FlagshipFlavor[] = [
     tint: "#FF9AAC",
     note: "Mixed berry · zero alcohol",
     description:
-      "The nostalgic non-alcoholic fruit beer, done properly. Layered berry, a malt-like depth and a rounded, grown-up finish.",
+      "",
     ingredients:
       "Carbonated Water, Sugar, Acidity Regulators (330, 331), Sweetener (960), Preservative (211), Colour (150d), Natural & Nature Identical Fruit Beer flavour",
     nutrition: {
@@ -204,7 +204,7 @@ export const FLAVORS: FlagshipFlavor[] = [
     tint: "#FFF6A8",
     note: "Nimboo masala · bright yellow",
     description:
-      "The classic nimbu soda reborn. Fresh lemon, a pinch of rock salt and a fizz sharp enough to reset a whole afternoon.",
+      "",
     ingredients:
       "Carbonated Water, Sugar, Salt, Acidity Regulators, Stabilizers, Sweetener, Preservative, Natural & Nature Identical Nimboo Masala flavour",
     nutrition: {
@@ -235,7 +235,7 @@ export const FLAVORS: FlagshipFlavor[] = [
     tint: "#E0A76A",
     note: "Roasted zeera · heritage amber",
     description:
-      "Roasted zeera, black salt and a slow warm spice trail. The digestive classic our grandfathers ordered, kept exactly as it should be.",
+      "",
     ingredients:
       "Carbonated Water, Sugar, Acidity Regulators (330, 331), Stabilizers (414, 445), Sweetener (960), Preservative (211), Colour (150d), Natural & Nature Identical Zeera Masala flavour",
     nutrition: {
@@ -394,7 +394,7 @@ export const PET_RANGE: Record<PetTier, Flavor[]> = {
       color: "#C4CBD4",
       tint: "#E4E9EE",
       note: "PET bottle (160ml) · ₹10",
-      description: "Traditional citrus spiced lemonade soda. Rolling out in our 160ml PET range.",
+      description: "",
       ingredients: "Carbonated Water, Lemon Extract, Spices, Sweetener (960), Preservative (211)",
       pairs: ["Summer afternoons", "Street snacks"],
       sweetness: "Low",
