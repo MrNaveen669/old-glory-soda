@@ -117,7 +117,7 @@ export function Footer() {
                 href={`mailto:${BRAND.email}`}
                 className="inline-flex min-h-11 max-w-full items-center break-all underline hover:text-on-accent"
               >
-                {BRAND.email}
+                {BRAND.email}, Phone : +91 94076 26212
               </a>
             </p>
             <div className="mt-5 flex items-center gap-3">
