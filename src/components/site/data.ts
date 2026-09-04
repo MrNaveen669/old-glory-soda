@@ -569,7 +569,7 @@ export const GALLERY: GalleryItem[] = [
 ];
 
 export type StoreCity =
-  "Dhamtari" | "Nagari" | "Keshkal" | "Kondagaon" | "Jagdalpur" | "Raipur" | "Balod" | "Dalli";
+  "Raipur"|"Dhamtari" | "Nagari" | "Keshkal" | "Kondagaon" | "Jagdalpur"   | "Balod" | "Dalli";
 
 type StoreDistributor = {
   name: string;
@@ -590,47 +590,7 @@ export type StoreLocation =
     };
 
 export const STORE_LOCATIONS: StoreLocation[] = [
-  {
-    city: "Dhamtari",
-    status: "in-stock",
-    distributor: {
-      name: "Old Glory Soda - Dhamtari",
-      location: "Dhamtari, Chhattisgarh",
-    },
-  },
-  {
-    city: "Nagari",
-    status: "in-stock",
-    distributor: {
-      name: "Old Glory Soda - Nagari",
-      location: "Nagari, Chhattisgarh",
-    },
-  },
-  {
-    city: "Keshkal",
-    status: "in-stock",
-    distributor: {
-      name: "Old Glory Soda - Keshkal",
-      location: "Keshkal, Chhattisgarh",
-    },
-  },
-  {
-    city: "Kondagaon",
-    status: "in-stock",
-    distributor: {
-      name: "Old Glory Soda - Kondagaon",
-      location: "Kondagaon, Chhattisgarh",
-    },
-  },
-  {
-    city: "Jagdalpur",
-    status: "in-stock",
-    distributor: {
-      name: "Old Glory Soda - Jagdalpur",
-      location: "Jagdalpur, Chhattisgarh",
-    },
-  },
-  {
+   {
     city: "Raipur",
     status: "in-stock",
     distributor: {
@@ -639,6 +599,47 @@ export const STORE_LOCATIONS: StoreLocation[] = [
       phone: "9407626212",
     },
   },
+  {
+    city: "Dhamtari",
+    status: "in-stock",
+    distributor: {
+      name: "Old Glory Soda - Dhamtari",
+      location: "Kanhaiya Agency, New Bus Stand",
+    },
+  },
+  {
+    city: "Nagari",
+    status: "in-stock",
+    distributor: {
+      name: "Old Glory Soda - Nagari",
+      location: "Kanhaiya Agency",
+    },
+  },
+  {
+    city: "Keshkal",
+    status: "in-stock",
+    distributor: {
+      name: "Old Glory Soda - Keshkal",
+      location: "Frhaan Traders",
+    },
+  },
+  {
+    city: "Kondagaon",
+    status: "in-stock",
+    distributor: {
+      name: "Old Glory Soda - Kondagaon",
+      location: "Lahoti Traders",
+    },
+  },
+  {
+    city: "Jagdalpur",
+    status: "in-stock",
+    distributor: {
+      name: "Old Glory Soda - Jagdalpur",
+      location: "Kriti Sales, Gurudwara Road, Moti Talab Para",
+    },
+  },
+ 
   { city: "Balod", status: "coming-soon" },
   { city: "Dalli", status: "coming-soon" },
 ];

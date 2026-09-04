@@ -115,7 +115,7 @@ export function Footer() {
           </div>
 
           {/* Col 4: Socials & Contact */}
-          <div>
+          <div id="contact-details">
             <p className="font-display text-xs font-bold uppercase tracking-widest text-accent-gold">
               Connect
             </p>

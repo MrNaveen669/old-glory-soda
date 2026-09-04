@@ -27,7 +27,7 @@ export type MappedOutlet = {
 };
 
 const CITY_COORDINATES: Record<CityName, MapPosition> = {
-  Dhamtari: [20.7015, 81.554158],
+  Dhamtari: [20.718340, 81.549901],
   Nagari: [20.34646, 81.95998],
   Keshkal: [20.08266, 81.5876],
   Kondagaon: [19.59515, 81.66747],
