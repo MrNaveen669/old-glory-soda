@@ -47,7 +47,8 @@ export const CITY_LOCATIONS: readonly CityLocation[] = STORE_LOCATIONS.map((loca
   };
 });
 
-export const DEFAULT_CITY: CityName = "Dhamtari";
+// Default city changed to Raipur so the Where to Buy section shows Raipur first on load
+export const DEFAULT_CITY: CityName = "Raipur";
 
 export const RAIPUR_OUTLETS: readonly RaipurOutlet[] = [
   {
