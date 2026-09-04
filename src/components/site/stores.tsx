@@ -192,7 +192,7 @@ export function Stores() {
                 </motion.a>
               ) : selectedLocation.status === "in-stock" ? (
                 <motion.a
-                  href="#contact"
+                  href="#contact-details"
                   whileHover={{ y: -2 }}
                   whileTap={{ scale: 0.97 }}
                   className="inline-flex min-h-11 items-center gap-2 rounded-full border border-border-theme px-5 py-2.5 text-[11px] font-semibold text-text-primary transition hover:bg-bg-muted/30"
@@ -396,7 +396,7 @@ export function Stores() {
                     </a>
                   ) : selectedLocation.status === "in-stock" ? (
                     <a
-                      href="#contact"
+                      href="#contact-details"
                       className="mt-4 flex min-h-12 w-full items-center gap-3 rounded-2xl border border-accent-primary/50 bg-accent-primary/10 px-4 py-3 text-accent-primary transition hover:bg-accent-primary/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary sm:w-fit"
                     >
                       <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-accent-primary/20">

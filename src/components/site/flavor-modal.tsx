@@ -217,7 +217,7 @@ export function FlavorModal({ flavor, onClose }: { flavor: Flavor | null; onClos
                       )}
                       {flavor.lowCalorie && (
                         <span className="rounded-full border border-accent-cta/45 bg-accent-cta/10 px-2.5 py-1 text-[9px] font-semibold tracking-[0.1em] text-accent-cta uppercase">
-                          Low Calorie
+                          {flavor.id === "diet-cola" ? "Zero Calorie" : "Low Calorie"}
                         </span>
                       )}
                       {flavor.comingSoon && (
