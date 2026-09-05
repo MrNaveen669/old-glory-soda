@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from "motion/react";
 import { useCallback, useEffect, useRef } from "react";
+import { Link } from "@tanstack/react-router";
 import { CloseCircle, Location, Star1 } from "iconsax-reactjs";
 import type { Flavor } from "./data";
 import { flavorImage, flavorFullImage } from "./images";
@@ -123,7 +124,6 @@ export function FlavorModal({ flavor, onClose }: { flavor: Flavor | null; onClos
                     <video
                       key={flavor.media.src}
                       ref={videoRef}
-                      src={flavor.media.src}
                       poster={flavor.media.poster}
                       aria-label={flavor.media.alt ?? `${flavor.name} product video`}
                       className="h-full w-full object-cover"
@@ -132,7 +132,13 @@ export function FlavorModal({ flavor, onClose }: { flavor: Flavor | null; onClos
                       loop
                       playsInline
                       preload="metadata"
-                    />
+                    >
+                      <source
+                        src={flavor.media.src.replace(/\.mp4$/i, ".webm")}
+                        type="video/webm"
+                      />
+                      <source src={flavor.media.src} type="video/mp4" />
+                    </video>
                   </div>
                 ) : flavor.media?.type === "image" ? (
                   <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl bg-bg-muted/50 lg:h-full lg:aspect-auto">
@@ -293,6 +299,16 @@ export function FlavorModal({ flavor, onClose }: { flavor: Flavor | null; onClos
                     <Location size={18} variant="Linear" />
                     {flavor.comingSoon ? "Coming Soon" : "Find this near me"}
                   </button>
+                  {!flavor.comingSoon && (
+                    <Link
+                      to="/products/$slug"
+                      params={{ slug: flavor.slug }}
+                      onClick={handleClose}
+                      className="mt-3 inline-flex min-h-11 items-center text-xs font-bold tracking-wider text-accent-primary uppercase hover:underline"
+                    >
+                      Open full product page →
+                    </Link>
+                  )}
                 </div>
               </div>
             </div>

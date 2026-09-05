@@ -12,6 +12,7 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { ThemeProvider } from "../components/site/theme-provider";
+import { absoluteUrl, BRAND_NAME, DEFAULT_OG_IMAGE_PATH } from "../lib/seo";
 
 function NotFoundComponent() {
   return (
@@ -78,19 +79,21 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Old Glory Soda — All Season Drink" },
+      { title: `${BRAND_NAME} — All Season Drink` },
       {
         name: "description",
         content:
           "Old Glory Soda — the classic marble-neck goli soda, bottled in six bold flavours. All Season Drink.",
       },
-      { name: "author", content: "Old Glory Soda" },
+      { name: "author", content: BRAND_NAME },
+      { name: "robots", content: "index, follow, max-image-preview:large" },
       { name: "theme-color", content: "#0D1B2E" },
-      { property: "og:site_name", content: "Old Glory Soda" },
+      { property: "og:site_name", content: BRAND_NAME },
+      { property: "og:locale", content: "en_IN" },
       { property: "og:type", content: "website" },
-      { property: "og:image", content: "https://oldglorysoda.lovable.app/logo-mark.png" },
+      { property: "og:image", content: absoluteUrl(DEFAULT_OG_IMAGE_PATH) },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:image", content: "https://oldglorysoda.lovable.app/logo-mark.png" },
+      { name: "twitter:image", content: absoluteUrl(DEFAULT_OG_IMAGE_PATH) },
     ],
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -115,7 +118,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" data-theme="dark">
+    <html lang="en-IN" data-theme="dark">
       <head>
         <HeadContent />
       </head>

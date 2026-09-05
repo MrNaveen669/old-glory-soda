@@ -47,14 +47,18 @@ function PetFlavorCard({
           <img
             src={image}
             alt={`${flavor.name} ₹${flavor.price} PET bottle`}
+            width={1024}
+            height={1536}
+            loading="lazy"
+            decoding="async"
             className="h-[108%] max-h-[108%] w-auto object-contain drop-shadow-md transition-transform duration-300 ease-out group-hover:scale-[1.045] group-active:scale-[1.02]"
           />
         )}
       </div>
 
-      <h4 className={`mt-2 font-display text-xs font-bold uppercase ${titleColorClass}`}>
+      <h3 className={`mt-2 font-display text-xs font-bold uppercase ${titleColorClass}`}>
         {title}
-      </h4>
+      </h3>
 
       <span className="mt-0.5 text-[10px] font-semibold text-text-muted">{tagline}</span>
     </button>

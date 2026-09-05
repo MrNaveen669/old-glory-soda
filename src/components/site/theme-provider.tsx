@@ -12,7 +12,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const root = document.documentElement;
-    root.dataset.theme = theme;
+    root.dataset["theme"] = theme;
     document
       .querySelector('meta[name="theme-color"]')
       ?.setAttribute("content", theme === "dark" ? "#0D1B2E" : "#F6EFDD");

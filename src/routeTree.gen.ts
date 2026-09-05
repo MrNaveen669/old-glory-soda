@@ -11,6 +11,10 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as HealthRouteImport } from './routes/health'
+import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as ProductsIndexRouteImport } from './routes/products/index'
+import { Route as ProductsSlugRouteImport } from './routes/products/$slug'
 import { Route as StoryBottlingWorksRouteImport } from './routes/story/bottling-works'
 import { Route as StoryCornerShopCratesRouteImport } from './routes/story/corner-shop-crates'
 import { Route as StoryRoadsideRootsRouteImport } from './routes/story/roadside-roots'
@@ -24,6 +28,26 @@ const IndexRoute = IndexRouteImport.update({
 const HealthRoute = HealthRouteImport.update({
   id: '/health',
   path: '/health',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RobotsDottxtRoute = RobotsDottxtRouteImport.update({
+  id: '/robots.txt',
+  path: '/robots.txt',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProductsIndexRoute = ProductsIndexRouteImport.update({
+  id: '/products/',
+  path: '/products/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProductsSlugRoute = ProductsSlugRouteImport.update({
+  id: '/products/$slug',
+  path: '/products/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const StoryBottlingWorksRoute = StoryBottlingWorksRouteImport.update({
@@ -50,62 +74,90 @@ const StoryTownRolloutRoute = StoryTownRolloutRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/health': typeof HealthRoute
+  '/robots.txt': typeof RobotsDottxtRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/products/$slug': typeof ProductsSlugRoute
   '/story/bottling-works': typeof StoryBottlingWorksRoute
   '/story/corner-shop-crates': typeof StoryCornerShopCratesRoute
   '/story/roadside-roots': typeof StoryRoadsideRootsRoute
   '/story/town-rollout': typeof StoryTownRolloutRoute
+  '/products/': typeof ProductsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/health': typeof HealthRoute
+  '/robots.txt': typeof RobotsDottxtRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/products/$slug': typeof ProductsSlugRoute
   '/story/bottling-works': typeof StoryBottlingWorksRoute
   '/story/corner-shop-crates': typeof StoryCornerShopCratesRoute
   '/story/roadside-roots': typeof StoryRoadsideRootsRoute
   '/story/town-rollout': typeof StoryTownRolloutRoute
+  '/products': typeof ProductsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/health': typeof HealthRoute
+  '/robots.txt': typeof RobotsDottxtRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/products/$slug': typeof ProductsSlugRoute
   '/story/bottling-works': typeof StoryBottlingWorksRoute
   '/story/corner-shop-crates': typeof StoryCornerShopCratesRoute
   '/story/roadside-roots': typeof StoryRoadsideRootsRoute
   '/story/town-rollout': typeof StoryTownRolloutRoute
+  '/products/': typeof ProductsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/health'
+    | '/robots.txt'
+    | '/sitemap.xml'
+    | '/products/$slug'
     | '/story/bottling-works'
     | '/story/corner-shop-crates'
     | '/story/roadside-roots'
     | '/story/town-rollout'
+    | '/products/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/health'
+    | '/robots.txt'
+    | '/sitemap.xml'
+    | '/products/$slug'
     | '/story/bottling-works'
     | '/story/corner-shop-crates'
     | '/story/roadside-roots'
     | '/story/town-rollout'
+    | '/products'
   id:
     | '__root__'
     | '/'
     | '/health'
+    | '/robots.txt'
+    | '/sitemap.xml'
+    | '/products/$slug'
     | '/story/bottling-works'
     | '/story/corner-shop-crates'
     | '/story/roadside-roots'
     | '/story/town-rollout'
+    | '/products/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   HealthRoute: typeof HealthRoute
+  RobotsDottxtRoute: typeof RobotsDottxtRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  ProductsSlugRoute: typeof ProductsSlugRoute
   StoryBottlingWorksRoute: typeof StoryBottlingWorksRoute
   StoryCornerShopCratesRoute: typeof StoryCornerShopCratesRoute
   StoryRoadsideRootsRoute: typeof StoryRoadsideRootsRoute
   StoryTownRolloutRoute: typeof StoryTownRolloutRoute
+  ProductsIndexRoute: typeof ProductsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -122,6 +174,34 @@ declare module '@tanstack/react-router' {
       path: '/health'
       fullPath: '/health'
       preLoaderRoute: typeof HealthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/robots.txt': {
+      id: '/robots.txt'
+      path: '/robots.txt'
+      fullPath: '/robots.txt'
+      preLoaderRoute: typeof RobotsDottxtRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/products/': {
+      id: '/products/'
+      path: '/products'
+      fullPath: '/products/'
+      preLoaderRoute: typeof ProductsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/products/$slug': {
+      id: '/products/$slug'
+      path: '/products/$slug'
+      fullPath: '/products/$slug'
+      preLoaderRoute: typeof ProductsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/story/bottling-works': {
@@ -158,10 +238,14 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   HealthRoute: HealthRoute,
+  RobotsDottxtRoute: RobotsDottxtRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
+  ProductsSlugRoute: ProductsSlugRoute,
   StoryBottlingWorksRoute: StoryBottlingWorksRoute,
   StoryCornerShopCratesRoute: StoryCornerShopCratesRoute,
   StoryRoadsideRootsRoute: StoryRoadsideRootsRoute,
   StoryTownRolloutRoute: StoryTownRolloutRoute,
+  ProductsIndexRoute: ProductsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

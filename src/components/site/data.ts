@@ -1,11 +1,13 @@
+import { ADDRESS, BRAND_NAME, EMAIL, PHONE, PHONE_NATIONAL } from "../../lib/seo";
+
 export const BRAND = {
-  name: "Old Glory Soda",
+  name: BRAND_NAME,
   tagline: "All Season Drink",
   intro:
     "The marble-neck goli soda you grew up chasing down summer streets — bottled bolder, fizzier and ready for every season.",
-  email: "kajalbeverageindusty@gmail.com",
-  phone: "+91 98400 00000",
-  address: "Old Glory Bottling Works, Mana, Chhattisgarh",
+  email: EMAIL,
+  phone: PHONE,
+  address: ADDRESS,
 };
 
 export const FLAVOR_IDS = [
@@ -48,6 +50,7 @@ export type ProductMediaSource =
 
 export type Flavor = {
   id: string;
+  slug: string;
   name: string;
   flavourType: string;
   short: string;
@@ -73,6 +76,7 @@ export type FlagshipFlavor = Omit<Flavor, "id"> & { id: FlavorId };
 export const FLAVORS: FlagshipFlavor[] = [
   {
     id: "blueberry-blast",
+    slug: "blueberry",
     name: "Blueberry Blast Soda",
     flavourType: "Blueberry",
     short: "Blueberry",
@@ -104,6 +108,7 @@ export const FLAVORS: FlagshipFlavor[] = [
   },
   {
     id: "green-apple",
+    slug: "green-apple",
     name: "Fizzy Green Apple Soda",
     flavourType: "Green Apple",
     short: "Green Apple",
@@ -135,6 +140,7 @@ export const FLAVORS: FlagshipFlavor[] = [
   },
   {
     id: "citrus-orange",
+    slug: "orange",
     name: "Citrus Orange Pop Soda",
     flavourType: "Orange",
     short: "Orange",
@@ -165,6 +171,7 @@ export const FLAVORS: FlagshipFlavor[] = [
   },
   {
     id: "fruit-beer",
+    slug: "fruit-beer",
     name: "Fruit Beer",
     flavourType: "Fruit Beer",
     short: "Fruit Beer",
@@ -195,6 +202,7 @@ export const FLAVORS: FlagshipFlavor[] = [
   },
   {
     id: "lemon-zing",
+    slug: "lemon",
     name: "Zesty Lemon Zing Soda",
     flavourType: "Nimboo Masala",
     short: "Lemon",
@@ -225,6 +233,7 @@ export const FLAVORS: FlagshipFlavor[] = [
   },
   {
     id: "zeera-soda",
+    slug: "jeera",
     name: "Spicy Spark Zeera Soda",
     flavourType: "Zeera Masala",
     short: "Zeera",
@@ -384,6 +393,7 @@ export const PET_RANGE: Record<PetTier, Flavor[]> = {
     petFrom("citrus-orange", { price: 10, nutrition: ORANGE_10_NUTRITION }),
     {
       id: "shikanji-pet-10",
+      slug: "shikanji",
       name: "Shikanji",
       flavourType: "Shikanji",
       short: "Shikanji",
@@ -411,6 +421,7 @@ export const PET_RANGE: Record<PetTier, Flavor[]> = {
 export const COLA_PRODUCTS: Flavor[] = [
   {
     id: "diet-cola",
+    slug: "diet-cola",
     name: "Diet Cola",
     flavourType: "Diet Cola",
     short: "Diet Cola",
@@ -432,11 +443,13 @@ export const COLA_PRODUCTS: Flavor[] = [
     media: {
       type: "video",
       src: "/Deit cola.mp4",
+      poster: "/og/diet-cola-product.jpg",
       alt: "Old Glory Diet Cola bottle video",
     },
   },
   {
     id: "cola",
+    slug: "cola",
     name: "Cola",
     flavourType: "Cola",
     short: "Cola",
@@ -457,6 +470,7 @@ export const COLA_PRODUCTS: Flavor[] = [
     media: {
       type: "video",
       src: "/cola.mp4",
+      poster: "/og/cola-product.jpg",
       alt: "Old Glory Cola bottle video",
     },
   },
@@ -523,7 +537,7 @@ export const GALLERY: GalleryItem[] = [
     type: "video",
     src: "/GREEN-APPLE.mp4",
     poster: "/Green-apple-poster.png",
-    caption: "",
+    caption: "Old Glory Green Apple Soda",
   },
 
   // IMAGES
@@ -532,7 +546,7 @@ export const GALLERY: GalleryItem[] = [
     type: "video",
     src: "/Title-video.mp4",
     poster: "/Fruite-beer-poster.png",
-    caption: "",
+    caption: "Old Glory Soda in motion",
   },
 
   {
@@ -540,7 +554,7 @@ export const GALLERY: GalleryItem[] = [
     type: "video",
     src: "/ZEERA-Soda..mp4",
     poster: "/Jeera-poster.png",
-    caption: "",
+    caption: "Old Glory Zeera Soda",
   },
 
   {
@@ -548,7 +562,7 @@ export const GALLERY: GalleryItem[] = [
     type: "video",
     src: "/blueberry-SODA.mp4",
     poster: "/Blueberry-poster.png",
-    caption: "",
+    caption: "Old Glory Blueberry Soda",
   },
 
   {
@@ -556,7 +570,7 @@ export const GALLERY: GalleryItem[] = [
     type: "video",
     src: "/Zesty-Lemon-Zing-Soda..mp4",
     poster: "/lemon-poster.png",
-    caption: "",
+    caption: "Old Glory Lemon Soda",
   },
 
   {
@@ -564,12 +578,12 @@ export const GALLERY: GalleryItem[] = [
     type: "video",
     src: "/ORNGE-SODA.mp4",
     poster: "/Orange-poster.png",
-    caption: "",
+    caption: "Old Glory Orange Soda",
   },
 ];
 
 export type StoreCity =
-  "Raipur"|"Dhamtari" | "Nagari" | "Keshkal" | "Kondagaon" | "Jagdalpur"   | "Balod" | "Dalli";
+  "Raipur" | "Dhamtari" | "Nagari" | "Keshkal" | "Kondagaon" | "Jagdalpur" | "Balod" | "Dalli";
 
 type StoreDistributor = {
   name: string;
@@ -590,13 +604,13 @@ export type StoreLocation =
     };
 
 export const STORE_LOCATIONS: StoreLocation[] = [
-   {
+  {
     city: "Raipur",
     status: "in-stock",
     distributor: {
       name: "Raipur Beverage Distributors Hub",
       location: "Raipur, Chhattisgarh",
-      phone: "9407626212",
+      phone: PHONE_NATIONAL,
     },
   },
   {
@@ -639,7 +653,7 @@ export const STORE_LOCATIONS: StoreLocation[] = [
       location: "Kriti Sales, Gurudwara Road, Moti Talab Para",
     },
   },
- 
+
   { city: "Balod", status: "coming-soon" },
   { city: "Dalli", status: "coming-soon" },
 ];

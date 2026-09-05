@@ -1,9 +1,19 @@
 import { motion } from "motion/react";
 import { Facebook, Instagram, Youtube } from "iconsax-reactjs";
+import type { MouseEvent } from "react";
+import { useLocation } from "@tanstack/react-router";
 import { BRAND, NAV_LINKS, SOCIALS } from "./data";
 import { VINTAGE_ILLUSTRATIONS } from "./images";
 import { OldGloryLogo } from "./logo";
 import { scrollToSection } from "./use-lenis";
+import {
+  ADDRESS,
+  EMAIL,
+  PHONE_DISPLAY,
+  PHONE_TEL,
+  WHATSAPP_DISPLAY,
+  WHATSAPP_URL,
+} from "../../lib/seo";
 
 const SOCIAL_ICONS: Record<string, typeof Instagram> = {
   instagram: Instagram,
@@ -19,6 +29,25 @@ const PRODUCT_RANGES = [
 ] as const;
 
 export function Footer() {
+  const location = useLocation();
+  const isHomepage = location.pathname === "/";
+
+  const navigateToSection = (event: MouseEvent<HTMLAnchorElement>, id: string) => {
+    if (!isHomepage) return;
+    event.preventDefault();
+    window.history.pushState(null, "", `#${id}`);
+    scrollToSection(id);
+  };
+
+  const sectionHref = (id: string) => (isHomepage ? `#${id}` : `/#${id}`);
+
+  const backToTop = (event: MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+    const target = isHomepage ? "hero" : "top";
+    window.history.pushState(null, "", `#${target}`);
+    scrollToSection(target);
+  };
+
   return (
     <footer
       id="contact"
@@ -29,6 +58,10 @@ export function Footer() {
         <img
           src={VINTAGE_ILLUSTRATIONS.crates}
           alt="Vintage corner shop and crate illustration watermark"
+          width={1536}
+          height={1024}
+          loading="lazy"
+          decoding="async"
           className="h-full w-full object-cover filter sepia-[0.8] contrast-[1.2]"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-footer-bg via-footer-bg/80 to-footer-bg" />
@@ -73,7 +106,6 @@ export function Footer() {
               {BRAND.tagline}. The original marble-neck codd soda bottled fresh in six signature
               profiles.
             </p>
-            <p className="mt-3 text-[11px] text-accent-gold">{BRAND.address}</p>
           </div>
 
           {/* Col 2: Navigation Links */}
@@ -84,12 +116,13 @@ export function Footer() {
             <ul className="mt-4 space-y-2.5">
               {NAV_LINKS.map((link) => (
                 <li key={link.id}>
-                  <button
-                    onClick={() => scrollToSection(link.id)}
+                  <a
+                    href={sectionHref(link.id)}
+                    onClick={(event) => navigateToSection(event, link.id)}
                     className="inline-flex min-h-11 min-w-11 items-center text-sm text-on-accent/80 transition-colors hover:text-on-accent hover:underline"
                   >
                     {link.label}
-                  </button>
+                  </a>
                 </li>
               ))}
             </ul>
@@ -104,7 +137,7 @@ export function Footer() {
               {PRODUCT_RANGES.map((range) => (
                 <li key={range.href}>
                   <a
-                    href={range.href}
+                    href={isHomepage ? range.href : `/${range.href}`}
                     className="inline-flex min-h-11 min-w-11 items-center text-sm text-on-accent/80 transition-colors hover:text-on-accent"
                   >
                     {range.label}
@@ -122,33 +155,31 @@ export function Footer() {
             <ul className="mt-4 space-y-2.5 text-sm text-on-accent/80">
               <li>
                 <a
-                  href="tel:+919407626212"
+                  href={`tel:${PHONE_TEL}`}
                   className="inline-flex min-h-11 items-center underline transition-colors hover:text-on-accent"
                 >
-                  CALL : 94076-26212
+                  CALL : {PHONE_DISPLAY}
                 </a>
               </li>
               <li>
                 <a
-                  href="https://wa.me/917509434343"
+                  href={WHATSAPP_URL}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex min-h-11 items-center underline transition-colors hover:text-on-accent"
                 >
-                  WHATSAPP : 75094-34343
+                  WHATSAPP : {WHATSAPP_DISPLAY}
                 </a>
               </li>
               <li>
                 <a
-                  href="mailto:kajalbeverageindustry@gmail.com"
+                  href={`mailto:${EMAIL}`}
                   className="inline-flex min-h-11 items-center break-all underline transition-colors hover:text-on-accent"
                 >
-                  MAIL : KAJALBEVERAGEINDUSTRY@GMAIL.COM
+                  MAIL : {EMAIL.toUpperCase()}
                 </a>
               </li>
-              <li className="leading-relaxed">
-                ADDRESS : Near HP Gas Agency, Mana Basti, Raipur CG-492015
-              </li>
+              <li className="leading-relaxed">ADDRESS : {ADDRESS}</li>
             </ul>
             <div className="mt-5 flex items-center gap-3">
               {SOCIALS.map((s) => {
@@ -176,12 +207,13 @@ export function Footer() {
           <p>
             © {new Date().getFullYear()} {BRAND.name}. All rights reserved. Made in India.
           </p>
-          <button
-            onClick={() => scrollToSection("hero")}
+          <a
+            href={isHomepage ? "#hero" : "#top"}
+            onClick={backToTop}
             className="inline-flex min-h-11 items-center text-xs font-bold tracking-wider text-accent-gold uppercase hover:underline"
           >
             Back to top ↑
-          </button>
+          </a>
         </div>
       </div>
     </footer>

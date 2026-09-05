@@ -77,9 +77,9 @@ function swapToFallback(
 ) {
   const image = event.currentTarget;
 
-  if (image.dataset.fallbackApplied === "true") return;
+  if (image.dataset["fallbackApplied"] === "true") return;
 
-  image.dataset.fallbackApplied = "true";
+  image.dataset["fallbackApplied"] = "true";
   image.src = fallback;
 }
 
@@ -827,7 +827,7 @@ function ComparisonCard({
 export function ThenNow() {
   const [selectedId, setSelectedId] =
     useState<FlavorId>(
-      FLAVORS[0].id,
+      FLAVORS[0]!.id,
     );
 
   const cardRefs =

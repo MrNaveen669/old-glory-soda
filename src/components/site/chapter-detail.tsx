@@ -1,15 +1,22 @@
 import { motion } from "motion/react";
 import { Link } from "@tanstack/react-router";
 import { ArrowLeft, ArrowRight, Location } from "iconsax-reactjs";
-import { STORY_CHAPTERS, type StoryChapter } from "./story-chapters";
+import { STORY_CHAPTERS, type StoryChapterId } from "./story-chapters";
 import { Navbar } from "./navbar";
 import { Footer } from "./footer";
 
-export function ChapterDetail({ chapterId }: { chapterId: string }) {
-  const chapter: StoryChapter = (STORY_CHAPTERS[chapterId] ?? STORY_CHAPTERS["roadside-roots"])!;
+const STORY_ROUTE_BY_ID: Record<StoryChapterId, `/story/${StoryChapterId}`> = {
+  "roadside-roots": "/story/roadside-roots",
+  "bottling-works": "/story/bottling-works",
+  "town-rollout": "/story/town-rollout",
+  "corner-shop-crates": "/story/corner-shop-crates",
+};
+
+export function ChapterDetail({ chapterId }: { chapterId: StoryChapterId }) {
+  const chapter = STORY_CHAPTERS[chapterId];
 
   return (
-    <div className="min-h-screen bg-bg-base text-text-primary flex flex-col font-sans">
+    <div id="top" className="min-h-screen bg-bg-base text-text-primary flex flex-col font-sans">
       <Navbar />
 
       <main className="flex-1 pt-20">
@@ -20,6 +27,8 @@ export function ChapterDetail({ chapterId }: { chapterId: string }) {
             <img
               src={chapter.bgImage}
               alt={`${chapter.title} vintage illustration hero background`}
+              fetchPriority="high"
+              decoding="async"
               className="h-full w-full object-cover filter sepia-[0.75] contrast-[1.2] scale-105"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-footer-bg via-footer-bg/75 to-footer-bg" />
@@ -70,7 +79,10 @@ export function ChapterDetail({ chapterId }: { chapterId: string }) {
 
               <div className="mt-8 space-y-6 text-base sm:text-lg leading-relaxed text-text-muted-strong">
                 {chapter.paragraphs.map((p, idx) => (
-                  <p key={idx} className="first-letter:font-display first-letter:text-4xl first-letter:font-bold first-letter:text-accent-primary first-letter:mr-1">
+                  <p
+                    key={idx}
+                    className="first-letter:font-display first-letter:text-4xl first-letter:font-bold first-letter:text-accent-primary first-letter:mr-1"
+                  >
                     {p}
                   </p>
                 ))}
@@ -89,9 +101,9 @@ export function ChapterDetail({ chapterId }: { chapterId: string }) {
 
             {/* Supporting Illustration Gallery Row */}
             <div className="mt-16">
-              <h3 className="font-display text-xl font-bold uppercase tracking-wide text-text-primary text-center mb-6">
+              <h2 className="font-display text-xl font-bold uppercase tracking-wide text-text-primary text-center mb-6">
                 Chapter Illustration Archive
-              </h3>
+              </h2>
               <div className="grid gap-6 sm:grid-cols-3">
                 {chapter.galleryImages.map((img, idx) => (
                   <motion.div
@@ -106,6 +118,8 @@ export function ChapterDetail({ chapterId }: { chapterId: string }) {
                       <img
                         src={img.src}
                         alt={img.caption}
+                        loading="lazy"
+                        decoding="async"
                         className="h-36 w-full object-contain filter sepia-[0.5] contrast-[1.1] transition-transform duration-500 group-hover:scale-105"
                       />
                     </div>
@@ -120,7 +134,7 @@ export function ChapterDetail({ chapterId }: { chapterId: string }) {
             {/* Bottom Sequential Chapter Navigation */}
             <div className="mt-16 flex flex-col sm:flex-row items-center justify-between gap-4 border-t-2 border-border-theme pt-8">
               <Link
-                to={`/story/${chapter.prevChapter.id}` as any}
+                to={STORY_ROUTE_BY_ID[chapter.prevChapter.id]}
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full border-2 border-accent-primary bg-bg-base px-6 py-3.5 text-xs font-bold tracking-wider text-accent-primary uppercase shadow-md transition-all hover:bg-accent-primary hover:text-on-accent min-h-[44px]"
               >
                 <ArrowLeft size={16} variant="Linear" />
@@ -136,11 +150,20 @@ export function ChapterDetail({ chapterId }: { chapterId: string }) {
               </Link>
 
               <Link
-                to={`/story/${chapter.nextChapter.id}` as any}
+                to={STORY_ROUTE_BY_ID[chapter.nextChapter.id]}
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full bg-accent-primary px-6 py-3.5 text-xs font-bold tracking-wider text-on-accent uppercase shadow-md transition-all hover:bg-accent-hover hover:scale-105 min-h-[44px]"
               >
                 Next: {chapter.nextChapter.title}
                 <ArrowRight size={16} variant="Linear" />
+              </Link>
+            </div>
+
+            <div className="mt-6 text-center">
+              <Link
+                to="/products"
+                className="inline-flex min-h-11 items-center text-xs font-bold tracking-widest text-accent-primary uppercase hover:underline"
+              >
+                Explore the Old Glory product range →
               </Link>
             </div>
           </div>

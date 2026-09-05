@@ -1,4 +1,5 @@
 import { motion } from "motion/react";
+import { Link } from "@tanstack/react-router";
 import { FLAVORS, type Flavor } from "./data";
 import { FLAVOR_IMAGES } from "./images";
 import { Section } from "./primitives";
@@ -75,6 +76,10 @@ export function Flavors({ onSelectFlavor }: { onSelectFlavor: (flavor: Flavor) =
                     <img
                       src={FLAVOR_IMAGES[f.id]}
                       alt={`Old Glory ${f.name} illustrated bottle cutout`}
+                      width={1024}
+                      height={1536}
+                      loading="lazy"
+                      decoding="async"
                       className="h-full w-auto max-w-none object-contain filter drop-shadow-md transition-transform duration-[350ms] ease-out group-hover:scale-110 group-active:scale-110"
                     />
                   </div>
@@ -108,6 +113,15 @@ export function Flavors({ onSelectFlavor }: { onSelectFlavor: (flavor: Flavor) =
               </motion.button>
             );
           })}
+        </div>
+
+        <div className="mt-8 text-center">
+          <Link
+            to="/products"
+            className="inline-flex min-h-11 items-center rounded-full border border-border-theme px-5 py-2 text-xs font-bold tracking-wider text-accent-primary uppercase transition hover:border-accent-primary hover:bg-accent-primary/10"
+          >
+            Explore full product details →
+          </Link>
         </div>
       </div>
     </Section>

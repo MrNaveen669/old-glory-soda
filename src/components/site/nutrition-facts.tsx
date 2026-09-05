@@ -18,10 +18,10 @@ export function NutritionFacts({
         style={{ borderTopColor: accent }}
       >
         <header className="border-b-2 border-text-primary/30 px-3 py-3 sm:px-4 lg:px-5 lg:py-1">
-          <h4 className="flex flex-wrap items-baseline gap-x-1.5 font-display text-xl font-bold leading-none tracking-[-0.01em] text-text-primary uppercase sm:text-2xl">
+          <h3 className="flex flex-wrap items-baseline gap-x-1.5 font-display text-xl font-bold leading-none tracking-[-0.01em] text-text-primary uppercase sm:text-2xl">
             <span>Nutritional Facts</span>
             <span className="text-[0.55em] tracking-normal">[Typical Values]*</span>
-          </h4>
+          </h3>
           <p className="mt-2 text-[11px] font-semibold leading-tight text-text-primary sm:text-xs">
             Serving Size - {nutrition.servingSize}, {nutrition.servingsPerPack}
           </p>

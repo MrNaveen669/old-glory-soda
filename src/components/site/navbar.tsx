@@ -1,5 +1,6 @@
 import { AnimatePresence, motion, useScroll, useSpring } from "motion/react";
-import { useEffect, useState } from "react";
+import { useLocation } from "@tanstack/react-router";
+import { useEffect, useState, type MouseEvent } from "react";
 import { CloseCircle, HamburgerMenu, Location } from "iconsax-reactjs";
 import { NAV_LINKS } from "./data";
 import { OldGloryLogo } from "./logo";
@@ -7,6 +8,8 @@ import { ThemeToggle } from "./theme-toggle";
 import { scrollToSection } from "./use-lenis";
 
 export function Navbar() {
+  const location = useLocation();
+  const isHomepage = location.pathname === "/";
   const [active, setActive] = useState("hero");
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
@@ -41,6 +44,15 @@ export function Navbar() {
     scrollToSection(id);
   };
 
+  const navigateToSection = (event: MouseEvent<HTMLAnchorElement>, id: string) => {
+    if (!isHomepage) return;
+    event.preventDefault();
+    window.history.pushState(null, "", `#${id}`);
+    go(id);
+  };
+
+  const sectionHref = (id: string) => (isHomepage ? `#${id}` : `/#${id}`);
+
   return (
     <header className="fixed inset-x-0 top-0 z-50">
       <motion.div
@@ -52,21 +64,23 @@ export function Navbar() {
         className={`transition-all duration-500 ${scrolled ? "glass-panel border-x-0 border-t-0" : "border-transparent bg-transparent"}`}
       >
         <nav className="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-2 px-4 py-2 sm:px-5 sm:py-3 lg:flex lg:justify-between">
-          <button
-            onClick={() => go("hero")}
+          <a
+            href={sectionHref("hero")}
+            onClick={(event) => navigateToSection(event, "hero")}
             className="flex min-h-11 min-w-0 items-center text-left"
             aria-label="Old Glory Soda — back to top"
           >
             <OldGloryLogo
               className={`h-9 w-auto sm:h-10 ${scrolled ? "text-foreground" : "text-hero-text"}`}
             />
-          </button>
+          </a>
 
           <div className="hidden items-center gap-1 lg:flex">
             {NAV_LINKS.map((link) => (
-              <button
+              <a
                 key={link.id}
-                onClick={() => go(link.id)}
+                href={sectionHref(link.id)}
+                onClick={(event) => navigateToSection(event, link.id)}
                 className={`relative min-h-11 rounded-full px-3.5 py-1.5 text-sm transition-colors ${
                   active === link.id
                     ? "text-foreground"
@@ -81,19 +95,20 @@ export function Navbar() {
                   />
                 )}
                 <span className="relative">{link.label}</span>
-              </button>
+              </a>
             ))}
           </div>
 
           <div className="flex shrink-0 items-center gap-2">
             <ThemeToggle />
-            <button
-              onClick={() => go("stores")}
+            <a
+              href={sectionHref("stores")}
+              onClick={(event) => navigateToSection(event, "stores")}
               className="hidden min-h-11 items-center gap-1.5 rounded-full bg-accent-cta px-5 py-2.5 text-xs font-bold tracking-wider text-on-accent uppercase shadow-md transition-all hover:scale-105 hover:bg-accent-hover active:scale-95 dark:text-bg-base sm:inline-flex"
             >
               <Location size={16} variant="Linear" />
               Find Old Glory
-            </button>
+            </a>
             <button
               onClick={() => setOpen((o) => !o)}
               aria-label="Toggle menu"
@@ -120,26 +135,28 @@ export function Navbar() {
             >
               <div className="flex flex-col gap-1 px-4 py-3 sm:px-5">
                 {NAV_LINKS.map((link, i) => (
-                  <motion.button
+                  <motion.a
                     key={link.id}
+                    href={sectionHref(link.id)}
                     initial={{ opacity: 0, x: -12 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.04 * i }}
-                    onClick={() => go(link.id)}
+                    onClick={(event) => navigateToSection(event, link.id)}
                     className={`min-h-11 rounded-xl px-4 py-2.5 text-left text-base ${
                       active === link.id ? "bg-secondary text-foreground" : "text-muted-foreground"
                     }`}
                   >
                     {link.label}
-                  </motion.button>
+                  </motion.a>
                 ))}
-                <button
-                  onClick={() => go("stores")}
+                <a
+                  href={sectionHref("stores")}
+                  onClick={(event) => navigateToSection(event, "stores")}
                   className="mt-2 inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-accent-cta px-4 text-sm font-bold text-bg-base sm:hidden"
                 >
                   <Location size={18} variant="Linear" />
                   Find Old Glory
-                </button>
+                </a>
               </div>
             </motion.div>
           )}
