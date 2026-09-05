@@ -1,9 +1,4 @@
-import {
-  motion,
-  useInView,
-  useScroll,
-  useTransform,
-} from "motion/react";
+import { motion, useInView, useScroll, useTransform } from "motion/react";
 
 import { useEffect, useRef, useState } from "react";
 import { Gallery as GalleryIcon } from "iconsax-reactjs";
@@ -77,7 +72,7 @@ function Tile({ item, index }: TileProps) {
    * which destroyed and re-fetched the video every time the user
    * scrolled the tile out of view and back in.
    */
-  const [shouldLoad, setShouldLoad] = useState(isHero);
+  const [shouldLoad, setShouldLoad] = useState(false);
 
   useEffect(() => {
     if (inView) setShouldLoad(true);
@@ -113,15 +108,9 @@ function Tile({ item, index }: TileProps) {
     offset: ["start end", "end start"],
   });
 
-  const y = useTransform(
-    scrollYProgress,
-    [0, 1],
-    ["5%", "-5%"]
-  );
+  const y = useTransform(scrollYProgress, [0, 1], ["5%", "-5%"]);
 
-  const layout =
-    TILE_LAYOUTS[index] ??
-    "lg:col-span-1 lg:row-span-1";
+  const layout = TILE_LAYOUTS[index] ?? "lg:col-span-1 lg:row-span-1";
 
   return (
     <motion.article
@@ -193,11 +182,11 @@ function Tile({ item, index }: TileProps) {
               muted
               loop
               playsInline
-              autoPlay={isHero}
+              autoPlay={false}
               poster={item.poster}
-              preload={isHero ? "auto" : "none"}
+              preload="none"
               // @ts-expect-error - fetchpriority is valid HTML but not yet in React's DOM types
-              fetchpriority={isHero ? "high" : "low"}
+              fetchpriority="low"
               aria-label={item.caption}
               className="
                 h-full
@@ -212,10 +201,7 @@ function Tile({ item, index }: TileProps) {
               {shouldLoad && (
                 <>
                   {/* WebM first — smaller file, browser prefers it if supported */}
-                  <source
-                    src={item.src.replace(/\.mp4$/i, ".webm")}
-                    type="video/webm"
-                  />
+                  <source src={item.src.replace(/\.mp4$/i, ".webm")} type="video/webm" />
                   <source src={item.src} type="video/mp4" />
                 </>
               )}
@@ -546,11 +532,7 @@ export function GallerySection() {
           "
         >
           {GALLERY.map((item, index) => (
-            <Tile
-              key={item.id}
-              item={item}
-              index={index}
-            />
+            <Tile key={item.id} item={item} index={index} />
           ))}
         </div>
 

@@ -23,11 +23,12 @@ export function Hero() {
         loop
         playsInline
         poster="/Tree.png"
-        preload="auto"
+        preload="metadata"
         aria-hidden="true"
         tabIndex={-1}
         className="pointer-events-none absolute inset-0 h-full w-full object-cover"
       >
+        <source src="/Title-video.webm" type="video/webm" />
         <source src="/Title-video.mp4" type="video/mp4" />
       </video>
 
@@ -86,7 +87,8 @@ export function Hero() {
             transition={{ delay: 0.6, duration: 0.7 }}
             className="mt-4 max-w-lg text-base leading-relaxed text-hero-muted sm:text-lg"
           >
-            The heritage marble-neck goli soda you grew up chasing down summer streets — bottled bolder, fizzier, and made for every season of India.
+            The heritage marble-neck goli soda you grew up chasing down summer streets — bottled
+            bolder, fizzier, and made for every season of India.
           </motion.p>
 
           {/* CTA Buttons */}
@@ -127,7 +129,6 @@ export function Hero() {
           <div className="relative sm:p-5">
             <div className="relative aspect-[4/3] w-full" />
 
-
             {/* Bottom-right Circular Stamp Badge with Fixed Curved Text */}
             <motion.div
               animate={reduced ? {} : { rotate: 360 }}
@@ -167,24 +168,13 @@ export function Hero() {
     lg:w-40
   "
             >
-              <svg
-                viewBox="0 0 100 100"
-                className="h-full w-full pointer-events-none"
-              >
+              <svg viewBox="0 0 100 100" className="h-full w-full pointer-events-none">
                 <defs>
                   {/* TOP ARC */}
-                  <path
-                    id="badgeTopArc"
-                    d="M 10 50 A 40 40 0 0 1 90 50"
-                    fill="none"
-                  />
+                  <path id="badgeTopArc" d="M 10 50 A 40 40 0 0 1 90 50" fill="none" />
 
                   {/* BOTTOM ARC */}
-                  <path
-                    id="badgeBottomArc"
-                    d="M 90 50 A 40 40 0 0 1 10 50"
-                    fill="none"
-                  />
+                  <path id="badgeBottomArc" d="M 90 50 A 40 40 0 0 1 10 50" fill="none" />
                 </defs>
 
                 {/* TOP TEXT */}
@@ -197,11 +187,7 @@ export function Hero() {
         tracking-[0.18em]
       "
                 >
-                  <textPath
-                    href="#badgeTopArc"
-                    startOffset="50%"
-                    textAnchor="middle"
-                  >
+                  <textPath href="#badgeTopArc" startOffset="50%" textAnchor="middle">
                     Low Calories
                   </textPath>
                 </text>
@@ -216,11 +202,7 @@ export function Hero() {
         tracking-[0.18em]
       "
                 >
-                  <textPath
-                    href="#badgeBottomArc"
-                    startOffset="50%"
-                    textAnchor="middle"
-                  >
+                  <textPath href="#badgeBottomArc" startOffset="50%" textAnchor="middle">
                     Low Calories
                   </textPath>
                 </text>

@@ -1,5 +1,5 @@
 import { motion, useInView } from "motion/react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { COLA_PRODUCTS, type Flavor } from "./data";
 import { Section } from "./primitives";
@@ -16,13 +16,22 @@ function ColaCard({
   const cardRef = useRef<HTMLButtonElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const isVisible = useInView(cardRef, { amount: 0.25 });
+  const [shouldLoad, setShouldLoad] = useState(false);
   const video = product.media?.type === "video" ? product.media : undefined;
   const volume = product.volume ?? "160ml";
   const price = product.price ?? 20;
 
   useEffect(() => {
+    if (isVisible) setShouldLoad(true);
+  }, [isVisible]);
+
+  useEffect(() => {
+    if (shouldLoad) videoRef.current?.load();
+  }, [shouldLoad]);
+
+  useEffect(() => {
     const element = videoRef.current;
-    if (!element) return;
+    if (!element || !shouldLoad) return;
 
     const syncPlayback = () => {
       if (isVisible && document.visibilityState === "visible") {
@@ -41,7 +50,7 @@ function ColaCard({
       document.removeEventListener("visibilitychange", syncPlayback);
       element.pause();
     };
-  }, [isVisible]);
+  }, [isVisible, shouldLoad]);
 
   return (
     <motion.button
@@ -59,15 +68,21 @@ function ColaCard({
         {video && (
           <video
             ref={videoRef}
-            src={video.src}
             poster={video.poster}
-            preload="metadata"
+            preload="none"
             muted
             loop
             playsInline
             aria-hidden="true"
             className="pointer-events-none h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.035]"
-          />
+          >
+            {shouldLoad && (
+              <>
+                <source src={video.src.replace(/\.mp4$/i, ".webm")} type="video/webm" />
+                <source src={video.src} type="video/mp4" />
+              </>
+            )}
+          </video>
         )}
 
         <span className="pointer-events-none absolute inset-0 bg-gradient-to-t from-bg-base/55 via-transparent to-bg-base/10" />

@@ -663,37 +663,37 @@ export const TESTIMONIALS = [
     quote:
       "Honestly? The blueberry one tastes like the soda cart outside my school. That goli pop sound still gets a cheer from everyone.",
     name: "Anitha",
-    place: "Coimbatore",
+    place: "Jagdalpur",
   },
   {
     quote:
       "Zeera soda after a heavy biryani is unbeatable. We keep a crate at the restaurant now — customers ask for it by name.",
     name: "Imran Sheikh",
-    place: "Hyderabad",
+    place: "Keshkal",
   },
   {
     quote: "Dangerously good. Tart, loud fizz, gone in a minute.",
     name: "Meera",
-    place: "Kochi",
+    place: "Raipur",
   },
   {
     quote:
       "Finally a fruit beer that doesn't taste like cough syrup. Price is fair, availability is still patchy in my area, but when I find it I buy six.",
     name: "Dev",
-    place: "Mumbai",
+    place: "Mana",
   },
   {
     quote:
       "Glass bottles, real fizz, zero fuss. My kids fight over the blueberry and I secretly grab the lemon zing for myself.",
     name: "Sudha Mani",
-    place: "Chennai",
+    place: "Nagari",
   },
 ];
 
 export const SOCIALS = [
   { label: "Instagram", href: "https://www.instagram.com/old_glory_golisoda/", icon: "instagram" },
-  { label: "Facebook", href: "https://facebook.com", icon: "facebook" },
-  { label: "YouTube", href: "https://youtube.com", icon: "youtube" },
+  { label: "Facebook", href: "https://www.facebook.com/share/1FL64ihZm3/", icon: "facebook" },
+  { label: "YouTube", href: "https://www.youtube.com/@OldgloryGoliSoda/shorts", icon: "youtube" },
 ];
 
 export const NAV_LINKS = [
